@@ -149,7 +149,7 @@ $(document).ready(function () {
                     startTime.timeslots[date].forEach(time => {
                         // Create event with calculated start and end time
                         const startDateTime = `${date}T${time}`;
-                        const endDateTime = calculateEndTime(startDateTime, event.duration);
+                        const endDateTime = calculateEndTimeInAEST(startDateTime, event.duration);
 
                         console.log(`Creating event for ${event.name} (${event.id}) starting at ${startDateTime} and ending at ${endDateTime}`);
                         
@@ -174,13 +174,16 @@ $(document).ready(function () {
         return calendarEvents;
     }
 
-    // Function to calculate end time based on duration in minutes
-    function calculateEndTime(startDateTime, durationInMinutes) {
+    // Function to calculate end time in AEST
+    function calculateEndTimeInAEST(startDateTime, durationInMinutes) {
         const start = new Date(startDateTime);
         const duration = parseInt(durationInMinutes, 10);
         if (!isNaN(duration)) {
             start.setMinutes(start.getMinutes() + duration); // Add duration to start time
-            return start.toISOString().slice(0, -1); // Return ISO formatted end time
+
+            // Adjust to Australia/Sydney timezone (AEST)
+            const endDate = new Date(start.toLocaleString('en-US', { timeZone: 'Australia/Sydney' }));
+            return endDate.toISOString().slice(0, -1); // Return ISO formatted end time
         } else {
             console.warn(`Invalid duration: ${durationInMinutes}`);
             return startDateTime; // Default to start time if duration is invalid
@@ -228,7 +231,16 @@ $(document).ready(function () {
     function getCategoryBorderColor(category) {
         switch (category) {
             case '1': return '#142652';
-            // Add other cases as needed
+            case '2': return '#142652';
+            case '3': return '#142652';
+            case '5': return '#4b6c59';
+            case '6': return '#cbe4e0';
+            case '7': return '#142652';
+            case '8': return '#84cdb8';
+            case '9': return '#ebf7f4';
+            case '10': return '#84cdb8';
+            case '11': return '#84cdb8';
+            case '12': return '#555555';
             default: return '#142652'; // Default color
         }
     }
