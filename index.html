@@ -167,7 +167,7 @@ $(document).ready(function () {
         return calendarEvents;
     }
 
-    // Calculate end time based on start time and duration
+    // Correct calculation of end time based on start time and duration
     function calculateEndTime(startDateTime, duration) {
         const startTime = new Date(startDateTime);
         const durationMinutes = parseInt(duration, 10); // Parse duration in minutes
