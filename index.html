@@ -31,8 +31,8 @@ $(document).ready(function () {
 
     // Load JSON data for events and start times
     Promise.all([
-        fetch('./simplybook_events.json').then(response => response.json()),
-        fetch('./simplybook_start_times.json').then(response => response.json())
+        fetch('simplybook_events.json').then(response => response.json()),
+        fetch('simplybook_start_times.json').then(response => response.json())
     ])
     .then(([eventData, startTimeData]) => {
         console.log("Loaded event data:", eventData);
