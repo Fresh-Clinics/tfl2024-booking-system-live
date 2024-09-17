@@ -59,7 +59,7 @@ $(document).ready(function () {
         eventContent: function (arg) {
             if (arg.event && arg.event.title) {
                 const borderColor = getCategoryBorderColor(arg.event.extendedProps.category);
-                const displaySlots = arg.event.extendedProps.displaySlots && !['1', '2', '3', '5', '6', '9', '10'].includes(arg.event.extendedProps.category);
+                const displaySlots = arg.event.extendedProps.displaySlots && !['11', '12'].includes(arg.event.extendedProps.category);
                 return {
                     html: `<div class="fc-event-content" style="border-top: 4px solid ${borderColor} !important; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                               <div class="fc-event-title">${arg.event.title}</div>
@@ -133,7 +133,7 @@ $(document).ready(function () {
                             category: event.categories[0],
                             rawStartTime: startDateTime,
                             rawEndTime: endDateTime,
-                            displaySlots: !['1', '2', '3', '5', '6', '9', '10'].includes(event.categories[0])
+                            displaySlots: !['11', '12'].includes(event.categories[0])
                         });
                     });
                 });
