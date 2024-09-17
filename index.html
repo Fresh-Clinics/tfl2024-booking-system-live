@@ -80,16 +80,15 @@ $(document).ready(function () {
         },
         eventClick: function (info) {
             const event = info.event;
-            const startDateTime = luxon.DateTime.fromISO(event.start.toISOString()).setZone('Australia/Sydney').toFormat('dd MMM yyyy hh:mm a');
-            const endDateTime = luxon.DateTime.fromISO(event.end.toISOString()).setZone('Australia/Sydney').toFormat('dd MMM yyyy hh:mm a');
-            const logoPath = getResourceLogo(event.resourceId);
+            const startDateTime = luxon.DateTime.fromISO(event.start).toFormat('d MMM yyyy h:mm a');
+            const endDateTime = luxon.DateTime.fromISO(event.end).toFormat('d MMM yyyy h:mm a');
 
             const popup = document.createElement('div');
             popup.className = 'popup-overlay';
             popup.innerHTML = `
                 <div class="popup-content">
                     <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
-                    ${logoPath ? `<img src="${logoPath}" style="width: 100px; margin: 10px auto;" alt="Resource Logo">` : ''}
+                    <img src="${getResourceLogo(event.resourceId)}" style="width: 100px; margin: 10px auto;" alt="Resource Logo">
                     <p><strong>${startDateTime} - ${endDateTime}</strong></p>
                     <h3>${event.title}</h3>
                     <div style="font-size: 0.9rem; font-family: Arial;">${event.extendedProps.description}</div>                  
@@ -104,25 +103,21 @@ $(document).ready(function () {
     calendar.render();
 
     function loadEvents(successCallback) {
-        $.when(
-            $.getJSON('/simplybook_events.json'),
-            $.getJSON('/simplybook_start_times.json')
-        ).then(function (eventData, startTimeData) {
-            const events = eventData[0];
-            const startTimes = startTimeData[0];
-            const calendarEvents = processEvents(events, startTimes);
+        $.getJSON('/events_data%20(2).json', function (data) {
+            const calendarEvents = processEvents(data);
             successCallback([...calendarEvents, ...getHardcodedEvents()]);
         }).catch(function (error) {
             console.error("Error loading JSON data:", error);
         });
     }
 
-    function processEvents(events, startTimes) {
+    function processEvents(events) {
         const calendarEvents = [];
         events.forEach(event => {
-            const eventStartTimes = startTimes.filter(st => st.service_id == event.id);
-            eventStartTimes.forEach(startTime => {
-                Object.entries(startTime.timeslots).forEach(([date, slots]) => {
+            const providerTimes = event.timeMatrix;
+
+            providerTimes.forEach(provider => {
+                Object.entries(provider.timeslots).forEach(([date, slots]) => {
                     slots.forEach(slot => {
                         const startDateTime = `${date}T${slot}`;
                         const endDateTime = luxon.DateTime.fromISO(startDateTime).plus({ minutes: parseInt(event.duration) }).toISO();
@@ -131,7 +126,7 @@ $(document).ready(function () {
                             title: event.name,
                             start: startDateTime,
                             end: endDateTime,
-                            resourceId: startTime.provider_id,
+                            resourceId: provider.provider_id,
                             description: event.description || '',
                             bookings_limit: event.bookings_limit, 
                             category: event.categories[0],
@@ -262,8 +257,7 @@ $(document).ready(function () {
             }
         ]);
     }
-
-    function getCategoryBorderColor(category) {
+function getCategoryBorderColor(category) {
         switch (category) {
             case '1': return '#142652';
             case '2': return '#142652';
@@ -275,7 +269,7 @@ $(document).ready(function () {
             case '9': return '#84cdb8';
             case '10': return '#84cdb8';
             case '11': return '#555555';
-            case '12': return '#ebf7f4';
+            case '12': return '#ebf7f4!important';
             default: return '#142652'; // Default color
         }
     }
@@ -284,29 +278,29 @@ $(document).ready(function () {
         return [
             { id: '29', title: 'Woodlands Stage', category: 'Program', order_id: 'a', logo: ' ' },
             { id: '30', title: 'Fresh Lounge', category: 'Program', order_id: 'b', logo: ' ' },
-            { id: '8', title: 'Merz | Room 1', category: 'Training Suites', order_id: 'c', logo: 'image-files/Merz.png' },
-            { id: '23', title: 'Merz | Room 2', category: 'Training Suites', order_id: 'd', logo: 'image-files/Merz.png' },
-            { id: '2', title: 'Galderma | Room 1', category: 'Training Suites', order_id: 'e', logo: 'image-files/Galderma.png' },
-            { id: '24', title: 'Galderma | Room 2', category: 'Training Suites', order_id: 'f', logo: 'image-files/Galderma.png' },
-            { id: '3', title: 'Allergan', category: 'Training Suites', order_id: 'g', logo: 'image-files/Allergan.png' },
-            { id: '4', title: 'Evolus', category: 'Training Suites', order_id: 'h', logo: 'image-files/Evolus.png' },
-            { id: '7', title: 'Candela', category: 'Training Suites', order_id: 'i', logo: 'image-files/Candela.png' },
-            { id: '14', title: 'Cryomed', category: 'Training Suites', order_id: 'j', logo: 'image-files/Cryomed.png' },
-            { id: '13', title: 'Dermocosmetica | Room 1', category: 'Training Suites', order_id: 'k', logo: 'image-files/Dermocosmetica.png' },
-            { id: '25', title: 'Dermocosmetica | Room 2', category: 'Training Suites', order_id: 'l', logo: 'image-files/Dermocosmetica.png' },
-            { id: '9', title: 'EnVogue', category: 'Training Suites', order_id: 'm', logo: 'image-files/enVogue.png' },
-            { id: '10', title: 'Hugel', category: 'Training Suites', order_id: 'n', logo: 'image-files/Hugel.png' },
-            { id: '26', title: 'Rejuran', category: 'Training Suites', order_id: 'o', logo: 'image-files/Rejuran.png' },
-            { id: '11', title: 'Teoxane', category: 'Training Suites', order_id: 'p', logo: 'image-files/Teoxane.png' },
-            { id: '12', title: 'Xytide', category: 'Training Suites', order_id: 'q', logo: 'image-files/Xytide.png' },
-            { id: '15', title: 'Fresh Clinics | Room 1', category: 'Training Suites', order_id: 'r', logo: 'image-files/Fresh-Clinics.png' },
-            { id: '27', title: 'Fresh Clinics | Room 2', category: 'Training Suites', order_id: 's', logo: 'image-files/Fresh-Clinics.png' },
-            { id: '28', title: 'Laser & Skin Training', category: 'Training Suites', order_id: 't', logo: 'image-files/Laser-Skin-Training.png' },
-            { id: '20', title: 'Venus Concept', category: 'Activations Hub', order_id: 'u', logo: 'image-files/Venus.png' },
-            { id: '17', title: 'Alma', category: 'Activations Hub', order_id: 'v', logo: 'image-files/Alma.png' },
-            { id: '19', title: 'Advanced Skin Technology', category: 'Activations Hub', order_id: 'w', logo: 'image-files/AST.png' },
-            { id: '22', title: 'Fresh Tech Hub', category: 'Activations Hub', order_id: 'x', logo: 'image-files/fresh-tech-hub.png' },
-            { id: '18', title: 'The Skincare Company', category: 'Activations Hub', order_id: 'y', logo: 'image-files/Skincare-Company.png' },
+            { id: '8', title: 'Merz | Room 1', category: 'Training Suites', order_id: 'c', logo: 'Merz.png' },
+            { id: '23', title: 'Merz | Room 2', category: 'Training Suites', order_id: 'd', logo: 'Merz.png' },
+            { id: '2', title: 'Galderma | Room 1', category: 'Training Suites', order_id: 'e', logo: 'Galderma.png' },
+            { id: '24', title: 'Galderma | Room 2', category: 'Training Suites', order_id: 'f', logo: 'Galderma.png' },
+            { id: '3', title: 'Allergan', category: 'Training Suites', order_id: 'g', logo: 'Allergan.png' },
+            { id: '4', title: 'Evolus', category: 'Training Suites', order_id: 'h', logo: 'Evolus.png' },
+            { id: '7', title: 'Candela', category: 'Training Suites', order_id: 'i', logo: 'Candela.png' },
+            { id: '14', title: 'Cryomed', category: 'Training Suites', order_id: 'j', logo: 'Cryomed.png' },
+            { id: '13', title: 'Dermocosmetica | Room 1', category: 'Training Suites', order_id: 'k', logo: 'Dermocosmetica.png' },
+            { id: '25', title: 'Dermocosmetica | Room 2', category: 'Training Suites', order_id: 'l', logo: 'Dermocosmetica.png' },
+            { id: '9', title: 'EnVogue', category: 'Training Suites', order_id: 'm', logo: 'enVogue.png' },
+            { id: '10', title: 'Hugel', category: 'Training Suites', order_id: 'n', logo: 'Hugel.png' },
+            { id: '26', title: 'Rejuran', category: 'Training Suites', order_id: 'o', logo: 'Rejuran.png' },
+            { id: '11', title: 'Teoxane', category: 'Training Suites', order_id: 'p', logo: 'Teoxane.png' },
+            { id: '12', title: 'Xytide', category: 'Training Suites', order_id: 'q', logo: 'Xytide.png' },
+            { id: '15', title: 'Fresh Clinics | Room 1', category: 'Training Suites', order_id: 'r', logo: 'Fresh-Clinics.png' },
+            { id: '27', title: 'Fresh Clinics | Room 2', category: 'Training Suites', order_id: 's', logo: 'Fresh-Clinics.png' },
+            { id: '28', title: 'Laser & Skin Training', category: 'Training Suites', order_id: 't', logo: 'Laser-Skin-Training.png' },
+            { id: '20', title: 'Venus Concept', category: 'Activations Hub', order_id: 'u', logo: 'Venus.png' },
+            { id: '17', title: 'Alma', category: 'Activations Hub', order_id: 'v', logo: 'Alma.png' },
+            { id: '19', title: 'Advanced Skin Technology', category: 'Activations Hub', order_id: 'w', logo: 'AST.png' },
+            { id: '22', title: 'Fresh Tech Hub', category: 'Activations Hub', order_id: 'x', logo: 'fresh-tech-hub.png' },
+            { id: '18', title: 'The Skincare Company', category: 'Activations Hub', order_id: 'y', logo: 'Skincare-Company.png' },
             { id: '21', title: 'Wellness Sessions', category: 'Wellness & Spa', order_id: 'z', logo: ' ' },
             { id: '16', title: 'The Fresh Spa', category: 'Wellness & Spa', order_id: 'zz', logo: ' ' }
         ];
@@ -314,7 +308,7 @@ $(document).ready(function () {
 
     function getResourceLogo(resourceId) {
         const resource = getHardcodedResources().find(r => r.id === resourceId);
-        return resource && resource.logo ? resource.logo : '';
+        return resource ? resource.logo : '';
     }
 });
 </script>
