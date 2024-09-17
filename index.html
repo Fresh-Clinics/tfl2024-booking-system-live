@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FullCalendar with Hardcoded Events</title>
+    <title>Calendar with Hardcoded Events from JSON</title>
 
     <!-- Include FullCalendar Scheduler CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.15/index.global.min.css" rel="stylesheet" />
@@ -27,26 +27,21 @@
 $(document).ready(function () {
     console.log("Initializing FullCalendar with Hardcoded Events...");
 
-    // Load Event Data and Start Time Data from JSON Files
-    let eventData = [];
-    let startTimeData = [];
-
-    // Fetch events from the JSON file hosted on GitHub
-    $.getJSON('https://raw.githubusercontent.com/Fresh-Clinics/fullcalendar-hardcoded-events/main/simplybook_events.json', function(events) {
-        eventData = events; // Store events from JSON file
+    // Load events and start times from JSON files
+    Promise.all([
+        fetch('simplybook_events.json').then(response => response.json()),
+        fetch('simplybook_start_times.json').then(response => response.json())
+    ])
+    .then(([eventData, startTimeData]) => {
         console.log("Loaded event data:", eventData);
+        console.log("Loaded start time data:", startTimeData);
 
-        // Fetch start times from the JSON file hosted on GitHub
-        $.getJSON('https://raw.githubusercontent.com/Fresh-Clinics/fullcalendar-hardcoded-events/main/simplybook_start_times.json', function(startTimes) {
-            startTimeData = startTimes; // Store start times from JSON file
-            console.log("Loaded start time data:", startTimeData);
+        // Initialize FullCalendar with loaded data
+        initializeCalendar(eventData, startTimeData);
+    })
+    .catch(error => console.error('Error loading JSON data:', error));
 
-            // Render the calendar with loaded data
-            renderCalendarWithEvents();
-        });
-    });
-
-    function renderCalendarWithEvents() {
+    function initializeCalendar(eventData, startTimeData) {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
             schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
@@ -54,17 +49,13 @@ $(document).ready(function () {
             initialDate: '2024-10-29',
             timeZone: 'Australia/Sydney', // Set timezone to AEST
             headerToolbar: {
-                left: 'prev',
+                left: 'prev,next today',
                 center: 'title',
-                right: 'next'
+                right: 'resourceTimeGridDay,resourceTimeGridWeek'
             },
             dayMinWidth: 150, // Set column width
             resources: getHardcodedResources(), // Use hardcoded resources
-            events: function (info, successCallback, failureCallback) {
-                // Process and merge events and start times data for FullCalendar
-                const combinedEvents = processEvents(eventData, startTimeData);
-                successCallback(combinedEvents); // Use combined events for FullCalendar
-            },
+            events: processEventsForCalendar(eventData, startTimeData),
             height: 'auto',
             slotMinTime: '07:00',
             slotMaxTime: '23:00',
@@ -110,13 +101,16 @@ $(document).ready(function () {
             },
             eventClick: function (info) {
                 const event = info.event;
+                const startTime = event.extendedProps.rawStartTime ? formatTimeToAEST(new Date(event.extendedProps.rawStartTime)) : "Invalid Start Time";
+                const endTime = event.extendedProps.rawEndTime ? formatTimeToAEST(new Date(event.extendedProps.rawEndTime)) : "Invalid End Time";
+                
                 const popup = document.createElement('div');
                 popup.className = 'popup-overlay';
                 popup.innerHTML = `
                     <div class="popup-content">
                         <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
                         <img src="${getResourceLogo(event.resourceId)}" style="width: 100px; margin: 10px auto;" alt="Resource Logo">
-                        <p><strong>${formatTimeToAEST(new Date(event.extendedProps.rawStartTime))} - ${formatTimeToAEST(new Date(event.extendedProps.rawEndTime))}</strong></p>
+                        <p><strong>${startTime} - ${endTime}</strong></p>
                         <h3>${event.title}</h3>
                         <p>${event.extendedProps.description}</p>                  
                         <div class="popup-footer">Bookings open Monday 23rd October at 7:00PM AEST</div>
@@ -130,29 +124,18 @@ $(document).ready(function () {
         calendar.render();
     }
 
-    // Process and merge events and start times data
-    function processEvents(eventData, startTimeData) {
+    function processEventsForCalendar(eventData, startTimeData) {
         const calendarEvents = [];
-        
-        // Loop through each event in eventData
+
         eventData.forEach(event => {
-            const eventStartTimes = startTimeData.filter(startTime => parseInt(startTime.service_id) === parseInt(event.id)); // Match start times by event ID
-
-            if (!eventStartTimes.length) {
-                console.warn(`No start times found for event: ${event.name} (${event.id})`);
-                return;
-            }
-
-            // For each matching start time, calculate start and end times for the event
-            eventStartTimes.forEach(startTime => {
+            const startTimes = startTimeData.filter(startTime => startTime.service_id === parseInt(event.id));
+            startTimes.forEach(startTime => {
                 Object.keys(startTime.timeslots).forEach(date => {
                     startTime.timeslots[date].forEach(time => {
-                        // Create event with calculated start and end time
                         const startDateTime = `${date}T${time}`;
                         const endDateTime = calculateEndTimeInAEST(startDateTime, event.duration);
-
                         console.log(`Creating event for ${event.name} (${event.id}) starting at ${startDateTime} and ending at ${endDateTime}`);
-                        
+
                         calendarEvents.push({
                             id: event.id,
                             title: event.name,
@@ -229,9 +212,17 @@ $(document).ready(function () {
         ];
     }
 
-    function getResourceLogo(resourceId) {
-        const resource = getHardcodedResources().find(r => r.id === resourceId);
-        return resource ? resource.logo : '';
+    function formatTimeToAEST(date) {
+        if (isNaN(date.getTime())) {
+            console.warn('Invalid date provided to formatTimeToAEST:', date);
+            return 'Invalid Time'; // Return a fallback value for invalid dates
+        }
+        return new Intl.DateTimeFormat('en-AU', {
+            timeZone: 'Australia/Sydney',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        }).format(date);
     }
 
     function getCategoryBorderColor(category) {
@@ -251,13 +242,9 @@ $(document).ready(function () {
         }
     }
 
-    function formatTimeToAEST(date) {
-        return new Intl.DateTimeFormat('en-AU', {
-            timeZone: 'Australia/Sydney',
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: true
-        }).format(date);
+    function getResourceLogo(resourceId) {
+        const resource = getHardcodedResources().find(r => r.id === resourceId);
+        return resource ? resource.logo : '';
     }
 });
 </script>
