@@ -37,7 +37,8 @@ $(document).ready(function () {
         console.log("Loaded event data:", eventData);
         console.log("Loaded start time data:", startTimeData);
         const calendarEvents = processEventsForCalendar(eventData, startTimeData);
-        initializeCalendar(calendarEvents);
+        const hardcodedEvents = getHardcodedEvents();
+        initializeCalendar([...calendarEvents, ...hardcodedEvents]); // Combine events
     }).catch(error => {
         console.error("Error loading JSON data:", error);
     });
@@ -163,6 +164,146 @@ $(document).ready(function () {
         return calendarEvents;
     }
 
+    function getHardcodedEvents() {
+        const resources = getHardcodedResources();
+        return resources.flatMap(resource => [
+            {
+                id: `bg-event-${resource.id}-1`,
+                title: ' ',
+                description: '<b>Afternoon Tea, Sponsor Activations & Networking</b><br><br>In the Restaurant, on the Deck and in the Fresh Lounge',
+                start: '2024-10-29T15:30:00',
+                end: '2024-10-29T16:00:00',
+                resourceId: resource.id,
+                category: '12',
+                display: 'background'
+            },
+            {
+                id: `bg-event-${resource.id}-2`,
+                title: ' ',
+                description: '<b>Lunch, Sponsor Activations & Networking</b><br><br>In the Restaurant, on the Deck and in the Fresh Lounge',
+                start: '2024-10-29T13:00:00',
+                end: '2024-10-29T14:00:00',
+                resourceId: resource.id,
+                category: '12',
+                display: 'background'
+            },
+            {
+                id: `bg-event-${resource.id}-3`,
+                title: ' ',
+                description: '<b>Fresh Life Welcome Event</b><br>Brought to you by Galderma<br><br>On the Deck',
+                start: '2024-10-29T17:30:00',
+                end: '2024-10-29T18:30:00',
+                resourceId: resource.id,
+                category: '12',
+                display: 'background'
+            },
+            {
+                id: `bg-event-${resource.id}-4`,
+                title: ' ',
+                description: '<b>Morning Tea, Sponsor Activations & Networking</b><br><br>In the Restaurant, on the Deck and in the Fresh Lounge',
+                start: '2024-10-30T11:30:00',
+                end: '2024-10-30T12:00:00',
+                resourceId: resource.id,
+                category: '12',
+                display: 'background'
+            },
+            {
+                id: `bg-event-${resource.id}-5`,
+                title: ' ',
+                description: '<b>Lunch, Sponsor Activations & Networking</b><br><br>In the Restaurant, on the Deck and in the Fresh Lounge',
+                start: '2024-10-30T13:30:00',
+                end: '2024-10-30T14:30:00',
+                resourceId: resource.id,
+                category: '12',
+                display: 'background'
+            },
+            {
+                id: `bg-event-${resource.id}-6`,
+                title: ' ',
+                description: '<b>Afternoon Tea, Sponsor Activations & Networking</b><br><br>In the Restaurant, on the Deck and in the Fresh Lounge',
+                start: '2024-10-30T16:00:00',
+                end: '2024-10-30T16:30:00',
+                resourceId: resource.id,
+                category: '12',
+                display: 'background'
+            },
+            {
+                id: `bg-event-${resource.id}-7`,
+                title: ' ',
+                description: '<b>Aperitivo Hour</b><br>Brought to you by Fresh Clinics Training Team<br><br>On the Deck',
+                start: '2024-10-30T17:30:00',
+                end: '2024-10-30T18:30:00',
+                resourceId: resource.id,
+                category: '12',
+                display: 'background'
+            },
+            {
+                id: `bg-event-${resource.id}-8`,
+                title: ' ',
+                description: '<b>Morning Tea, Sponsor Activations & Networking</b><br><br>In the Restaurant, on the Deck and in the Fresh Lounge',
+                start: '2024-10-31T11:00:00',
+                end: '2024-10-31T11:30:00',
+                resourceId: resource.id,
+                category: '12',
+                display: 'background'
+            },
+            {
+                id: `bg-event-${resource.id}-9`,
+                title: ' ',
+                description: '<b>Lunch, Sponsor Activations & Networking</b><br><br>In the Restaurant, on the Deck and in the Fresh Lounge',
+                start: '2024-10-31T13:30:00',
+                end: '2024-10-31T14:30:00',
+                resourceId: resource.id,
+                category: '12',
+                display: 'background'
+            },
+            {
+                id: `bg-event-${resource.id}-10`,
+                title: ' ',
+                description: '<b>Afternoon Tea, Sponsor Activations & Networking</b><br><br>In the Restaurant, on the Deck and in the Fresh Lounge',
+                start: '2024-10-31T16:00:00',
+                end: '2024-10-31T16:30:00',
+                resourceId: resource.id,
+                category: '12',
+                display: 'background'
+            },
+            {
+                id: `bg-event-${resource.id}-11`,
+                title: ' ',
+                description: '<b>Fright Night Finale</b><br>(Ticketed Event)<br>Brought to you by Fresh Clinics<br><br>Woodlands Stage<br><br><b><a style="color:#84cdb8" href="https://events.humanitix.com/the-fresh-life-2024#group1">Buy ticket</a>',
+                start: '2024-10-31T18:00:00',
+                end: '2024-10-31T22:30:00',
+                resourceId: resource.id,
+                category: '12',
+                display: 'background'
+            }
+        ]);
+    }
+
+    function formatTimeToAEST(dateTime) {
+        if (!dateTime.isValid) {
+            return "Invalid time";
+        }
+        return dateTime.toLocaleString(luxon.DateTime.TIME_SIMPLE);
+    }
+
+    function getCategoryBorderColor(category) {
+        switch (category) {
+            case '1': return '#142652';
+            case '2': return '#142652';
+            case '3': return '#142652';
+            case '5': return '#4b6c59';
+            case '6': return '#cbe4e0';
+            case '7': return '#142652';
+            case '8': return '#84cdb8';
+            case '9': return '#ebf7f4';
+            case '10': return '#84cdb8';
+            case '11': return '#84cdb8';
+            case '12': return '#555555';
+            default: return '#142652'; // Default color
+        }
+    }
+
     function getHardcodedResources() {
         return [
             { id: '29', title: 'Woodlands Stage', category: 'Program', order_id: 'a', logo: ' ' },
@@ -198,30 +339,6 @@ $(document).ready(function () {
     function getResourceLogo(resourceId) {
         const resource = getHardcodedResources().find(r => r.id === resourceId);
         return resource ? resource.logo : '';
-    }
-
-    function formatTimeToAEST(dateTime) {
-        if (!dateTime.isValid) {
-            return "Invalid time";
-        }
-        return dateTime.toLocaleString(luxon.DateTime.TIME_SIMPLE);
-    }
-
-    function getCategoryBorderColor(category) {
-        switch (category) {
-            case '1': return '#142652';
-            case '2': return '#142652';
-            case '3': return '#142652';
-            case '5': return '#4b6c59';
-            case '6': return '#cbe4e0';
-            case '7': return '#142652';
-            case '8': return '#84cdb8';
-            case '9': return '#ebf7f4';
-            case '10': return '#84cdb8';
-            case '11': return '#84cdb8';
-            case '12': return '#555555';
-            default: return '#142652'; // Default color
-        }
     }
 });
 </script>
