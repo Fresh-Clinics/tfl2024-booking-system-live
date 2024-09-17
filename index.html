@@ -37,10 +37,17 @@ $(document).ready(function () {
         initialDate: '2024-10-29',
         timeZone: 'Australia/Sydney', // Set timezone to AEST
         headerToolbar: {
-            left: 'prev,next today',
+            left: 'prev,next',
             center: 'title',
-            right: 'resourceTimeGridDay,resourceTimeGridWeek'
-        },
+            right: 'resourceTimeGridDay,resourceTimeGridThreeDay'
+    },
+    views: {
+      resourceTimeGridThreeDay: {
+        type: 'resourceTimeGrid',
+        duration: { days: 3 },
+        buttonText: '3 days'
+      }
+    },
         dayMinWidth: 150, // Set column width
         height: 'auto',
         slotMinTime: '07:00',
