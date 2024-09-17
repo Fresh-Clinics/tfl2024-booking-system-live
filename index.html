@@ -80,8 +80,9 @@ $(document).ready(function () {
         },
         eventClick: function (info) {
             const event = info.event;
-            const startDateTime = event.start ? luxon.DateTime.fromISO(event.start.toISOString(), { zone: 'Australia/Sydney' }).toFormat('dd MMM yyyy hh:mm a') : 'Invalid DateTime';
-            const endDateTime = event.end ? luxon.DateTime.fromISO(event.end.toISOString(), { zone: 'Australia/Sydney' }).toFormat('dd MMM yyyy hh:mm a') : 'Invalid DateTime';
+            // Convert to 'Australia/Sydney' timezone and format as 'h:mm a' (X:XX AM - X:XX PM)
+            const startDateTime = event.start ? luxon.DateTime.fromISO(event.start.toISOString()).setZone('Australia/Sydney').toFormat('h:mm a') : 'Invalid DateTime';
+            const endDateTime = event.end ? luxon.DateTime.fromISO(event.end.toISOString()).setZone('Australia/Sydney').toFormat('h:mm a') : 'Invalid DateTime';
 
             const logo = getResourceLogo(event.resourceId);
             const logoHTML = logo ? `<img src="image-files/${logo}" style="width: 100px; margin: 10px auto;" alt="Resource Logo">` : '';
