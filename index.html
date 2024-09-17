@@ -17,6 +17,8 @@
     <!-- Include Tippy.js for tooltips -->
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
+    <!-- Include Luxon for timezone management -->
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.1.1/build/global/luxon.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -106,7 +108,7 @@ $(document).ready(function () {
                     <div class="popup-content">
                         <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
                         <img src="${getResourceLogo(event.resourceId)}" style="width: 100px; margin: 10px auto;" alt="Resource Logo">
-                        <p><strong>${formatTimeToAEST(new Date(event.extendedProps.rawStartTime))} - ${formatTimeToAEST(new Date(event.extendedProps.rawEndTime))}</strong></p>
+                        <p><strong>${formatTimeToAEST(DateTime.fromISO(event.extendedProps.rawStartTime).setZone('Australia/Sydney'))} - ${formatTimeToAEST(DateTime.fromISO(event.extendedProps.rawEndTime).setZone('Australia/Sydney'))}</strong></p>
                         <h3>${event.title}</h3>
                         <p>${event.extendedProps.description}</p>                  
                         <div class="popup-footer">Bookings open Monday 23rd October at 7:00PM AEST</div>
@@ -121,6 +123,7 @@ $(document).ready(function () {
     }
 
     function processEventsForCalendar(eventData, startTimeData) {
+        const { DateTime } = luxon;
         const calendarEvents = [];
 
         eventData.forEach(event => {
@@ -131,27 +134,27 @@ $(document).ready(function () {
             startTimesForEvent.forEach(startTimeEntry => {
                 Object.entries(startTimeEntry.timeslots).forEach(([date, times]) => {
                     times.forEach(time => {
-                        // Create a Date object using the timezone offset for AEST (UTC+10)
-                        const startDateTime = new Date(`${date}T${time}+10:00`).toISOString();
+                        // Use Luxon to handle AEST timezone explicitly
+                        const startDateTime = DateTime.fromISO(`${date}T${time}`, { zone: 'Australia/Sydney' });
                         
-                        // Calculate the end time using the event duration and maintain the AEST timezone
+                        // Calculate the end time using the event duration
                         const durationMinutes = parseInt(event.duration);
-                        const endDateTime = new Date(new Date(startDateTime).getTime() + durationMinutes * 60000).toISOString();
+                        const endDateTime = startDateTime.plus({ minutes: durationMinutes });
 
                         calendarEvents.push({
                             id: event.id,
                             title: event.name,
-                            start: startDateTime,
-                            end: endDateTime,
+                            start: startDateTime.toISO(),
+                            end: endDateTime.toISO(),
                             resourceId: startTimeEntry.provider_id.toString(),
                             description: event.description || '',
                             bookings_limit: event.bookings_limit,
                             category: event.categories[0] || '',
-                            rawStartTime: startDateTime,
-                            rawEndTime: endDateTime
+                            rawStartTime: startDateTime.toISO(),
+                            rawEndTime: endDateTime.toISO()
                         });
 
-                        console.log(`Creating event for ${event.name} (${event.id}) starting at ${startDateTime} and ending at ${endDateTime}`);
+                        console.log(`Creating event for ${event.name} (${event.id}) starting at ${startDateTime.toISO()} and ending at ${endDateTime.toISO()}`);
                     });
                 });
             });
@@ -197,16 +200,11 @@ $(document).ready(function () {
         return resource ? resource.logo : '';
     }
 
-    function formatTimeToAEST(date) {
-        if (isNaN(date.getTime())) {
+    function formatTimeToAEST(dateTime) {
+        if (!dateTime.isValid) {
             return "Invalid time";
         }
-        return new Intl.DateTimeFormat('en-AU', {
-            timeZone: 'Australia/Sydney',
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: true
-        }).format(date);
+        return dateTime.toLocaleString(luxon.DateTime.TIME_SIMPLE);
     }
 
     function getCategoryBorderColor(category) {
