@@ -80,8 +80,8 @@ $(document).ready(function () {
         },
         eventClick: function (info) {
             const event = info.event;
-            const startDateTime = luxon.DateTime.fromISO(event.start).toFormat('d MMM yyyy h:mm a');
-            const endDateTime = luxon.DateTime.fromISO(event.end).toFormat('d MMM yyyy h:mm a');
+            const startDateTime = luxon.DateTime.fromISO(event.start, { zone: 'Australia/Sydney' }).toFormat('d MMM yyyy h:mm a');
+            const endDateTime = luxon.DateTime.fromISO(event.end, { zone: 'Australia/Sydney' }).toFormat('d MMM yyyy h:mm a');
 
             const popup = document.createElement('div');
             popup.className = 'popup-overlay';
