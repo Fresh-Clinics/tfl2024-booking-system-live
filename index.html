@@ -132,7 +132,8 @@ $(document).ready(function () {
                             bookings_limit: event.bookings_limit, 
                             category: event.categories[0],
                             rawStartTime: startDateTime,
-                            rawEndTime: end['1', '2', '3', '5', '6', '9', '10'].includes(event.categories[0])
+                            rawEndTime: endDateTime,
+                            displaySlots: !['1', '2', '3', '5', '6', '9', '10'].includes(event.categories[0])
                         });
                     });
                 });
