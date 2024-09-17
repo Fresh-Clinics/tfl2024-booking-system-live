@@ -12,6 +12,9 @@
     <!-- Include Tippy.js for tooltips -->
     <link href="https://unpkg.com/tippy.js@6/dist/tippy.css" rel="stylesheet" />
 
+    <!-- Link to custom styles -->
+    <link rel="stylesheet" href="style.css">
+
     <!-- Include FullCalendar Scheduler JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.15/index.global.min.js"></script>
 
@@ -21,37 +24,6 @@
     <!-- Include Tippy.js for tooltips -->
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
-
-    <style>
-        #calendar {
-            max-width: 1100px;
-            margin: 40px auto;
-        }
-        .popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .popup-content {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            max-width: 500px;
-            width: 90%;
-        }
-        .close-popup {
-            float: right;
-            cursor: pointer;
-            font-size: 20px;
-        }
-    </style>
 </head>
 <body>
 
