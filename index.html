@@ -90,8 +90,9 @@ $(document).ready(function () {
             popup.innerHTML = `
                 <div class="popup-content">
                     <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
-                    ${getResourceLogo(event.resourceId) ? `<img src="${getResourceLogo(event.resourceId)}" style="width: 100px; margin: 10px auto;" alt="Resource Logo">` : ''}
-                    <p><strong>${startDateTime} - ${endDateTime}</strong></p>
+                   <img src="${getResourceLogo(event.resourceId)}" style="width: 100px; margin: 10px auto;" alt="Resource Logo">
+                        <p><strong>${formatTimeToAEST(new Date(event.extendedProps.rawStartTime))} - ${formatTimeToAEST(new Date(event.extendedProps.rawEndTime))}</strong></p>
+                        
                     <h3>${event.title}</h3>
                     <div style="font-size: 0.9rem; font-family: Arial;">${event.extendedProps.description}</div>                  
                     <div class="popup-footer">Bookings open Monday 23rd October at 7:00PM AEST</div>
