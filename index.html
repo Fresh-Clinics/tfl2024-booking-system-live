@@ -8,22 +8,16 @@
 
     <!-- Include FullCalendar Scheduler CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.15/index.global.min.css" rel="stylesheet" />
-
     <!-- Include Tippy.js for tooltips -->
     <link href="https://unpkg.com/tippy.js@6/dist/tippy.css" rel="stylesheet" />
-
-    <!-- Link to custom styles -->
-    <link rel="stylesheet" href="style.css">
-
     <!-- Include FullCalendar Scheduler JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.15/index.global.min.js"></script>
-
     <!-- Include jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
     <!-- Include Tippy.js for tooltips -->
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -33,23 +27,98 @@
 $(document).ready(function () {
     console.log("Initializing FullCalendar with Hardcoded Events...");
 
-    // Fetch JSON files
+    // Fetch JSON data for events and start times
     Promise.all([
-        fetch('https://fullcalendar-hardcoded-events.vercel.app/simplybook_events.json').then(response => response.json()),
-        fetch('https://fullcalendar-hardcoded-events.vercel.app/simplybook_start_times.json').then(response => response.json())
-    ])
-    .then(([eventData, startTimeData]) => {
+        fetch('./simplybook_events.json').then(response => response.json()),
+        fetch('./simplybook_start_times.json').then(response => response.json())
+    ]).then(([eventData, startTimeData]) => {
         console.log("Loaded event data:", eventData);
         console.log("Loaded start time data:", startTimeData);
-
-        const processedEvents = processEventsForCalendar(eventData, startTimeData);
-        console.log("Processed events for calendar:", processedEvents);
-
-        renderCalendar(processedEvents);
-    })
-    .catch(error => {
+        const calendarEvents = processEventsForCalendar(eventData, startTimeData);
+        initializeCalendar(calendarEvents);
+    }).catch(error => {
         console.error("Error loading JSON data:", error);
     });
+
+    function initializeCalendar(events) {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+            initialView: 'resourceTimeGridDay',
+            initialDate: '2024-10-29',
+            timeZone: 'Australia/Sydney', // Set timezone to AEST
+            headerToolbar: {
+                left: 'prev',
+                center: 'title',
+                right: 'next'
+            },
+            dayMinWidth: 150, // Set column width
+            resources: getHardcodedResources(), // Use hardcoded resources
+            events: events,
+            height: 'auto',
+            slotMinTime: '07:00',
+            slotMaxTime: '23:00',
+            resourceOrder: 'order_id', // Order by order_id
+            businessHours: [
+                {
+                    daysOfWeek: [2],
+                    startTime: '09:00',
+                    endTime: '18:30'
+                },
+                {
+                    daysOfWeek: [3],
+                    startTime: '07:30',
+                    endTime: '19:00'
+                },
+                {
+                    daysOfWeek: [4],
+                    startTime: '07:00',
+                    endTime: '22:30'
+                }
+            ],
+            eventContent: function (arg) {
+                if (arg.event && arg.event.title) {
+                    // Determine border color based on category
+                    const borderColor = getCategoryBorderColor(arg.event.extendedProps.category);
+                    return {
+                        html: `<div class="fc-event-content" style="border-top: 4px solid ${borderColor} !important; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                                  <div class="fc-event-title">${arg.event.title}</div>
+                                  <div class="fc-event-slots">${arg.event.extendedProps.displaySlots ? `Slots Available: ${arg.event.extendedProps.bookings_limit}` : ''}</div> <!-- Display slots available -->
+                               </div>`
+                    };
+                } else {
+                    return { html: '<div class="fc-event-content"><div class="fc-event-title">Invalid Event</div></div>' };
+                }
+            },
+            eventDidMount: function (info) {
+                tippy(info.el, {
+                    content: `<strong>${info.event.title}</strong><br>${info.event.extendedProps.description}`,
+                    allowHTML: true,
+                    theme: 'light-border',
+                    placement: 'top'
+                });
+            },
+            eventClick: function (info) {
+                const event = info.event;
+                const popup = document.createElement('div');
+                popup.className = 'popup-overlay';
+                popup.innerHTML = `
+                    <div class="popup-content">
+                        <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
+                        <img src="${getResourceLogo(event.resourceId)}" style="width: 100px; margin: 10px auto;" alt="Resource Logo">
+                        <p><strong>${formatTimeToAEST(new Date(event.extendedProps.rawStartTime))} - ${formatTimeToAEST(new Date(event.extendedProps.rawEndTime))}</strong></p>
+                        <h3>${event.title}</h3>
+                        <p>${event.extendedProps.description}</p>                  
+                        <div class="popup-footer">Bookings open Monday 23rd October at 7:00PM AEST</div>
+                    </div>
+                `;
+                document.body.appendChild(popup);
+            },
+            allDaySlot: false
+        });
+
+        calendar.render();
+    }
 
     function processEventsForCalendar(eventData, startTimeData) {
         const calendarEvents = [];
@@ -62,9 +131,12 @@ $(document).ready(function () {
             startTimesForEvent.forEach(startTimeEntry => {
                 Object.entries(startTimeEntry.timeslots).forEach(([date, times]) => {
                     times.forEach(time => {
-                        const startDateTime = new Date(`${date}T${time}`).toISOString(); // Convert to ISO string
+                        // Create a Date object using the timezone offset for AEST (UTC+10)
+                        const startDateTime = new Date(`${date}T${time}+10:00`).toISOString();
+                        
+                        // Calculate the end time using the event duration and maintain the AEST timezone
                         const durationMinutes = parseInt(event.duration);
-                        const endDateTime = new Date(new Date(startDateTime).getTime() + durationMinutes * 60000).toISOString(); // Calculate end time
+                        const endDateTime = new Date(new Date(startDateTime).getTime() + durationMinutes * 60000).toISOString();
 
                         calendarEvents.push({
                             id: event.id,
@@ -88,90 +160,10 @@ $(document).ready(function () {
         return calendarEvents;
     }
 
-    function renderCalendar(events) {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
-            initialView: 'resourceTimeGridDay',
-            initialDate: '2024-10-29',
-            timeZone: 'Australia/Sydney',
-            headerToolbar: {
-                left: 'prev,next',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,resourceTimeGridDay'
-            },
-            resources: getHardcodedResources(),
-            events: events,
-            height: 'auto',
-            slotMinTime: '07:00',
-            slotMaxTime: '23:00',
-            resourceOrder: 'order_id',
-            businessHours: [
-                { daysOfWeek: [2], startTime: '09:00', endTime: '18:30' },
-                { daysOfWeek: [3], startTime: '07:30', endTime: '19:00' },
-                { daysOfWeek: [4], startTime: '07:00', endTime: '22:30' }
-            ],
-            eventContent: function (arg) {
-                if (arg.event && arg.event.title) {
-                    const borderColor = getCategoryBorderColor(arg.event.extendedProps.category);
-                    return {
-                        html: `<div class="fc-event-content" style="border-top: 4px solid ${borderColor} !important; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                                  <div class="fc-event-title">${arg.event.title}</div>
-                               </div>`
-                    };
-                } else {
-                    return { html: '<div class="fc-event-content"><div class="fc-event-title">Invalid Event</div></div>' };
-                }
-            },
-            eventDidMount: function (info) {
-                tippy(info.el, {
-                    content: `<strong>${info.event.title}</strong><br>${info.event.extendedProps.description}`,
-                    allowHTML: true,
-                    theme: 'light-border',
-                    placement: 'top'
-                });
-            },
-            eventClick: function (info) {
-                const event = info.event;
-                const popup = document.createElement('div');
-                popup.className = 'popup-overlay';
-                popup.innerHTML = `
-                    <div class="popup-content">
-                        <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
-                        <h3>${event.title}</h3>
-                        <p>${event.extendedProps.description}</p>
-                        <div class="popup-footer">Bookings open Monday 23rd October at 7:00PM AEST</div>
-                    </div>
-                `;
-                document.body.appendChild(popup);
-            },
-            allDaySlot: false
-        });
-
-        calendar.render();
-    }
-
-    function getCategoryBorderColor(category) {
-        switch (category) {
-            case '1': return '#142652';
-            case '2': return '#142652';
-            case '3': return '#142652';
-            case '5': return '#4b6c59';
-            case '6': return '#cbe4e0';
-            case '7': return '#142652';
-            case '8': return '#84cdb8';
-            case '9': return '#ebf7f4';
-            case '10': return '#84cdb8';
-            case '11': return '#84cdb8';
-            case '12': return '#555555';
-            default: return '#142652';
-        }
-    }
-
     function getHardcodedResources() {
         return [
-            { id: '29', title: 'Woodlands Stage', category: 'Program', order_id: 'a', logo: '' },
-            { id: '30', title: 'Fresh Lounge', category: 'Program', order_id: 'b', logo: '' },
+            { id: '29', title: 'Woodlands Stage', category: 'Program', order_id: 'a', logo: ' ' },
+            { id: '30', title: 'Fresh Lounge', category: 'Program', order_id: 'b', logo: ' ' },
             { id: '8', title: 'Merz | Room 1', category: 'Training Suites', order_id: 'c', logo: 'Merz.png' },
             { id: '23', title: 'Merz | Room 2', category: 'Training Suites', order_id: 'd', logo: 'Merz.png' },
             { id: '2', title: 'Galderma | Room 1', category: 'Training Suites', order_id: 'e', logo: 'Galderma.png' },
@@ -195,9 +187,43 @@ $(document).ready(function () {
             { id: '19', title: 'Advanced Skin Technology', category: 'Activations Hub', order_id: 'w', logo: 'AST.png' },
             { id: '22', title: 'Fresh Tech Hub', category: 'Activations Hub', order_id: 'x', logo: 'fresh-tech-hub.png' },
             { id: '18', title: 'The Skincare Company', category: 'Activations Hub', order_id: 'y', logo: 'Skincare-Company.png' },
-            { id: '21', title: 'Wellness Sessions', category: 'Wellness & Spa', order_id: 'z', logo: '' },
-            { id: '16', title: 'The Fresh Spa', category: 'Wellness & Spa', order_id: 'zz', logo: '' }
+            { id: '21', title: 'Wellness Sessions', category: 'Wellness & Spa', order_id: 'z', logo: ' ' },
+            { id: '16', title: 'The Fresh Spa', category: 'Wellness & Spa', order_id: 'zz', logo: ' ' }
         ];
+    }
+
+    function getResourceLogo(resourceId) {
+        const resource = getHardcodedResources().find(r => r.id === resourceId);
+        return resource ? resource.logo : '';
+    }
+
+    function formatTimeToAEST(date) {
+        if (isNaN(date.getTime())) {
+            return "Invalid time";
+        }
+        return new Intl.DateTimeFormat('en-AU', {
+            timeZone: 'Australia/Sydney',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        }).format(date);
+    }
+
+    function getCategoryBorderColor(category) {
+        switch (category) {
+            case '1': return '#142652';
+            case '2': return '#142652';
+            case '3': return '#142652';
+            case '5': return '#4b6c59';
+            case '6': return '#cbe4e0';
+            case '7': return '#142652';
+            case '8': return '#84cdb8';
+            case '9': return '#ebf7f4';
+            case '10': return '#84cdb8';
+            case '11': return '#84cdb8';
+            case '12': return '#555555';
+            default: return '#142652'; // Default color
+        }
     }
 });
 </script>
