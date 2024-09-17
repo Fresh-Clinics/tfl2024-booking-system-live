@@ -183,10 +183,11 @@ $(document).ready(function () {
             return start.toISOString().slice(0, -1); // Return ISO formatted end time
         } else {
             console.warn(`Invalid duration: ${durationInMinutes}`);
-            return startDateTime; // Fallback to start time if duration is invalid
+            return startDateTime; // Default to start time if duration is invalid
         }
     }
 
+    // Predefined hardcoded resources
     function getHardcodedResources() {
         return [
             { id: '29', title: 'Woodlands Stage', category: 'Program', order_id: 'a', logo: ' ' },
@@ -227,7 +228,7 @@ $(document).ready(function () {
     function getCategoryBorderColor(category) {
         switch (category) {
             case '1': return '#142652';
-            // ... other cases ...
+            // Add other cases as needed
             default: return '#142652'; // Default color
         }
     }
