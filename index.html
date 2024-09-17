@@ -27,7 +27,7 @@
 $(document).ready(function () {
     console.log("Initializing FullCalendar with Hardcoded Events...");
 
-    // Step 1: Load Event Data and Start Time Data from JSON Files
+    // Load Event Data and Start Time Data from JSON Files
     let eventData = [];
     let startTimeData = [];
 
@@ -41,7 +41,7 @@ $(document).ready(function () {
             startTimeData = startTimes; // Store start times from JSON file
             console.log("Loaded start time data:", startTimeData);
 
-            // Step 2: Render the calendar with loaded data
+            // Render the calendar with loaded data
             renderCalendarWithEvents();
         });
     });
@@ -130,13 +130,18 @@ $(document).ready(function () {
         calendar.render();
     }
 
-    // Step 3: Process and merge events and start times data
+    // Process and merge events and start times data
     function processEvents(eventData, startTimeData) {
         const calendarEvents = [];
         
         // Loop through each event in eventData
         eventData.forEach(event => {
             const eventStartTimes = startTimeData.filter(startTime => parseInt(startTime.service_id) === parseInt(event.id)); // Match start times by event ID
+
+            if (!eventStartTimes.length) {
+                console.warn(`No start times found for event: ${event.name} (${event.id})`);
+                return;
+            }
 
             // For each matching start time, calculate start and end times for the event
             eventStartTimes.forEach(startTime => {
@@ -146,6 +151,8 @@ $(document).ready(function () {
                         const startDateTime = `${date}T${time}`;
                         const endDateTime = calculateEndTime(startDateTime, event.duration);
 
+                        console.log(`Creating event for ${event.name} (${event.id}) starting at ${startDateTime} and ending at ${endDateTime}`);
+                        
                         calendarEvents.push({
                             id: event.id,
                             title: event.name,
@@ -167,16 +174,15 @@ $(document).ready(function () {
         return calendarEvents;
     }
 
-    // Correct calculation of end time based on start time and duration
-    function calculateEndTime(startDateTime, duration) {
-        const startTime = new Date(startDateTime);
-        const durationMinutes = parseInt(duration, 10); // Parse duration in minutes
-
-        if (!isNaN(durationMinutes)) {
-            const endTime = new Date(startTime.getTime() + durationMinutes * 60000); // Add duration to start time
-            return endTime.toISOString(); // Convert to ISO format
+    // Function to calculate end time based on duration in minutes
+    function calculateEndTime(startDateTime, durationInMinutes) {
+        const start = new Date(startDateTime);
+        const duration = parseInt(durationInMinutes, 10);
+        if (!isNaN(duration)) {
+            start.setMinutes(start.getMinutes() + duration); // Add duration to start time
+            return start.toISOString().slice(0, -1); // Return ISO formatted end time
         } else {
-            console.warn("Invalid duration provided. Cannot calculate end time.");
+            console.warn(`Invalid duration: ${durationInMinutes}`);
             return startDateTime; // Fallback to start time if duration is invalid
         }
     }
@@ -213,26 +219,17 @@ $(document).ready(function () {
         ];
     }
 
-    function getCategoryBorderColor(category) {
-        switch (category) {
-            case '1': return '#142652';
-            case '2': return '#142652';
-            case '3': return '#142652';
-            case '5': return '#4b6c59';
-            case '6': return '#cbe4e0';
-            case '7': return '#142652';
-            case '8': return '#84cdb8';
-            case '9': return '#ebf7f4';
-            case '10': return '#84cdb8';
-            case '11': return '#84cdb8';
-            case '12': return '#555555';
-            default: return '#142652'; // Default color
-        }
-    }
-
     function getResourceLogo(resourceId) {
         const resource = getHardcodedResources().find(r => r.id === resourceId);
         return resource ? resource.logo : '';
+    }
+
+    function getCategoryBorderColor(category) {
+        switch (category) {
+            case '1': return '#142652';
+            // ... other cases ...
+            default: return '#142652'; // Default color
+        }
     }
 
     function formatTimeToAEST(date) {
