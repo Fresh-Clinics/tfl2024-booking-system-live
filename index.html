@@ -134,9 +134,11 @@ $(document).ready(function () {
     function processEvents(eventData, startTimeData) {
         const calendarEvents = [];
         
+        // Loop through each event in eventData
         eventData.forEach(event => {
             const eventStartTimes = startTimeData.filter(startTime => parseInt(startTime.service_id) === parseInt(event.id)); // Match start times by event ID
 
+            // For each matching start time, calculate start and end times for the event
             eventStartTimes.forEach(startTime => {
                 Object.keys(startTime.timeslots).forEach(date => {
                     startTime.timeslots[date].forEach(time => {
