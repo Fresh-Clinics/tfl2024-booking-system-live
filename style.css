@@ -123,3 +123,4 @@ body {
     color: #0e4333 !important; /* Set custom text color */
     opacity: unset;
 }
+.fc-direction-ltr .fc-button-group > .fc-button:not(:last-child) {margin-right:10px}
