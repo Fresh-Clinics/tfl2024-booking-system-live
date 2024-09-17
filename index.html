@@ -17,9 +17,8 @@
     <!-- Include Tippy.js for tooltips -->
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
-    <!-- Include Luxon for date manipulation -->
+    <!-- Include Luxon for date and time handling -->
     <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
-    <!-- Link to external stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -30,148 +29,121 @@
 $(document).ready(function () {
     console.log("Initializing FullCalendar with Hardcoded Events...");
 
-    // Load event data from JSON files
-    Promise.all([
-        fetch('simplybook_events.json').then(response => response.json()),
-        fetch('simplybook_start_times.json').then(response => response.json())
-    ])
-    .then(([eventData, startTimeData]) => {
-        console.log("Loaded event data:", eventData);
-        console.log("Loaded start time data:", startTimeData);
+    // Initialize FullCalendar
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+        initialView: 'resourceTimeGridDay',
+        initialDate: '2024-10-29',
+        timeZone: 'Australia/Sydney', // Set timezone to AEST
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'resourceTimeGridDay,resourceTimeGridWeek'
+        },
+        dayMinWidth: 150, // Set column width
+        height: 'auto',
+        slotMinTime: '07:00',
+        slotMaxTime: '23:00',
+        resourceOrder: 'order_id',
+        resources: getHardcodedResources(),
+        events: function (info, successCallback, failureCallback) {
+            // Load events from JSON and hardcoded
+            loadEvents(successCallback);
+        },
+        businessHours: [
+            { daysOfWeek: [2], startTime: '09:00', endTime: '18:30' },
+            { daysOfWeek: [3], startTime: '07:30', endTime: '19:00' },
+            { daysOfWeek: [4], startTime: '07:00', endTime: '22:30' }
+        ],
+        eventContent: function (arg) {
+            if (arg.event && arg.event.title) {
+                const borderColor = getCategoryBorderColor(arg.event.extendedProps.category);
+                const displaySlots = arg.event.extendedProps.displaySlots && !['9', '10', '11', '12'].includes(arg.event.extendedProps.category);
+                return {
+                    html: `<div class="fc-event-content" style="border-top: 4px solid ${borderColor} !important; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                              <div class="fc-event-title">${arg.event.title}</div>
+                              <div class="fc-event-slots">${displaySlots ? `Slots Available: ${arg.event.extendedProps.bookings_limit}` : ''}</div>
+                           </div>`
+                };
+            } else {
+                return { html: '<div class="fc-event-content"><div class="fc-event-title">Invalid Event</div></div>' };
+            }
+        },
+        eventDidMount: function (info) {
+            tippy(info.el, {
+                content: `<strong>${info.event.title}</strong><br>${info.event.extendedProps.description}`,
+                allowHTML: true,
+                theme: 'light-border',
+                placement: 'top'
+            });
+        },
+        eventClick: function (info) {
+            const event = info.event;
+            const startDateTime = luxon.DateTime.fromISO(event.start).toFormat('dd MMM yyyy hh:mm a');
+            const endDateTime = luxon.DateTime.fromISO(event.end).toFormat('dd MMM yyyy hh:mm a');
 
-        // Process events and start times
-        const processedEvents = processEvents(eventData, startTimeData);
-        console.log("Processed events for calendar:", processedEvents);
-
-        // Initialize FullCalendar
-        initializeCalendar(processedEvents);
-    })
-    .catch(error => {
-        console.error("Error loading JSON data:", error);
+            const popup = document.createElement('div');
+            popup.className = 'popup-overlay';
+            popup.innerHTML = `
+                <div class="popup-content">
+                    <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
+                    <img src="${getResourceLogo(event.resourceId)}" style="width: 100px; margin: 10px auto;" alt="Resource Logo">
+                    <p><strong>${startDateTime} - ${endDateTime}</strong></p>
+                    <h3>${event.title}</h3>
+                    <div style="font-size: 0.9rem; font-family: Arial;">${event.extendedProps.description}</div>                  
+                    <div class="popup-footer">Bookings open Monday 23rd October at 7:00PM AEST</div>
+                </div>
+            `;
+            document.body.appendChild(popup);
+        },
+        allDaySlot: false
     });
 
-    function initializeCalendar(events) {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
-            initialView: 'resourceTimeGridDay',
-            initialDate: '2024-10-29',
-            timeZone: 'Australia/Sydney', // Set timezone to AEST
-            headerToolbar: {
-                left: 'prev',
-                center: 'title',
-                right: 'next'
-            },
-            dayMinWidth: 150, // Set column width
-            resources: getHardcodedResources(), // Use hardcoded resources
-            events: events,
-            height: 'auto',
-            slotMinTime: '07:00',
-            slotMaxTime: '23:00',
-            resourceOrder: 'order_id', // Order by order_id
-            businessHours: [
-                {
-                    daysOfWeek: [2],
-                    startTime: '09:00',
-                    endTime: '18:30'
-                },
-                {
-                    daysOfWeek: [3],
-                    startTime: '07:30',
-                    endTime: '19:00'
-                },
-                {
-                    daysOfWeek: [4],
-                    startTime: '07:00',
-                    endTime: '22:30'
-                }
-            ],
-            eventContent: function (arg) {
-                if (arg.event && arg.event.title) {
-                    // Determine border color based on category
-                    const borderColor = getCategoryBorderColor(arg.event.extendedProps.category);
-                    return {
-                        html: `<div class="fc-event-content" style="border-top: 4px solid ${borderColor} !important; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                                  <div class="fc-event-title">${arg.event.title}</div>
-                                  <div class="fc-event-slots">${arg.event.extendedProps.displaySlots ? `Slots Available: ${arg.event.extendedProps.bookings_limit}` : ''}</div> <!-- Display slots available -->
-                               </div>`
-                    };
-                } else {
-                    return { html: '<div class="fc-event-content"><div class="fc-event-title">Invalid Event</div></div>' };
-                }
-            },
-            eventDidMount: function (info) {
-                tippy(info.el, {
-                    content: `<strong>${info.event.title}</strong><br>${info.event.extendedProps.description}`,
-                    allowHTML: true,
-                    theme: 'light-border',
-                    placement: 'top'
-                });
-            },
-            eventClick: function (info) {
-                const event = info.event;
-                const startTime = luxon.DateTime.fromISO(event.start).setZone('Australia/Sydney');
-                const endTime = luxon.DateTime.fromISO(event.end).setZone('Australia/Sydney');
+    calendar.render();
 
-                const popup = document.createElement('div');
-                popup.className = 'popup-overlay';
-                popup.innerHTML = `
-                    <div class="popup-content">
-                        <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
-                        <img src="${getResourceLogo(event.resourceId)}" style="width: 100px; margin: 10px auto;" alt="Resource Logo">
-                        <p><strong>${formatTimeToAEST(startTime)} - ${formatTimeToAEST(endTime)}</strong></p>
-                        <h3>${event.title}</h3>
-                        <p>${event.extendedProps.description}</p>                  
-                        <div class="popup-footer">Bookings open Monday 23rd October at 7:00PM AEST</div>
-                    </div>
-                `;
-                document.body.appendChild(popup);
-            },
-            allDaySlot: false
+    function loadEvents(successCallback) {
+        $.when(
+            $.getJSON('/simplybook_events.json'),
+            $.getJSON('/simplybook_start_times.json')
+        ).then(function (eventData, startTimeData) {
+            const events = eventData[0];
+            const startTimes = startTimeData[0];
+            const calendarEvents = processEvents(events, startTimes);
+            successCallback([...calendarEvents, ...getHardcodedEvents()]);
+        }).catch(function (error) {
+            console.error("Error loading JSON data:", error);
         });
-
-        calendar.render();
     }
 
-    function formatTimeToAEST(dateTime) {
-        if (!dateTime.isValid) {
-            return "Invalid time";
-        }
-        return dateTime.toLocaleString(luxon.DateTime.TIME_SIMPLE);
-    }
-
-    function processEvents(eventData, startTimeData) {
-        const events = [];
-        eventData.forEach(event => {
-            const matchingStartTimes = startTimeData.filter(start => start.service_id == event.id);
-            matchingStartTimes.forEach(startTimeEntry => {
-                Object.entries(startTimeEntry.timeslots).forEach(([date, times]) => {
-                    times.forEach(time => {
-                        const startDateTime = `${date}T${time}`;
-                        const durationMinutes = parseInt(event.duration);
-                        const endDateTime = luxon.DateTime.fromISO(startDateTime).plus({ minutes: durationMinutes }).toISO();
-                        console.log(`Creating event for ${event.name} (${event.id}) starting at ${startDateTime} and ending at ${endDateTime}`);
-                        events.push({
+    function processEvents(events, startTimes) {
+        const calendarEvents = [];
+        events.forEach(event => {
+            const eventStartTimes = startTimes.filter(st => st.service_id == event.id);
+            eventStartTimes.forEach(startTime => {
+                Object.entries(startTime.timeslots).forEach(([date, slots]) => {
+                    slots.forEach(slot => {
+                        const startDateTime = `${date}T${slot}`;
+                        const endDateTime = luxon.DateTime.fromISO(startDateTime).plus({ minutes: parseInt(event.duration) }).toISO();
+                        calendarEvents.push({
                             id: event.id,
                             title: event.name,
                             start: startDateTime,
                             end: endDateTime,
-                            resourceId: startTimeEntry.provider_id.toString(),
+                            resourceId: startTime.provider_id,
                             description: event.description || '',
-                            bookings_limit: event.bookings_limit, // Add bookings limit
-                            category: event.categories[0], // Get the first category
-                            displaySlots: true, // Include slots display
-                            rawStartTime: startDateTime, // For popup
-                            rawEndTime: endDateTime // For popup
+                            bookings_limit: event.bookings_limit, 
+                            category: event.categories[0],
+                            rawStartTime: startDateTime,
+                            rawEndTime: endDateTime,
+                            displaySlots: !['1', '2', '3', '5', '6', '7', '9', '10', '11', '12'].includes(event.categories[0])
                         });
                     });
                 });
             });
         });
-
-        // Add hardcoded events
-        events.push(...getHardcodedEvents());
-        return events;
+        console.log("Processed events for calendar:", calendarEvents);
+        return calendarEvents;
     }
 
     function getHardcodedEvents() {
@@ -289,8 +261,7 @@ $(document).ready(function () {
             }
         ]);
     }
-
-    function getCategoryBorderColor(category) {
+function getCategoryBorderColor(category) {
         switch (category) {
             case '1': return '#142652';
             case '2': return '#142652';
@@ -299,10 +270,10 @@ $(document).ready(function () {
             case '6': return '#cbe4e0';
             case '7': return '#142652';
             case '8': return '#84cdb8';
-            case '9': return '#ebf7f4';
+            case '9': return '#84cdb8';
             case '10': return '#84cdb8';
-            case '11': return '#84cdb8';
-            case '12': return '#555555';
+            case '11': return '#555555';
+            case '12': return '#ebf7f4';
             default: return '#142652'; // Default color
         }
     }
