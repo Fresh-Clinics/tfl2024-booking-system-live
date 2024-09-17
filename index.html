@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendar with Hardcoded Events from JSON</title>
+    <title>FullCalendar with Hardcoded Events</title>
 
     <!-- Include FullCalendar Scheduler CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.15/index.global.min.css" rel="stylesheet" />
@@ -27,7 +27,7 @@
 $(document).ready(function () {
     console.log("Initializing FullCalendar with Hardcoded Events...");
 
-    // Load events and start times from JSON files using correct relative paths
+    // Load JSON data for events and start times
     Promise.all([
         fetch('./simplybook_events.json').then(response => response.json()),
         fetch('./simplybook_start_times.json').then(response => response.json())
@@ -35,13 +35,15 @@ $(document).ready(function () {
     .then(([eventData, startTimeData]) => {
         console.log("Loaded event data:", eventData);
         console.log("Loaded start time data:", startTimeData);
-
-        // Initialize FullCalendar with loaded data
-        initializeCalendar(eventData, startTimeData);
+        
+        const calendarEvents = processEventsForCalendar(eventData, startTimeData);
+        renderCalendarWithEvents(calendarEvents);
     })
-    .catch(error => console.error('Error loading JSON data:', error));
+    .catch(error => {
+        console.error("Error loading JSON data:", error);
+    });
 
-    function initializeCalendar(eventData, startTimeData) {
+    function renderCalendarWithEvents(events) {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
             schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
@@ -49,13 +51,13 @@ $(document).ready(function () {
             initialDate: '2024-10-29',
             timeZone: 'Australia/Sydney', // Set timezone to AEST
             headerToolbar: {
-                left: 'prev,next today',
+                left: 'prev',
                 center: 'title',
-                right: 'resourceTimeGridDay,resourceTimeGridWeek'
+                right: 'next'
             },
             dayMinWidth: 150, // Set column width
             resources: getHardcodedResources(), // Use hardcoded resources
-            events: processEventsForCalendar(eventData, startTimeData),
+            events: events,
             height: 'auto',
             slotMinTime: '07:00',
             slotMaxTime: '23:00',
@@ -101,16 +103,13 @@ $(document).ready(function () {
             },
             eventClick: function (info) {
                 const event = info.event;
-                const startTime = event.extendedProps.rawStartTime ? formatTimeToAEST(new Date(event.extendedProps.rawStartTime)) : "Invalid Start Time";
-                const endTime = event.extendedProps.rawEndTime ? formatTimeToAEST(new Date(event.extendedProps.rawEndTime)) : "Invalid End Time";
-                
                 const popup = document.createElement('div');
                 popup.className = 'popup-overlay';
                 popup.innerHTML = `
                     <div class="popup-content">
                         <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
                         <img src="${getResourceLogo(event.resourceId)}" style="width: 100px; margin: 10px auto;" alt="Resource Logo">
-                        <p><strong>${startTime} - ${endTime}</strong></p>
+                        <p><strong>${formatTimeToAEST(new Date(event.extendedProps.rawStartTime))} - ${formatTimeToAEST(new Date(event.extendedProps.rawEndTime))}</strong></p>
                         <h3>${event.title}</h3>
                         <p>${event.extendedProps.description}</p>                  
                         <div class="popup-footer">Bookings open Monday 23rd October at 7:00PM AEST</div>
@@ -124,29 +123,41 @@ $(document).ready(function () {
         calendar.render();
     }
 
-    function processEventsForCalendar(eventData, startTimeData) {
+    function processEventsForCalendar(events, startTimes) {
         const calendarEvents = [];
 
-        eventData.forEach(event => {
-            const startTimes = startTimeData.filter(startTime => startTime.service_id === parseInt(event.id));
-            startTimes.forEach(startTime => {
-                Object.keys(startTime.timeslots).forEach(date => {
-                    startTime.timeslots[date].forEach(time => {
-                        const startDateTime = `${date}T${time}`;
-                        const endDateTime = calculateEndTimeInAEST(startDateTime, event.duration);
-                        console.log(`Creating event for ${event.name} (${event.id}) starting at ${startDateTime} and ending at ${endDateTime}`);
+        events.forEach(event => {
+            const matchingStartTimes = startTimes.filter(startTime => startTime.service_id === parseInt(event.id));
 
+            matchingStartTimes.forEach(startTimeData => {
+                const timeslots = startTimeData.timeslots;
+
+                Object.entries(timeslots).forEach(([date, times]) => {
+                    times.forEach(startTime => {
+                        // Parse the start time
+                        const startDateTime = new Date(`${date}T${startTime}`);
+                        
+                        // Calculate the end time by adding the event duration (in minutes)
+                        const endDateTime = new Date(startDateTime.getTime() + parseInt(event.duration) * 60000);
+
+                        // Convert back to ISO strings
+                        const formattedStart = startDateTime.toISOString();
+                        const formattedEnd = endDateTime.toISOString();
+
+                        console.log(`Creating event for ${event.name} (${event.id}) starting at ${formattedStart} and ending at ${formattedEnd}`);
+
+                        // Add the event to the calendar
                         calendarEvents.push({
                             id: event.id,
                             title: event.name,
-                            start: startDateTime,
-                            end: endDateTime,
-                            resourceId: startTime.provider_id,
+                            start: formattedStart,
+                            end: formattedEnd,
+                            resourceId: startTimeData.provider_id,
                             description: event.description || '',
-                            bookings_limit: event.bookings_limit,
-                            category: event.categories[0],
-                            rawStartTime: startDateTime,
-                            rawEndTime: endDateTime
+                            bookings_limit: event.bookings_limit || '',
+                            category: event.categories ? event.categories[0] : 'default', // Get the first category
+                            rawStartTime: formattedStart, // For popup
+                            rawEndTime: formattedEnd // For popup
                         });
                     });
                 });
@@ -157,31 +168,7 @@ $(document).ready(function () {
         return calendarEvents;
     }
 
-    // Function to calculate end time in AEST
-    function calculateEndTimeInAEST(startDateTime, durationInMinutes) {
-        const start = new Date(startDateTime); // Convert start date string to Date object
-        const duration = parseInt(durationInMinutes, 10); // Convert duration to integer
-
-        if (!isNaN(start.getTime()) && !isNaN(duration)) {
-            // Add duration to start time
-            start.setMinutes(start.getMinutes() + duration);
-
-            // Convert to ISO string in the Australia/Sydney timezone
-            const options = { timeZone: 'Australia/Sydney', hour12: false };
-            const endDateString = start.toLocaleDateString('en-GB', options); // Format date part
-            const endTimeString = start.toLocaleTimeString('en-GB', options); // Format time part
-            return `${endDateString}T${endTimeString}`;
-        } else {
-            console.warn('Invalid date or duration:', startDateTime, durationInMinutes);
-            return startDateTime; // Fallback to the start time if calculation fails
-        }
-    }
-
     function formatTimeToAEST(date) {
-        if (isNaN(date.getTime())) {
-            console.warn('Invalid date provided to formatTimeToAEST:', date);
-            return 'Invalid Time'; // Return a fallback value for invalid dates
-        }
         return new Intl.DateTimeFormat('en-AU', {
             timeZone: 'Australia/Sydney',
             hour: '2-digit',
