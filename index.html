@@ -4,118 +4,231 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FullCalendar with Hardcoded Events</title>
+    <title>Calendar with Hardcoded Events</title>
+
+    <!-- Include FullCalendar Scheduler CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.15/index.global.min.css" rel="stylesheet" />
+
+    <!-- Include Tippy.js for tooltips -->
+    <link href="https://unpkg.com/tippy.js@6/dist/tippy.css" rel="stylesheet" />
+
+    <!-- Include FullCalendar Scheduler JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.15/index.global.min.js"></script>
+
+    <!-- Include jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Include Tippy.js for tooltips -->
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+
+    <style>
+        #calendar {
+            max-width: 1100px;
+            margin: 40px auto;
+        }
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 90%;
+        }
+        .close-popup {
+            float: right;
+            cursor: pointer;
+            font-size: 20px;
+        }
+    </style>
 </head>
 <body>
+
 <div id="calendar"></div>
 
 <script>
 $(document).ready(function () {
     console.log("Initializing FullCalendar with Hardcoded Events...");
 
-    // Load JSON data for events and start times
+    // Fetch JSON files
     Promise.all([
-        fetch('simplybook_events.json').then(response => response.json()),
-        fetch('simplybook_start_times.json').then(response => response.json())
+        fetch('https://fullcalendar-hardcoded-events.vercel.app/simplybook_events.json').then(response => response.json()),
+        fetch('https://fullcalendar-hardcoded-events.vercel.app/simplybook_start_times.json').then(response => response.json())
     ])
     .then(([eventData, startTimeData]) => {
         console.log("Loaded event data:", eventData);
         console.log("Loaded start time data:", startTimeData);
 
-        // Process the fetched data to create events for FullCalendar
-        const events = processEvents(eventData, startTimeData);
+        const processedEvents = processEventsForCalendar(eventData, startTimeData);
+        console.log("Processed events for calendar:", processedEvents);
 
-        // Initialize FullCalendar with processed events
-        initializeCalendar(events);
+        renderCalendar(processedEvents);
     })
-    .catch(error => console.error("Error loading JSON data:", error));
+    .catch(error => {
+        console.error("Error loading JSON data:", error);
+    });
 
-    // Process events to create the start and end times
-    function processEvents(eventData, startTimeData) {
-        const events = [];
-        startTimeData.forEach(startTimeEntry => {
-            const serviceId = startTimeEntry.service_id;
-            const event = eventData.find(e => e.id === serviceId.toString());
+    function processEventsForCalendar(eventData, startTimeData) {
+        const calendarEvents = [];
 
-            if (event) {
+        eventData.forEach(event => {
+            const startTimesForEvent = startTimeData.filter(
+                (startTime) => startTime.service_id === parseInt(event.id)
+            );
+
+            startTimesForEvent.forEach(startTimeEntry => {
                 Object.entries(startTimeEntry.timeslots).forEach(([date, times]) => {
                     times.forEach(time => {
-                        const startDateTime = new Date(`${date}T${time}+10:00`); // Convert to AEST
-                        const durationMinutes = parseInt(event.duration, 10);
-                        const endDateTime = new Date(startDateTime.getTime() + durationMinutes * 60000);
+                        const startDateTime = new Date(`${date}T${time}`).toISOString(); // Convert to ISO string
+                        const durationMinutes = parseInt(event.duration);
+                        const endDateTime = new Date(new Date(startDateTime).getTime() + durationMinutes * 60000).toISOString(); // Calculate end time
 
-                        events.push({
+                        calendarEvents.push({
                             id: event.id,
                             title: event.name,
-                            start: startDateTime.toISOString(),
-                            end: endDateTime.toISOString(),
-                            description: event.description || '',
+                            start: startDateTime,
+                            end: endDateTime,
                             resourceId: startTimeEntry.provider_id.toString(),
-                            category: event.categories[0] || 'default',
+                            description: event.description || '',
+                            bookings_limit: event.bookings_limit,
+                            category: event.categories[0] || '',
+                            rawStartTime: startDateTime,
+                            rawEndTime: endDateTime
                         });
 
-                        console.log(`Creating event for ${event.name} (${event.id}) starting at ${startDateTime.toISOString()} and ending at ${endDateTime.toISOString()}`);
+                        console.log(`Creating event for ${event.name} (${event.id}) starting at ${startDateTime} and ending at ${endDateTime}`);
                     });
                 });
-            }
+            });
         });
 
-        console.log("Processed events for calendar:", events);
-        return events;
+        return calendarEvents;
     }
 
-    // Initialize FullCalendar with the events
-    function initializeCalendar(events) {
+    function renderCalendar(events) {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
             schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
             initialView: 'resourceTimeGridDay',
             initialDate: '2024-10-29',
-            timeZone: 'Australia/Sydney', // Set timezone to AEST
+            timeZone: 'Australia/Sydney',
             headerToolbar: {
-                left: 'prev,next today',
+                left: 'prev,next',
                 center: 'title',
-                right: 'resourceTimeGridDay,timeGridWeek,dayGridMonth'
+                right: 'dayGridMonth,timeGridWeek,resourceTimeGridDay'
             },
             resources: getHardcodedResources(),
             events: events,
+            height: 'auto',
             slotMinTime: '07:00',
             slotMaxTime: '23:00',
             resourceOrder: 'order_id',
             businessHours: [
-                {
-                    daysOfWeek: [2],
-                    startTime: '09:00',
-                    endTime: '18:30'
-                },
-                {
-                    daysOfWeek: [3],
-                    startTime: '07:30',
-                    endTime: '19:00'
-                },
-                {
-                    daysOfWeek: [4],
-                    startTime: '07:00',
-                    endTime: '22:30'
-                }
+                { daysOfWeek: [2], startTime: '09:00', endTime: '18:30' },
+                { daysOfWeek: [3], startTime: '07:30', endTime: '19:00' },
+                { daysOfWeek: [4], startTime: '07:00', endTime: '22:30' }
             ],
+            eventContent: function (arg) {
+                if (arg.event && arg.event.title) {
+                    const borderColor = getCategoryBorderColor(arg.event.extendedProps.category);
+                    return {
+                        html: `<div class="fc-event-content" style="border-top: 4px solid ${borderColor} !important; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                                  <div class="fc-event-title">${arg.event.title}</div>
+                               </div>`
+                    };
+                } else {
+                    return { html: '<div class="fc-event-content"><div class="fc-event-title">Invalid Event</div></div>' };
+                }
+            },
+            eventDidMount: function (info) {
+                tippy(info.el, {
+                    content: `<strong>${info.event.title}</strong><br>${info.event.extendedProps.description}`,
+                    allowHTML: true,
+                    theme: 'light-border',
+                    placement: 'top'
+                });
+            },
+            eventClick: function (info) {
+                const event = info.event;
+                const popup = document.createElement('div');
+                popup.className = 'popup-overlay';
+                popup.innerHTML = `
+                    <div class="popup-content">
+                        <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
+                        <h3>${event.title}</h3>
+                        <p>${event.extendedProps.description}</p>
+                        <div class="popup-footer">Bookings open Monday 23rd October at 7:00PM AEST</div>
+                    </div>
+                `;
+                document.body.appendChild(popup);
+            },
             allDaySlot: false
         });
 
         calendar.render();
     }
 
+    function getCategoryBorderColor(category) {
+        switch (category) {
+            case '1': return '#142652';
+            case '2': return '#142652';
+            case '3': return '#142652';
+            case '5': return '#4b6c59';
+            case '6': return '#cbe4e0';
+            case '7': return '#142652';
+            case '8': return '#84cdb8';
+            case '9': return '#ebf7f4';
+            case '10': return '#84cdb8';
+            case '11': return '#84cdb8';
+            case '12': return '#555555';
+            default: return '#142652';
+        }
+    }
+
     function getHardcodedResources() {
         return [
-            { id: '29', title: 'Woodlands Stage', category: 'Program', order_id: 'a' },
-            { id: '30', title: 'Fresh Lounge', category: 'Program', order_id: 'b' },
-            // Add more resources as needed...
+            { id: '29', title: 'Woodlands Stage', category: 'Program', order_id: 'a', logo: '' },
+            { id: '30', title: 'Fresh Lounge', category: 'Program', order_id: 'b', logo: '' },
+            { id: '8', title: 'Merz | Room 1', category: 'Training Suites', order_id: 'c', logo: 'Merz.png' },
+            { id: '23', title: 'Merz | Room 2', category: 'Training Suites', order_id: 'd', logo: 'Merz.png' },
+            { id: '2', title: 'Galderma | Room 1', category: 'Training Suites', order_id: 'e', logo: 'Galderma.png' },
+            { id: '24', title: 'Galderma | Room 2', category: 'Training Suites', order_id: 'f', logo: 'Galderma.png' },
+            { id: '3', title: 'Allergan', category: 'Training Suites', order_id: 'g', logo: 'Allergan.png' },
+            { id: '4', title: 'Evolus', category: 'Training Suites', order_id: 'h', logo: 'Evolus.png' },
+            { id: '7', title: 'Candela', category: 'Training Suites', order_id: 'i', logo: 'Candela.png' },
+            { id: '14', title: 'Cryomed', category: 'Training Suites', order_id: 'j', logo: 'Cryomed.png' },
+            { id: '13', title: 'Dermocosmetica | Room 1', category: 'Training Suites', order_id: 'k', logo: 'Dermocosmetica.png' },
+            { id: '25', title: 'Dermocosmetica | Room 2', category: 'Training Suites', order_id: 'l', logo: 'Dermocosmetica.png' },
+            { id: '9', title: 'EnVogue', category: 'Training Suites', order_id: 'm', logo: 'enVogue.png' },
+            { id: '10', title: 'Hugel', category: 'Training Suites', order_id: 'n', logo: 'Hugel.png' },
+            { id: '26', title: 'Rejuran', category: 'Training Suites', order_id: 'o', logo: 'Rejuran.png' },
+            { id: '11', title: 'Teoxane', category: 'Training Suites', order_id: 'p', logo: 'Teoxane.png' },
+            { id: '12', title: 'Xytide', category: 'Training Suites', order_id: 'q', logo: 'Xytide.png' },
+            { id: '15', title: 'Fresh Clinics | Room 1', category: 'Training Suites', order_id: 'r', logo: 'Fresh-Clinics.png' },
+            { id: '27', title: 'Fresh Clinics | Room 2', category: 'Training Suites', order_id: 's', logo: 'Fresh-Clinics.png' },
+            { id: '28', title: 'Laser & Skin Training', category: 'Training Suites', order_id: 't', logo: 'Laser-Skin-Training.png' },
+            { id: '20', title: 'Venus Concept', category: 'Activations Hub', order_id: 'u', logo: 'Venus.png' },
+            { id: '17', title: 'Alma', category: 'Activations Hub', order_id: 'v', logo: 'Alma.png' },
+            { id: '19', title: 'Advanced Skin Technology', category: 'Activations Hub', order_id: 'w', logo: 'AST.png' },
+            { id: '22', title: 'Fresh Tech Hub', category: 'Activations Hub', order_id: 'x', logo: 'fresh-tech-hub.png' },
+            { id: '18', title: 'The Skincare Company', category: 'Activations Hub', order_id: 'y', logo: 'Skincare-Company.png' },
+            { id: '21', title: 'Wellness Sessions', category: 'Wellness & Spa', order_id: 'z', logo: '' },
+            { id: '16', title: 'The Fresh Spa', category: 'Wellness & Spa', order_id: 'zz', logo: '' }
         ];
     }
 });
 </script>
+
 </body>
 </html>
