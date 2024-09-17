@@ -142,21 +142,26 @@ $(document).ready(function () {
                     startTime.timeslots[date].forEach(time => {
                         // Create event with calculated start and end time
                         const startDateTime = `${date}T${time}`;
-                        const durationMinutes = parseInt(event.duration, 10) || 60; // Use event duration or default to 60 minutes
-                        const endDateTime = new Date(new Date(startDateTime).getTime() + durationMinutes * 60000).toISOString();
+                        const durationMinutes = parseInt(event.duration, 10); // Correctly parse duration from event data
+                        
+                        if (!isNaN(durationMinutes)) {
+                            const endDateTime = new Date(new Date(startDateTime).getTime() + durationMinutes * 60000).toISOString();
 
-                        calendarEvents.push({
-                            id: event.id,
-                            title: event.name,
-                            start: startDateTime,
-                            end: endDateTime,
-                            resourceId: startTime.provider_id.toString(), // Ensure resourceId is a string
-                            description: event.description || '',
-                            bookings_limit: event.bookings_limit || 'N/A',
-                            category: event.categories ? event.categories[0] : 'Unknown',
-                            rawStartTime: startDateTime,
-                            rawEndTime: endDateTime
-                        });
+                            calendarEvents.push({
+                                id: event.id,
+                                title: event.name,
+                                start: startDateTime,
+                                end: endDateTime,
+                                resourceId: startTime.provider_id.toString(), // Ensure resourceId is a string
+                                description: event.description || '',
+                                bookings_limit: event.bookings_limit || 'N/A',
+                                category: event.categories ? event.categories[0] : 'Unknown',
+                                rawStartTime: startDateTime,
+                                rawEndTime: endDateTime
+                            });
+                        } else {
+                            console.warn(`Invalid duration for event ID ${event.id}: using default duration.`);
+                        }
                     });
                 });
             });
