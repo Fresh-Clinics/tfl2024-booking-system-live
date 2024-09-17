@@ -98,7 +98,6 @@
         "timeslots": {
           "2024-10-28": [],
           "2024-10-29": [
-            "15:00:00",
             "17:00:00"
           ],
           "2024-10-30": [
@@ -296,9 +295,7 @@
         "service_id": 85,
         "timeslots": {
           "2024-10-28": [],
-          "2024-10-29": [
-            "14:00:00"
-          ],
+          "2024-10-29": [],
           "2024-10-30": [
             "14:30:00"
           ],
@@ -483,7 +480,7 @@
         "service_id": 75,
         "timeslots": {
           "2024-10-28": [],
-          "2024-10-29": ["14:00:00"],
+          "2024-10-29": [],
           "2024-10-30": [],
           "2024-10-31": [
             "14:30:00"
@@ -1707,12 +1704,12 @@
     "bookings_limit": "15",
     "products": [
       {
-        "product_id": "1",
-        "qty": "1"
-      },
-      {
         "product_id": "2",
         "qty": "15"
+      },
+      {
+        "product_id": "1",
+        "qty": "1"
       }
     ],
     "resource_groups": [],
@@ -1964,16 +1961,16 @@
     "bookings_limit": "15",
     "products": [
       {
+        "product_id": "2",
+        "qty": "13"
+      },
+      {
         "product_id": "1",
         "qty": "1"
       },
       {
         "product_id": "3",
         "qty": "1"
-      },
-      {
-        "product_id": "2",
-        "qty": "13"
       }
     ],
     "resource_groups": [],
@@ -4378,15 +4375,15 @@
     "bookings_limit": "6",
     "products": [
       {
-        "product_id": "2",
-        "qty": "3"
-      },
-      {
         "product_id": "1",
         "qty": "1"
       },
       {
         "product_id": "3",
+        "qty": "3"
+      },
+      {
+        "product_id": "2",
         "qty": "3"
       }
     ],
@@ -4865,16 +4862,16 @@
     "bookings_limit": "15",
     "products": [
       {
-        "product_id": "2",
-        "qty": "15"
-      },
-      {
         "product_id": "1",
         "qty": "1"
       },
       {
         "product_id": "3",
         "qty": "1"
+      },
+      {
+        "product_id": "2",
+        "qty": "15"
       }
     ],
     "resource_groups": [],
@@ -4941,12 +4938,12 @@
     "bookings_limit": "15",
     "products": [
       {
-        "product_id": "2",
-        "qty": "15"
-      },
-      {
         "product_id": "1",
         "qty": "1"
+      },
+      {
+        "product_id": "2",
+        "qty": "15"
       }
     ],
     "resource_groups": [],
@@ -5078,12 +5075,12 @@
     "bookings_limit": "15",
     "products": [
       {
-        "product_id": "2",
-        "qty": "15"
-      },
-      {
         "product_id": "1",
         "qty": "1"
+      },
+      {
+        "product_id": "2",
+        "qty": "15"
       }
     ],
     "resource_groups": [],
@@ -5346,12 +5343,12 @@
     "bookings_limit": "15",
     "products": [
       {
-        "product_id": "1",
-        "qty": "1"
-      },
-      {
         "product_id": "2",
         "qty": "15"
+      },
+      {
+        "product_id": "1",
+        "qty": "1"
       }
     ],
     "resource_groups": [],
@@ -8751,7 +8748,7 @@
   },
   {
     "id": "280",
-    "name": "Session To Be Shared Soon |  Mike Clague, Fresh Clinics, Workshop",
+    "name": "Patient Satisfaction and Profit",
     "duration": "45",
     "buffertime_before": "0",
     "buffertime_after": "0",
@@ -8835,7 +8832,7 @@
       "9"
     ],
     "position_in_category": {
-      "9": "7"
+      "9": "8"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -8889,7 +8886,7 @@
       "9"
     ],
     "position_in_category": {
-      "9": "17"
+      "9": "18"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -8914,12 +8911,12 @@
   },
   {
     "id": "272",
-    "name": "Session To Be Shared Soon | Dr David Eccleston, Fresh Clinics",
+    "name": "Do We Really Need So Many Toxins? A Guide to Choosing Yours",
     "duration": "45",
     "buffertime_before": "0",
     "buffertime_after": "0",
     "hide_duration": "0",
-    "description": "<p><b style=\"font-size: 1rem;\">Presented by</b><b style=\"font-size: 1rem;\"><span style=\"font-size: 1rem;\">&nbsp;</span></b><b>Dr David Ecclesto</b><br></p><p><b style=\"font-size: 1rem;\">Brought to you by Fresh Clinics</b></p>",
+    "description": "<p><b style=\"font-size: 1rem;\">Presented by</b><b style=\"font-size: 1rem;\"><span style=\"font-size: 1rem;\">&nbsp;</span></b><b>Dr David Eccleston</b><br></p><p><b style=\"font-size: 1rem;\">Brought to you by Fresh Clinics</b></p>",
     "is_public": "1",
     "is_active": "1",
     "position": "34",
@@ -8943,7 +8940,7 @@
       "9"
     ],
     "position_in_category": {
-      "9": "41"
+      "9": "42"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -8973,7 +8970,7 @@
     "buffertime_before": "0",
     "buffertime_after": "0",
     "hide_duration": "0",
-    "description": "<p><u>Intradermal Botulinum Toxin for the Reduction of Sebum Production and Pore Size</u></p><p>In this presentation, we will investigate whether intradermal injections of botulinum toxin (“microtoxin”) may improve skin quality and assess the effectiveness of microtoxin for the improvement of sebum levels and pore size count. This presentation will look at a case series of patients treated with intradermal botulinum toxin and assessed at four weekly intervals to examine change in pore count and sebum production as a measure of oiliness.</p><p><u>Skin Quality And Skin Rejuvenation With Revive + How Revive Fits Into Your Practice</u></p><p>The unique qualities of Revive / How Revive has predictable results that last longer due to the CPM technology, cross-linked HA and the addition of glycerol.</p><p><b style=\"font-size: 1rem;\">Presented by</b><b><span style=\"font-size: 1rem;\">&nbsp;</span>Dr Stephen Lowe &amp;&nbsp;<span style=\"font-size: 1rem;\">Freya Carlsen</span></b></p><p><b style=\"font-size: 1rem;\">Brought to you by Merz</b></p>",
+    "description": "<p><u>Intradermal Botulinum Toxin for the Reduction of Sebum Production and Pore Size</u></p><p><span style=\"font-size: 1rem;\">In this presentation, we will investigate whether intradermal injections of botulinum toxin (“microtoxin”) may improve skin quality and assess the effectiveness of microtoxin for the improvement of sebum levels and pore size count. This presentation will look at a case series of patients treated with intradermal botulinum toxin and assessed at four weekly intervals to examine change in pore count and sebum production as a measure of oiliness.</span><br></p><p><u>Glow Up with Revive: Revitalize Skin Quality &amp; Elevate Your Practice</u></p><p><span style=\"font-size: 1rem;\">The unique qualities of Revive / How Revive has predictable results that last longer due to the CPM technology, cross-linked HA and the addition of glycerol.</span><br></p><p><b style=\"font-size: 1rem;\">Presented by</b><b><span style=\"font-size: 1rem;\">&nbsp;</span>Dr Stephen Lowe &amp;&nbsp;<span style=\"font-size: 1rem;\">Freya Carlsen</span></b></p><p><b style=\"font-size: 1rem;\">Brought to you by Merz</b></p>",
     "is_public": "1",
     "is_active": "1",
     "position": "34",
@@ -8998,7 +8995,7 @@
       "9"
     ],
     "position_in_category": {
-      "9": "43"
+      "9": "45"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -9052,7 +9049,7 @@
       "9"
     ],
     "position_in_category": {
-      "9": "45"
+      "9": "48"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -9065,10 +9062,10 @@
         "service_id": 273,
         "timeslots": {
           "2024-10-28": [],
-          "2024-10-29": [
+          "2024-10-29": [],
+          "2024-10-30": [
             "10:40:00"
           ],
-          "2024-10-30": [],
           "2024-10-31": [],
           "2024-11-01": []
         }
@@ -9185,7 +9182,7 @@
   },
   {
     "id": "277",
-    "name": "Session To Be Shared Soon |  Mike Clague, Fresh Clinics, Workshop",
+    "name": "Patient Satisfaction and Profit",
     "duration": "45",
     "buffertime_before": "0",
     "buffertime_after": "0",
@@ -9269,7 +9266,7 @@
       "10"
     ],
     "position_in_category": {
-      "10": "11"
+      "10": "12"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -9323,7 +9320,7 @@
       "10"
     ],
     "position_in_category": {
-      "10": "16"
+      "10": "17"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -9348,12 +9345,12 @@
   },
   {
     "id": "275",
-    "name": "Session To Be Shared Soon | Dr David Eccleston, Fresh Clinics",
+    "name": "Do We Really Need So Many Toxins? A Guide to Choosing Yours",
     "duration": "45",
     "buffertime_before": "0",
     "buffertime_after": "0",
     "hide_duration": "0",
-    "description": "<p><b style=\"font-size: 1rem;\">Presented by</b><b style=\"font-size: 1rem;\"><span style=\"font-size: 1rem;\">&nbsp;</span></b><b>Dr David Ecclesto</b><br></p><p><b style=\"font-size: 1rem;\">Brought to you by Fresh Clinics</b></p>",
+    "description": "<p><b style=\"font-size: 1rem;\">Presented by</b><b style=\"font-size: 1rem;\"><span style=\"font-size: 1rem;\">&nbsp;</span></b><b>Dr David Eccleston</b><br></p><p><b style=\"font-size: 1rem;\">Brought to you by Fresh Clinics</b></p>",
     "is_public": "1",
     "is_active": "1",
     "position": "34",
@@ -9377,7 +9374,7 @@
       "10"
     ],
     "position_in_category": {
-      "10": "23"
+      "10": "24"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -9432,7 +9429,7 @@
       "10"
     ],
     "position_in_category": {
-      "10": "25"
+      "10": "27"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -9486,7 +9483,7 @@
       "10"
     ],
     "position_in_category": {
-      "10": "27"
+      "10": "29"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10380,7 +10377,7 @@
     "buffertime_before": "0",
     "buffertime_after": "0",
     "hide_duration": "0",
-    "description": "<div><b style=\"font-size: 1rem;\">Presented b</b><b><span style=\"font-size: 1rem;\">y</span><span style=\"font-size: 1rem;\"><span style=\"font-size: 1rem;\">&nbsp;</span></span>Ryan Bourgeois</b></div><div><b style=\"font-size: 1rem;\">Brought to you by Fresh Clinics</b></div>",
+    "description": "<div><b style=\"font-size: 1rem;\">Presented b</b><b><span style=\"font-size: 1rem;\">y</span><span style=\"font-size: 1rem;\"><span style=\"font-size: 1rem;\">&nbsp;</span></span>Ryan Bourgeois</b></div><div><b><br></b><b style=\"font-size: 1rem;\">Brought to you by Fresh Clinics</b></div>",
     "is_public": "1",
     "is_active": "1",
     "position": "36",
@@ -10459,7 +10456,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "18"
+      "11": "19"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10513,7 +10510,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "19"
+      "11": "20"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10567,7 +10564,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "20"
+      "11": "21"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10621,7 +10618,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "21"
+      "11": "22"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10675,7 +10672,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "23"
+      "11": "24"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10729,7 +10726,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "24"
+      "11": "25"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10754,12 +10751,12 @@
   },
   {
     "id": "288",
-    "name": "Session Coming Soon | Jing Wan, Rejuran",
+    "name": "Mastering REJURAN DOT™ PN: Innovative Applications for Enhanced Skin Rejuvenation",
     "duration": "25",
     "buffertime_before": "0",
     "buffertime_after": "0",
     "hide_duration": "0",
-    "description": "<div><b style=\"font-size: 1rem;\">Presented by</b><b><span style=\"font-size: 1rem;\">&nbsp;</span>Jing Wan</b></div><div><b style=\"font-size: 1rem;\">Brought to you by Rejuran</b></div>",
+    "description": "<div><b style=\"font-size: 1rem;\">Presented by</b><b><span style=\"font-size: 1rem;\">&nbsp;</span>Jing Wang<br><br></b></div><div><b style=\"font-size: 1rem;\">Brought to you by Rejuran</b></div>",
     "is_public": "1",
     "is_active": "1",
     "position": "36",
@@ -10783,7 +10780,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "25"
+      "11": "26"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10837,7 +10834,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "26"
+      "11": "28"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10862,12 +10859,12 @@
   },
   {
     "id": "286",
-    "name": "Session To Be Shared Soon | Dr Frank Lin, Merz",
+    "name": "Ultherapy and Beyond: Maximising Aesthetic Outcomes Through Combined Modalities",
     "duration": "25",
     "buffertime_before": "0",
     "buffertime_after": "0",
     "hide_duration": "0",
-    "description": "<div><b style=\"font-size: 1rem;\">Presented by&nbsp;</b><b style=\"font-size: 1rem;\">Dr Frank Lin</b><br></div><p><b>Brought to you by&nbsp;Merz</b></p>",
+    "description": "<div><b style=\"font-size: 1rem;\">Presented by&nbsp;</b><b style=\"font-size: 1rem;\">Dr Frank Lin</b></div><div><br></div><p><b>Brought to you by&nbsp;Merz</b></p>",
     "is_public": "1",
     "is_active": "1",
     "position": "36",
@@ -10891,7 +10888,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "27"
+      "11": "29"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10946,7 +10943,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "28"
+      "11": "31"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10971,7 +10968,7 @@
   },
   {
     "id": "284",
-    "name": "Session Coming Soon | Anita East, Brooke Carrero, Shannon Bennett, Evolus",
+    "name": "Experience Nuceiva® (prabotulinumtoxinA): From Launch to Results Across the UK, USA and Australia",
     "duration": "25",
     "buffertime_before": "0",
     "buffertime_after": "0",
@@ -11000,7 +10997,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "29"
+      "11": "32"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -11054,7 +11051,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "30"
+      "11": "34"
     },
     "additional_fields": [],
     "bookings_limit": "0",
