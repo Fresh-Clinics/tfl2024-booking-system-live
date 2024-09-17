@@ -72,7 +72,7 @@ $(document).ready(function () {
         },
         eventDidMount: function (info) {
             tippy(info.el, {
-                content: `<strong>${info.event.title}</strong><br>${info.event.extendedProps.description}`,
+                content: `<strong>${info.event.title}</strong><br><div style="font-size: 0.9rem; font-family: Arial;">${info.event.extendedProps.description}`</div>,
                 allowHTML: true,
                 theme: 'light-border',
                 placement: 'top'
@@ -81,9 +81,9 @@ $(document).ready(function () {
         eventClick: function (info) {
             const event = info.event;
 
-            // Correctly format and convert time to Australia/Sydney timezone
-            const startDateTime = luxon.DateTime.fromISO(event.start).setZone('Australia/Sydney').toFormat('h:mm a');
-            const endDateTime = luxon.DateTime.fromISO(event.end).setZone('Australia/Sydney').toFormat('h:mm a');
+            // Format and convert time to Australia/Sydney timezone
+            const startDateTime = formatTimeToAEST(new Date(event.extendedProps.rawStartTime));
+            const endDateTime = formatTimeToAEST(new Date(event.extendedProps.rawEndTime));
 
             const popup = document.createElement('div');
             popup.className = 'popup-overlay';
@@ -133,7 +133,7 @@ $(document).ready(function () {
                             category: event.categories[0],
                             rawStartTime: startDateTime,
                             rawEndTime: endDateTime,
-                            displaySlots: !['9', '10', '11', '12'].includes(event.categories[0])
+                            displaySlots: ['1', '2', '3', '5', '6', '7', '9'].includes(event.categories[0])
                         });
                     });
                 });
@@ -271,7 +271,7 @@ $(document).ready(function () {
             case '9': return '#84cdb8';
             case '10': return '#84cdb8';
             case '11': return '#555555';
-            case '12': return '#ebf7f4!important';
+            case '12': return '#ebf7f4 !important';
             default: return '#142652'; // Default color
         }
     }
@@ -310,6 +310,10 @@ $(document).ready(function () {
     function getResourceLogo(resourceId) {
         const resource = getHardcodedResources().find(r => r.id === resourceId);
         return resource && resource.logo ? `image-files/${resource.logo}` : null;
+    }
+
+    function formatTimeToAEST(date) {
+        return luxon.DateTime.fromJSDate(date).setZone('Australia/Sydney').toFormat('h:mm a');
     }
 });
 </script>
