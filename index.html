@@ -134,34 +134,30 @@ $(document).ready(function () {
     function processEvents(eventData, startTimeData) {
         const calendarEvents = [];
         
+        // Loop through each event in eventData
         eventData.forEach(event => {
             const eventStartTimes = startTimeData.filter(startTime => parseInt(startTime.service_id) === parseInt(event.id)); // Match start times by event ID
 
+            // For each matching start time, calculate start and end times for the event
             eventStartTimes.forEach(startTime => {
                 Object.keys(startTime.timeslots).forEach(date => {
                     startTime.timeslots[date].forEach(time => {
                         // Create event with calculated start and end time
                         const startDateTime = `${date}T${time}`;
-                        const durationMinutes = parseInt(event.duration, 10); // Correctly parse duration from event data
-                        
-                        if (!isNaN(durationMinutes)) {
-                            const endDateTime = new Date(new Date(startDateTime).getTime() + durationMinutes * 60000).toISOString();
+                        const endDateTime = calculateEndTime(startDateTime, event.duration);
 
-                            calendarEvents.push({
-                                id: event.id,
-                                title: event.name,
-                                start: startDateTime,
-                                end: endDateTime,
-                                resourceId: startTime.provider_id.toString(), // Ensure resourceId is a string
-                                description: event.description || '',
-                                bookings_limit: event.bookings_limit || 'N/A',
-                                category: event.categories ? event.categories[0] : 'Unknown',
-                                rawStartTime: startDateTime,
-                                rawEndTime: endDateTime
-                            });
-                        } else {
-                            console.warn(`Invalid duration for event ID ${event.id}: using default duration.`);
-                        }
+                        calendarEvents.push({
+                            id: event.id,
+                            title: event.name,
+                            start: startDateTime,
+                            end: endDateTime,
+                            resourceId: startTime.provider_id.toString(), // Ensure resourceId is a string
+                            description: event.description || '',
+                            bookings_limit: event.bookings_limit || 'N/A',
+                            category: event.categories ? event.categories[0] : 'Unknown',
+                            rawStartTime: startDateTime,
+                            rawEndTime: endDateTime
+                        });
                     });
                 });
             });
@@ -169,6 +165,20 @@ $(document).ready(function () {
 
         console.log("Processed events for calendar:", calendarEvents);
         return calendarEvents;
+    }
+
+    // Calculate end time based on start time and duration
+    function calculateEndTime(startDateTime, duration) {
+        const startTime = new Date(startDateTime);
+        const durationMinutes = parseInt(duration, 10); // Parse duration in minutes
+
+        if (!isNaN(durationMinutes)) {
+            const endTime = new Date(startTime.getTime() + durationMinutes * 60000); // Add duration to start time
+            return endTime.toISOString(); // Convert to ISO format
+        } else {
+            console.warn("Invalid duration provided. Cannot calculate end time.");
+            return startDateTime; // Fallback to start time if duration is invalid
+        }
     }
 
     function getHardcodedResources() {
