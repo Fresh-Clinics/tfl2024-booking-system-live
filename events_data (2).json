@@ -1,5 +1,117 @@
 [
   {
+    "id": "43",
+    "name": "INVITE ONLY | Midface Multilayering (MLT), ATP Fundamentals",
+    "duration": "55",
+    "buffertime_before": "0",
+    "buffertime_after": "0",
+    "hide_duration": "0",
+    "description": "<p><span style=\"font-family: Arial; font-size: 10pt;\">Teoxane Masterclass with Teoxane Faculty including LIVE demonstration of ATP.</span><br></p><p><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><b>Trainer - Dr Tarek Shalabi</b></span></p><p><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><b><span data-sheets-root=\"1\" style=\"font-size: 10pt;\">Level -&nbsp;</span><span data-sheets-root=\"1\" style=\"font-size: 10pt;\">Beginner / Intermediate</span></b></span><br></p>",
+    "is_public": "1",
+    "is_active": "1",
+    "position": "21",
+    "file_id": "59",
+    "seo_url": null,
+    "min_time_till_event": null,
+    "max_time_till_event": null,
+    "is_recurring": "0",
+    "picture": "d8415763a0f676401eb24d6c5b75a68b.png",
+    "picture_sub_path": "/image_files",
+    "class_id": null,
+    "is_visible": "1",
+    "picture_path": "/uploads/thefreshlifeconference/image_files/preview/d8415763a0f676401eb24d6c5b75a68b.png",
+    "unit_map": {
+      "11": null
+    },
+    "providers": [
+      11
+    ],
+    "categories": [
+      "4"
+    ],
+    "position_in_category": {
+      "4": "0"
+    },
+    "additional_fields": [
+      "1"
+    ],
+    "bookings_limit": "15",
+    "products": [],
+    "resource_groups": [],
+    "ticket_id": null,
+    "timeMatrix": [
+      {
+        "provider_id": 11,
+        "service_id": 43,
+        "timeslots": {
+          "2024-10-28": [],
+          "2024-10-29": [],
+          "2024-10-30": [
+            "12:00:00"
+          ],
+          "2024-10-31": [],
+          "2024-11-01": []
+        }
+      }
+    ]
+  },
+  {
+    "id": "41",
+    "name": "INVITE ONLY | Midface Multilayering (MLT), ATP Fundamentals",
+    "duration": "55",
+    "buffertime_before": "0",
+    "buffertime_after": "0",
+    "hide_duration": "0",
+    "description": "<p><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Teoxane Masterclass with Teoxane Faculty including LIVE demonstration of ATP.</span></p><p><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><b>Trainer -&nbsp;<span data-sheets-root=\"1\" style=\"font-size: 10pt;\">Dr Jane Lucas</span></b></span></p><p><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><b><span data-sheets-root=\"1\" style=\"font-size: 10pt;\">Level -&nbsp;</span><span data-sheets-root=\"1\" style=\"font-size: 10pt;\">Beginner / Intermediate</span></b></span><br></p>",
+    "is_public": "1",
+    "is_active": "1",
+    "position": "21",
+    "file_id": "57",
+    "seo_url": null,
+    "min_time_till_event": null,
+    "max_time_till_event": null,
+    "is_recurring": "0",
+    "picture": "98d72b31264fcdcdacb2d56490152bc0.png",
+    "picture_sub_path": "/image_files",
+    "class_id": null,
+    "is_visible": "1",
+    "picture_path": "/uploads/thefreshlifeconference/image_files/preview/98d72b31264fcdcdacb2d56490152bc0.png",
+    "unit_map": {
+      "11": null
+    },
+    "providers": [
+      11
+    ],
+    "categories": [
+      "4"
+    ],
+    "position_in_category": {
+      "4": "2"
+    },
+    "additional_fields": [
+      "1"
+    ],
+    "bookings_limit": "15",
+    "products": [],
+    "resource_groups": [],
+    "ticket_id": null,
+    "timeMatrix": [
+      {
+        "provider_id": 11,
+        "service_id": 41,
+        "timeslots": {
+          "2024-10-28": [],
+          "2024-10-29": [
+            "14:00:00"
+          ],
+          "2024-10-30": [],
+          "2024-10-31": [],
+          "2024-11-01": []
+        }
+      }
+    ]
+  },
+  {
     "id": "13",
     "name": "INVITE ONLY | The evolution of experience with Evolus",
     "duration": "60",
@@ -30,7 +142,7 @@
       "4"
     ],
     "position_in_category": {
-      "4": "0"
+      "4": "4"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -82,7 +194,7 @@
       "4"
     ],
     "position_in_category": {
-      "4": "5"
+      "4": "9"
     },
     "additional_fields": [
       "1"
@@ -98,7 +210,8 @@
         "timeslots": {
           "2024-10-28": [],
           "2024-10-29": [
-            "15:00:00","17:00:00"
+            "15:00:00",
+            "17:00:00"
           ],
           "2024-10-30": [
             "13:00:00",
@@ -154,12 +267,12 @@
         "qty": "15"
       },
       {
-        "product_id": "3",
-        "qty": "1"
-      },
-      {
         "product_id": "1",
         "qty": "2"
+      },
+      {
+        "product_id": "3",
+        "qty": "1"
       }
     ],
     "resource_groups": [],
@@ -244,7 +357,7 @@
     "buffertime_before": "0",
     "buffertime_after": "0",
     "hide_duration": "0",
-    "description": "<p><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">We're excited to introduce the Matrix RF Microneedling device, a revolutionary multi-application device designed to elevate your treatment offering and significantly increase your ROI.<br><br>In this Workshop, you will:<br></span></p><ul><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><span style=\"font-size: 13.3333px;\">Discover how the Matrix can resurface the skin, treat wrinkles, create volume, and strengthen the skins structure, providing comprehensive solutions for your patients at various stages of the aging journey.</span></span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><span style=\"font-size: 13.3333px;\">Learn about the Matrix Pro RF microneedling applicator, featuring the thinnest array of microneedles available on the market. With impedance monitoring and depth intelligence technology, you can treat at three depths in a single insertion, ensuring precise and effective results.</span></span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><span style=\"font-size: 13.3333px;\"><span style=\"font-size: 13.3333px;\">Explore the Sublime applicator which uses a combination of infrared and bipolar RF energy to hear the skin layers, shorten aged collagen fibres, and effectively treat wrinkles.</span></span></span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Understand the Sublative applicator which stimulates new collagen growth and resurfaces the skin, resulting in smoother skin and a reduction in facial wrinkles.</span></li><li><span style=\"font-family: Arial; font-size: 13.3333px;\">Witness a live RF microneedling treatment with the Matrix Pro applicator<br><br></span></li></ul><p><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">This workshop will equip you with the knowledge and skills to understand the potential of RF microneedling, boosting your clinic's success and profitability.</span><br></p><p><span style=\"font-size: 1rem;\"><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><b>Trainer -&nbsp;</b></span></span><span style=\"font-family: Arial; font-size: 10pt;\"><b>Kirsten Cachia</b></span></p><p><span style=\"font-family: Arial; font-size: 10pt;\"><b>Level - Beginner</b></span></p><p><span style=\"font-family: Arial; font-size: 10pt;\">1 x Injector Slot Available (Injector required to bring model)</span></p>",
+    "description": "<p><span style=\"font-family: Arial; font-size: 10pt;\">We're excited to introduce the Matrix RF Microneedling device, a revolutionary multi-application device designed to elevate your treatment offering and significantly increase your ROI.</span><br></p><p><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><br>In this Workshop, you will:<br></span></p><ul><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><span style=\"font-size: 13.3333px;\">Discover how the Matrix can resurface the skin, treat wrinkles, create volume, and strengthen the skins structure, providing comprehensive solutions for your patients at various stages of the aging journey.</span></span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><span style=\"font-size: 13.3333px;\">Learn about the Matrix Pro RF microneedling applicator, featuring the thinnest array of microneedles available on the market. With impedance monitoring and depth intelligence technology, you can treat at three depths in a single insertion, ensuring precise and effective results.</span></span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><span style=\"font-size: 13.3333px;\"><span style=\"font-size: 13.3333px;\">Explore the Sublime applicator which uses a combination of infrared and bipolar RF energy to hear the skin layers, shorten aged collagen fibres, and effectively treat wrinkles.</span></span></span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Understand the Sublative applicator which stimulates new collagen growth and resurfaces the skin, resulting in smoother skin and a reduction in facial wrinkles.</span></li><li><span style=\"font-family: Arial; font-size: 13.3333px;\">Witness a live RF microneedling treatment with the Matrix Pro applicator<br><br></span></li></ul><p><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">This workshop will equip you with the knowledge and skills to understand the potential of RF microneedling, boosting your clinic's success and profitability.</span><br></p><p><span style=\"font-size: 1rem;\"><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><b>Trainer -&nbsp;</b></span></span><span style=\"font-family: Arial; font-size: 10pt;\"><b>Kirsten Cachia</b></span></p><p><span style=\"font-family: Arial; font-size: 10pt;\"><b>Level - Beginner</b></span></p><p><span style=\"font-family: Arial; font-size: 10pt;\">1 x Injector Slot Available (Injector required to bring model)</span></p>",
     "is_public": "1",
     "is_active": "1",
     "position": "1",
@@ -258,7 +371,7 @@
     "class_id": null,
     "is_visible": "1",
     "picture_path": "/uploads/thefreshlifeconference/image_files/preview/b63e0ceb62ad642c7367010a52d2452f.png",
-    "short_description": "Injecting Energy: Revolutionise your Clinic with Matrix™ RF MicroneedlingWe're excited to introduce the Matrix RF Microneedling device, a revolutionary multi-application device designed to elevate your treatment offering and significantly increase your ROI.In this Workshop, you will:Discover how the Matrix can resurface the skin, treat wrinkles, create volume, and strengthen the skins structure, providing comprehensive solutions for your patients at various stages of the aging journey.Learn abou",
+    "short_description": "We're excited to introduce the Matrix RF Microneedling device, a revolutionary multi-application device designed to elevate your treatment offering and significantly increase your ROI.In this Workshop, you will:Discover how the Matrix can resurface the skin, treat wrinkles, create volume, and strengthen the skins structure, providing comprehensive solutions for your patients at various stages of the aging journey.Learn about the Matrix Pro RF microneedling applicator, featuring the thinnest arra",
     "unit_map": {
       "7": null
     },
@@ -296,9 +409,7 @@
         "timeslots": {
           "2024-10-28": [],
           "2024-10-29": ["14:00:00"],
-          "2024-10-30": [
-            "14:30:00"
-          ],
+          "2024-10-30": [],
           "2024-10-31": [
             "10:00:00",
             "12:30:00"
@@ -340,7 +451,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "29"
+      "1": "31"
     },
     "additional_fields": [
       "1"
@@ -405,7 +516,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "47"
+      "1": "49"
     },
     "additional_fields": [],
     "bookings_limit": "10",
@@ -459,7 +570,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "96"
+      "1": "98"
     },
     "additional_fields": [
       "1"
@@ -485,62 +596,6 @@
           "2024-10-31": [
             "14:30:00"
           ],
-          "2024-11-01": []
-        }
-      }
-    ]
-  },
-  {
-    "id": "41",
-    "name": "Midface Multilayering (MLT), ATP Fundamentals",
-    "duration": "55",
-    "buffertime_before": "0",
-    "buffertime_after": "0",
-    "hide_duration": "0",
-    "description": "<p><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Teoxane Masterclass with Teoxane Faculty including LIVE demonstration of ATP.</span></p><p><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><b>Trainer -&nbsp;<span data-sheets-root=\"1\" style=\"font-size: 10pt;\">Dr Jane Lucas</span></b></span></p><p><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><b><span data-sheets-root=\"1\" style=\"font-size: 10pt;\">Level -&nbsp;</span><span data-sheets-root=\"1\" style=\"font-size: 10pt;\">Beginner / Intermediate</span></b></span><br></p>",
-    "is_public": "1",
-    "is_active": "1",
-    "position": "21",
-    "file_id": "57",
-    "seo_url": null,
-    "min_time_till_event": null,
-    "max_time_till_event": null,
-    "is_recurring": "0",
-    "picture": "98d72b31264fcdcdacb2d56490152bc0.png",
-    "picture_sub_path": "/image_files",
-    "class_id": null,
-    "is_visible": "1",
-    "picture_path": "/uploads/thefreshlifeconference/image_files/preview/98d72b31264fcdcdacb2d56490152bc0.png",
-    "unit_map": {
-      "11": null
-    },
-    "providers": [
-      11
-    ],
-    "categories": [
-      "1"
-    ],
-    "position_in_category": {
-      "1": "108"
-    },
-    "additional_fields": [
-      "1"
-    ],
-    "bookings_limit": "15",
-    "products": [],
-    "resource_groups": [],
-    "ticket_id": null,
-    "timeMatrix": [
-      {
-        "provider_id": 11,
-        "service_id": 41,
-        "timeslots": {
-          "2024-10-28": [],
-          "2024-10-29": [
-            "14:00:00"
-          ],
-          "2024-10-30": [],
-          "2024-10-31": [],
           "2024-11-01": []
         }
       }
@@ -577,7 +632,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "114"
+      "1": "117"
     },
     "additional_fields": [
       "1"
@@ -644,7 +699,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "121"
+      "1": "124"
     },
     "additional_fields": [
       "1"
@@ -711,7 +766,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "128"
+      "1": "131"
     },
     "additional_fields": [
       "1"
@@ -765,7 +820,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "132"
+      "1": "135"
     },
     "additional_fields": [
       "1"
@@ -821,7 +876,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "142"
+      "1": "145"
     },
     "additional_fields": [
       "1"
@@ -882,7 +937,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "154"
+      "1": "157"
     },
     "additional_fields": [
       "1"
@@ -942,7 +997,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "165"
+      "1": "168"
     },
     "additional_fields": [
       "1"
@@ -998,7 +1053,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "173"
+      "1": "176"
     },
     "additional_fields": [
       "1"
@@ -1054,7 +1109,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "179"
+      "1": "182"
     },
     "additional_fields": [
       "1"
@@ -1112,7 +1167,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "186"
+      "1": "189"
     },
     "additional_fields": [
       "1"
@@ -1172,7 +1227,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "199"
+      "1": "202"
     },
     "additional_fields": [
       "1"
@@ -1230,7 +1285,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "208"
+      "1": "211"
     },
     "additional_fields": [
       "1"
@@ -1288,7 +1343,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "222"
+      "1": "225"
     },
     "additional_fields": [
       "1"
@@ -1345,7 +1400,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "229"
+      "1": "232"
     },
     "additional_fields": [],
     "bookings_limit": "15",
@@ -1401,7 +1456,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "235"
+      "1": "238"
     },
     "additional_fields": [
       "1"
@@ -1464,7 +1519,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "242"
+      "1": "245"
     },
     "additional_fields": [
       "1"
@@ -1521,7 +1576,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "248"
+      "1": "251"
     },
     "additional_fields": [
       "1"
@@ -1584,7 +1639,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "254"
+      "1": "257"
     },
     "additional_fields": [
       "1"
@@ -1611,7 +1666,7 @@
   },
   {
     "id": "51",
-    "name": "Teoxane Masterclass | Skin Rejuvenation ",
+    "name": "Skin Rejuvenation ",
     "duration": "25",
     "buffertime_before": "0",
     "buffertime_after": "0",
@@ -1640,7 +1695,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "265"
+      "1": "267"
     },
     "additional_fields": [
       "1"
@@ -1660,6 +1715,72 @@
           ],
           "2024-10-30": [],
           "2024-10-31": [],
+          "2024-11-01": []
+        }
+      }
+    ]
+  },
+  {
+    "id": "361",
+    "name": "Why Immunogenicity Matters for Lasting Results ",
+    "duration": "55",
+    "buffertime_before": "0",
+    "buffertime_after": "0",
+    "hide_duration": "0",
+    "description": "<p><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Join us for a workshop focused on converting patients to Xeomin from other neurotoxins. This comprehensive session will cover specific methods tailored to Xeomin for achieving the best results, including injection techniques and dosage to enhance accuracy and efficacy.</span><br></p><p><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><b>Trainer -&nbsp;</b></span><span style=\"font-family: Arial; font-size: 10pt;\"><b>Nurse Freya Carslon &amp; Nurse Nyree</b></span></p><p><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><b><span data-sheets-root=\"1\" style=\"font-size: 10pt;\">Level -&nbsp;</span></b><span data-sheets-root=\"1\" style=\"font-size: 10pt;\"><b>Advanced. Demonstration only</b></span></span></p>",
+    "is_public": "1",
+    "is_active": "1",
+    "position": "31",
+    "file_id": "306",
+    "seo_url": null,
+    "min_time_till_event": null,
+    "max_time_till_event": null,
+    "is_recurring": "0",
+    "picture": "afaf6cf740dc2b8bd9dfcc22e122319a.png",
+    "picture_sub_path": "/image_files",
+    "class_id": null,
+    "is_visible": "1",
+    "picture_path": "/uploads/thefreshlifeconference/image_files/preview/afaf6cf740dc2b8bd9dfcc22e122319a.png",
+    "unit_map": {
+      "23": null
+    },
+    "providers": [
+      23
+    ],
+    "categories": [
+      "1"
+    ],
+    "position_in_category": {
+      "1": "285"
+    },
+    "additional_fields": [
+      "1"
+    ],
+    "bookings_limit": "15",
+    "products": [
+      {
+        "product_id": "2",
+        "qty": "15"
+      },
+      {
+        "product_id": "1",
+        "qty": "1"
+      }
+    ],
+    "resource_groups": [],
+    "ticket_id": null,
+    "timeMatrix": [
+      {
+        "provider_id": 23,
+        "service_id": 361,
+        "timeslots": {
+          "2024-10-28": [],
+          "2024-10-29": [],
+          "2024-10-30": [],
+          "2024-10-31": [
+            "11:35:00",
+            "12:30:00"
+          ],
           "2024-11-01": []
         }
       }
@@ -1696,7 +1817,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "280"
+      "1": "288"
     },
     "additional_fields": [
       "1"
@@ -1723,8 +1844,7 @@
           "2024-10-29": [],
           "2024-10-30": [],
           "2024-10-31": [
-            "09:00:00",
-            "12:30:00"
+            "09:00:00"
           ],
           "2024-11-01": []
         }
@@ -1763,7 +1883,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "288"
+      "1": "297"
     },
     "additional_fields": [
       "1"
@@ -1827,7 +1947,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "295"
+      "1": "304"
     },
     "additional_fields": [
       "1"
@@ -1870,7 +1990,7 @@
     "buffertime_before": "0",
     "buffertime_after": "0",
     "hide_duration": "0",
-    "description": "<p><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Discover the transformative potential of the Nordlys system, featuring 4 timeless technologies: SWT® (Selective Waveband Technology) IPL, Frax 1550, Frax 1940, and Nd:YAG 1064nm. Join us to learn how the Nordlys platform can elevate patient satisfaction while driving increased ROI.<br><br>During this workshop, you will:<br></span></p><ul><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Explore the four cutting-edge technologies in the Nordlys system including:</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">SWT® IPL: Understand what sets SWT IPL apart from broadband IPL, with narrowband technology delivering exceptional results in skin rejuvenation, pigmented and vascular treatments.</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Frax 1550: Delve into the capabilities of this applicator for deeper skin resurfacing, providing significant improvements in skin texture and appearance.</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Frax 1940: Learn about the benefits of shallower skin resurfacing with this innovative applicator, ideal for treating pigmentation and surface-level skin concerns.</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Nd:YAG 1064nm: Discover the precision and effectiveness of this applicator in treating vascular lesions, ensuring superior patient outcomes.</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Versatility in treatments: With over 21 indications for treatment, including skin resurfacing, skin rejuvenation, vascular lesions, pigmented lesions, rosacea, acne, scarring, and more.</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Light and Bright Treatment: Witness the Light &amp; Bright treatment in action, a unique combination therapy that reduces redness, tames brown spots, and smooths skin texture all in a single session.<br><br></span></li></ul><p><span data-sheets-root=\"1\" style=\"\"><font face=\"Arial\"><span style=\"font-size: 13.3333px;\">Join us to understand the full potential of the Nordly system, and elevate your clinic with advanced IPL and laser technology.</span></font></span></p><p><span data-sheets-root=\"1\" style=\"\"><b><font face=\"Arial\"><span style=\"font-size: 13.3333px;\">Trainer -&nbsp;</span></font><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Marguerite Burke Lead Nurse Educator</span></b></span></p><p><span data-sheets-root=\"1\" style=\"\"><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><b>Level - Beginner</b></span></span></p><p><span data-sheets-root=\"1\" style=\"\"><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">1 x Injector Slot Available (Injector required to bring model)</span><br></span></p>",
+    "description": "<p><span style=\"font-family: Arial; font-size: 10pt;\">Discover the transformative potential of the Nordlys system, featuring 4 timeless technologies: SWT® (Selective Waveband Technology) IPL, Frax 1550, Frax 1940, and Nd:YAG 1064nm. Join us to learn how the Nordlys platform can elevate patient satisfaction while driving increased ROI.</span><br></p><p><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><br>During this workshop, you will:<br></span></p><ul><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Explore the four cutting-edge technologies in the Nordlys system including:</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">SWT® IPL: Understand what sets SWT IPL apart from broadband IPL, with narrowband technology delivering exceptional results in skin rejuvenation, pigmented and vascular treatments.</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Frax 1550: Delve into the capabilities of this applicator for deeper skin resurfacing, providing significant improvements in skin texture and appearance.</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Frax 1940: Learn about the benefits of shallower skin resurfacing with this innovative applicator, ideal for treating pigmentation and surface-level skin concerns.</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Nd:YAG 1064nm: Discover the precision and effectiveness of this applicator in treating vascular lesions, ensuring superior patient outcomes.</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Versatility in treatments: With over 21 indications for treatment, including skin resurfacing, skin rejuvenation, vascular lesions, pigmented lesions, rosacea, acne, scarring, and more.</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Light and Bright Treatment: Witness the Light &amp; Bright treatment in action, a unique combination therapy that reduces redness, tames brown spots, and smooths skin texture all in a single session.<br><br></span></li></ul><p><span data-sheets-root=\"1\" style=\"\"><font face=\"Arial\"><span style=\"font-size: 13.3333px;\">Join us to understand the full potential of the Nordly system, and elevate your clinic with advanced IPL and laser technology.</span></font></span></p><p><span data-sheets-root=\"1\" style=\"\"><b><font face=\"Arial\"><span style=\"font-size: 13.3333px;\">Trainer -&nbsp;</span></font><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Marguerite Burke Lead Nurse Educator</span></b></span></p><p><span data-sheets-root=\"1\" style=\"\"><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><b>Level - Beginner</b></span></span></p><p><span data-sheets-root=\"1\" style=\"\"><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">1 x Injector Slot Available (Injector required to bring model)</span><br></span></p>",
     "is_public": "1",
     "is_active": "1",
     "position": "1",
@@ -1884,7 +2004,7 @@
     "class_id": null,
     "is_visible": "1",
     "picture_path": "/uploads/thefreshlifeconference/image_files/preview/d23f2cb4a009bfab6af5e02aa37e5c5c.png",
-    "short_description": "Discover the Nordlys Multi-Application Platform: Elevate your Clinic with Cutting-Edge IPL &amp; Laser TreatmentsDiscover the transformative potential of the Nordlys system, featuring 4 timeless technologies: SWT® (Selective Waveband Technology) IPL, Frax 1550, Frax 1940, and Nd:YAG 1064nm. Join us to learn how the Nordlys platform can elevate patient satisfaction while driving increased ROI.During this workshop, you will:Explore the four cutting-edge technologies in the Nordlys system including",
+    "short_description": "Discover the transformative potential of the Nordlys system, featuring 4 timeless technologies: SWT® (Selective Waveband Technology) IPL, Frax 1550, Frax 1940, and Nd:YAG 1064nm. Join us to learn how the Nordlys platform can elevate patient satisfaction while driving increased ROI.During this workshop, you will:Explore the four cutting-edge technologies in the Nordlys system including:SWT® IPL: Understand what sets SWT IPL apart from broadband IPL, with narrowband technology delivering exception",
     "unit_map": {
       "7": null
     },
@@ -1895,7 +2015,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "322"
+      "1": "331"
     },
     "additional_fields": [
       "1"
@@ -1953,7 +2073,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "334"
+      "1": "344"
     },
     "additional_fields": [
       "1"
@@ -1961,15 +2081,15 @@
     "bookings_limit": "15",
     "products": [
       {
+        "product_id": "3",
+        "qty": "1"
+      },
+      {
         "product_id": "2",
         "qty": "13"
       },
       {
         "product_id": "1",
-        "qty": "1"
-      },
-      {
-        "product_id": "3",
         "qty": "1"
       }
     ],
@@ -2028,7 +2148,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "344"
+      "1": "354"
     },
     "additional_fields": [
       "1"
@@ -2088,7 +2208,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "351"
+      "1": "361"
     },
     "additional_fields": [
       "1"
@@ -2117,7 +2237,7 @@
   },
   {
     "id": "42",
-    "name": "Skin Rejuvenation - The Glow Up",
+    "name": "Teoxane Masterclass | The Glow Affect, Multillayering + Skin Rejuvenation",
     "duration": "55",
     "buffertime_before": "0",
     "buffertime_after": "0",
@@ -2146,7 +2266,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "363"
+      "1": "371"
     },
     "additional_fields": [
       "1"
@@ -2202,7 +2322,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "378"
+      "1": "391"
     },
     "additional_fields": [
       "1"
@@ -2265,7 +2385,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "401"
+      "1": "414"
     },
     "additional_fields": [
       "1"
@@ -2322,7 +2442,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "413"
+      "1": "426"
     },
     "additional_fields": [
       "1"
@@ -2380,7 +2500,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "435"
+      "1": "448"
     },
     "additional_fields": [
       "1"
@@ -2400,62 +2520,6 @@
             "12:00:00",
             "14:30:00",
             "16:30:00"
-          ],
-          "2024-10-31": [],
-          "2024-11-01": []
-        }
-      }
-    ]
-  },
-  {
-    "id": "43",
-    "name": "Midface Multilayering (MLT), ATP Fundamentals",
-    "duration": "55",
-    "buffertime_before": "0",
-    "buffertime_after": "0",
-    "hide_duration": "0",
-    "description": "<p><span style=\"font-family: Arial; font-size: 10pt;\">Teoxane Masterclass with Teoxane Faculty including LIVE demonstration of ATP.</span><br></p><p><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><b>Trainer - Dr Tarek Shalabi</b></span></p><p><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><b><span data-sheets-root=\"1\" style=\"font-size: 10pt;\">Level -&nbsp;</span><span data-sheets-root=\"1\" style=\"font-size: 10pt;\">Beginner / Intermediate</span></b></span><br></p>",
-    "is_public": "1",
-    "is_active": "1",
-    "position": "21",
-    "file_id": "59",
-    "seo_url": null,
-    "min_time_till_event": null,
-    "max_time_till_event": null,
-    "is_recurring": "0",
-    "picture": "d8415763a0f676401eb24d6c5b75a68b.png",
-    "picture_sub_path": "/image_files",
-    "class_id": null,
-    "is_visible": "1",
-    "picture_path": "/uploads/thefreshlifeconference/image_files/preview/d8415763a0f676401eb24d6c5b75a68b.png",
-    "unit_map": {
-      "11": null
-    },
-    "providers": [
-      11
-    ],
-    "categories": [
-      "1"
-    ],
-    "position_in_category": {
-      "1": "464"
-    },
-    "additional_fields": [
-      "1"
-    ],
-    "bookings_limit": "15",
-    "products": [],
-    "resource_groups": [],
-    "ticket_id": null,
-    "timeMatrix": [
-      {
-        "provider_id": 11,
-        "service_id": 43,
-        "timeslots": {
-          "2024-10-28": [],
-          "2024-10-29": [],
-          "2024-10-30": [
-            "12:00:00"
           ],
           "2024-10-31": [],
           "2024-11-01": []
@@ -2494,7 +2558,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "504"
+      "1": "518"
     },
     "additional_fields": [
       "1"
@@ -2552,7 +2616,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "508"
+      "1": "522"
     },
     "additional_fields": [
       "1"
@@ -2609,7 +2673,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "520"
+      "1": "534"
     },
     "additional_fields": [
       "1"
@@ -2667,7 +2731,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "527"
+      "1": "541"
     },
     "additional_fields": [
       "1"
@@ -2724,7 +2788,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "538"
+      "1": "552"
     },
     "additional_fields": [
       "1"
@@ -2784,7 +2848,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "546"
+      "1": "560"
     },
     "additional_fields": [
       "1"
@@ -2813,7 +2877,7 @@
   },
   {
     "id": "44",
-    "name": "Midface Multilayering (MLT), ATP Fundamentals",
+    "name": "Teoxane Trailblazers Masterclass | Midface Multilayering (MLT), ATP Fundamentals - Session 1",
     "duration": "55",
     "buffertime_before": "0",
     "buffertime_after": "0",
@@ -2842,7 +2906,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "557"
+      "1": "571"
     },
     "additional_fields": [
       "1"
@@ -2899,7 +2963,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "574"
+      "1": "590"
     },
     "additional_fields": [
       "1"
@@ -2926,12 +2990,12 @@
   },
   {
     "id": "90",
-    "name": "Elevate your Clinic with Cutting-Edge IPL & Laser Treatments",
+    "name": "Discover the Nordlys Multi-Application Platform: Elevate your Clinic with Cutting-Edge IPL & Laser Treatments",
     "duration": "55",
     "buffertime_before": "0",
     "buffertime_after": "0",
     "hide_duration": "0",
-    "description": "<p><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Discover the Nordlys Multi-Application Platform: Elevate your Clinic with Cutting-Edge IPL &amp; Laser Treatments</span></p><p><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Discover the transformative potential of the Nordlys system, featuring 4 timeless technologies: SWT® (Selective Waveband Technology) IPL, Frax 1550, Frax 1940, and Nd:YAG 1064nm. Join us to learn how the Nordlys platform can elevate patient satisfaction while driving increased ROI.<br><br>During this workshop, you will:<br></span></p><ul><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Explore the four cutting-edge technologies in the Nordlys system including:</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">SWT® IPL: Understand what sets SWT IPL apart from broadband IPL, with narrowband technology delivering exceptional results in skin rejuvenation, pigmented and vascular treatments.</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Frax 1550: Delve into the capabilities of this applicator for deeper skin resurfacing, providing significant improvements in skin texture and appearance.</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Frax 1940: Learn about the benefits of shallower skin resurfacing with this innovative applicator, ideal for treating pigmentation and surface-level skin concerns.</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Nd:YAG 1064nm: Discover the precision and effectiveness of this applicator in treating vascular lesions, ensuring superior patient outcomes.</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Versatility in treatments: With over 21 indications for treatment, including skin resurfacing, skin rejuvenation, vascular lesions, pigmented lesions, rosacea, acne, scarring, and more.</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Light and Bright Treatment: Witness the Light &amp; Bright treatment in action, a unique combination therapy that reduces redness, tames brown spots, and smooths skin texture all in a single session.</span></li></ul><p><span style=\"font-size: 13.3333px; font-family: Arial;\"><br>Join us to understand the full potential of the Nordly system, and elevate your clinic with advanced IPL and laser technology.</span><br></p><p><span data-sheets-root=\"1\" style=\"\"><font face=\"Arial\" style=\"\"><span style=\"font-size: 13.3333px;\"><b>Trainer -&nbsp;</b></span></font></span><span style=\"font-family: Arial; font-size: 13px; white-space-collapse: preserve;\"><b>Charlotte Jacques</b></span></p><p><span data-sheets-root=\"1\" style=\"\"><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><b>Level - Beginner</b></span></span></p><p><span data-sheets-root=\"1\" style=\"\"><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">1 x Injector Slot Available (Injector required to bring model)</span><br></span></p>",
+    "description": "<p><span style=\"font-family: Arial; font-size: 10pt;\">Discover the transformative potential of the Nordlys system, featuring 4 timeless technologies: SWT® (Selective Waveband Technology) IPL, Frax 1550, Frax 1940, and Nd:YAG 1064nm. Join us to learn how the Nordlys platform can elevate patient satisfaction while driving increased ROI.</span><br></p><p><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><br>During this workshop, you will:<br></span></p><ul><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Explore the four cutting-edge technologies in the Nordlys system including:</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">SWT® IPL: Understand what sets SWT IPL apart from broadband IPL, with narrowband technology delivering exceptional results in skin rejuvenation, pigmented and vascular treatments.</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Frax 1550: Delve into the capabilities of this applicator for deeper skin resurfacing, providing significant improvements in skin texture and appearance.</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Frax 1940: Learn about the benefits of shallower skin resurfacing with this innovative applicator, ideal for treating pigmentation and surface-level skin concerns.</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Nd:YAG 1064nm: Discover the precision and effectiveness of this applicator in treating vascular lesions, ensuring superior patient outcomes.</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Versatility in treatments: With over 21 indications for treatment, including skin resurfacing, skin rejuvenation, vascular lesions, pigmented lesions, rosacea, acne, scarring, and more.</span></li><li><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">Light and Bright Treatment: Witness the Light &amp; Bright treatment in action, a unique combination therapy that reduces redness, tames brown spots, and smooths skin texture all in a single session.</span></li></ul><p><span style=\"font-size: 13.3333px; font-family: Arial;\"><br>Join us to understand the full potential of the Nordly system, and elevate your clinic with advanced IPL and laser technology.</span><br></p><p><span data-sheets-root=\"1\" style=\"\"><font face=\"Arial\" style=\"\"><span style=\"font-size: 13.3333px;\"><b>Trainer -&nbsp;</b></span></font></span><span style=\"font-family: Arial; font-size: 13px; white-space-collapse: preserve;\"><b>Charlotte Jacques</b></span></p><p><span data-sheets-root=\"1\" style=\"\"><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\"><b>Level - Beginner</b></span></span></p><p><span data-sheets-root=\"1\" style=\"\"><span data-sheets-root=\"1\" style=\"font-size: 10pt; font-family: Arial;\">1 x Injector Slot Available (Injector required to bring model)</span><br></span></p>",
     "is_public": "1",
     "is_active": "1",
     "position": "1",
@@ -2945,7 +3009,7 @@
     "class_id": null,
     "is_visible": "1",
     "picture_path": "/uploads/thefreshlifeconference/image_files/preview/e7140e1e7c2e463ef407f97a28f01663.png",
-    "short_description": "Discover the Nordlys Multi-Application Platform: Elevate your Clinic with Cutting-Edge IPL &amp; Laser TreatmentsDiscover the transformative potential of the Nordlys system, featuring 4 timeless technologies: SWT® (Selective Waveband Technology) IPL, Frax 1550, Frax 1940, and Nd:YAG 1064nm. Join us to learn how the Nordlys platform can elevate patient satisfaction while driving increased ROI.During this workshop, you will:Explore the four cutting-edge technologies in the Nordlys system including",
+    "short_description": "Discover the transformative potential of the Nordlys system, featuring 4 timeless technologies: SWT® (Selective Waveband Technology) IPL, Frax 1550, Frax 1940, and Nd:YAG 1064nm. Join us to learn how the Nordlys platform can elevate patient satisfaction while driving increased ROI.During this workshop, you will:Explore the four cutting-edge technologies in the Nordlys system including:SWT® IPL: Understand what sets SWT IPL apart from broadband IPL, with narrowband technology delivering exception",
     "unit_map": {
       "7": null
     },
@@ -2956,7 +3020,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "606"
+      "1": "622"
     },
     "additional_fields": [
       "1"
@@ -3015,7 +3079,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "619"
+      "1": "636"
     },
     "additional_fields": [
       "1"
@@ -3073,7 +3137,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "629"
+      "1": "646"
     },
     "additional_fields": [
       "1"
@@ -3131,7 +3195,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "642"
+      "1": "659"
     },
     "additional_fields": [
       "1"
@@ -3188,7 +3252,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "653"
+      "1": "671"
     },
     "additional_fields": [
       "1"
@@ -3244,7 +3308,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "677"
+      "1": "695"
     },
     "additional_fields": [
       "1"
@@ -3300,7 +3364,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "688"
+      "1": "706"
     },
     "additional_fields": [
       "1"
@@ -3356,7 +3420,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "696"
+      "1": "714"
     },
     "additional_fields": [
       "1"
@@ -3415,7 +3479,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "707"
+      "1": "725"
     },
     "additional_fields": [
       "1"
@@ -3472,7 +3536,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "722"
+      "1": "740"
     },
     "additional_fields": [
       "1"
@@ -3531,7 +3595,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "730"
+      "1": "748"
     },
     "additional_fields": [
       "1"
@@ -3587,7 +3651,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "744"
+      "1": "763"
     },
     "additional_fields": [
       "1"
@@ -3644,7 +3708,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "759"
+      "1": "778"
     },
     "additional_fields": [
       "1"
@@ -3700,7 +3764,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "775"
+      "1": "796"
     },
     "additional_fields": [
       "1"
@@ -3759,7 +3823,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "799"
+      "1": "820"
     },
     "additional_fields": [
       "1"
@@ -3786,7 +3850,7 @@
   },
   {
     "id": "319",
-    "name": "Skin Rejuvenation - The Glow Up",
+    "name": "Teoxane Trailblazers | Masterclass: Midface Multilayering (MLT), ATP Fundamentals - Session 2",
     "duration": "55",
     "buffertime_before": "0",
     "buffertime_after": "0",
@@ -3815,7 +3879,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "836"
+      "1": "858"
     },
     "additional_fields": [
       "1"
@@ -3842,7 +3906,7 @@
   },
   {
     "id": "49",
-    "name": "Skin Rejuvenation - The Glow Up",
+    "name": "Teoxane Masterclass | The Glow Affect, Multillayering + Skin Rejuvenation",
     "duration": "55",
     "buffertime_before": "0",
     "buffertime_after": "0",
@@ -3871,7 +3935,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "843"
+      "1": "867"
     },
     "additional_fields": [
       "1"
@@ -3927,7 +3991,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "882"
+      "1": "908"
     },
     "additional_fields": [
       "1"
@@ -3985,7 +4049,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "891"
+      "1": "912"
     },
     "additional_fields": [
       "1"
@@ -4041,7 +4105,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "928"
+      "1": "955"
     },
     "additional_fields": [],
     "bookings_limit": "8",
@@ -4095,7 +4159,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "943"
+      "1": "970"
     },
     "additional_fields": [
       "1"
@@ -4151,7 +4215,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "957"
+      "1": "984"
     },
     "additional_fields": [
       "1"
@@ -4209,7 +4273,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "971"
+      "1": "998"
     },
     "additional_fields": [
       "1"
@@ -4217,15 +4281,15 @@
     "bookings_limit": "6",
     "products": [
       {
-        "product_id": "2",
-        "qty": "3"
-      },
-      {
         "product_id": "1",
         "qty": "1"
       },
       {
         "product_id": "3",
+        "qty": "3"
+      },
+      {
+        "product_id": "2",
         "qty": "3"
       }
     ],
@@ -4287,7 +4351,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "976"
+      "1": "1003"
     },
     "additional_fields": [
       "1"
@@ -4366,7 +4430,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "981"
+      "1": "1008"
     },
     "additional_fields": [
       "1"
@@ -4404,7 +4468,8 @@
             "16:30:00"
           ],
           "2024-10-31": [
-            "09:00:00","11:30:00",
+            "09:00:00",
+            "11:30:00",
             "14:30:00"
           ],
           "2024-11-01": []
@@ -4444,7 +4509,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "996"
+      "1": "1023"
     },
     "additional_fields": [],
     "bookings_limit": "10",
@@ -4503,7 +4568,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1008"
+      "1": "1035"
     },
     "additional_fields": [
       "1"
@@ -4563,7 +4628,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1022"
+      "1": "1049"
     },
     "additional_fields": [],
     "bookings_limit": "12",
@@ -4622,7 +4687,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1030"
+      "1": "1057"
     },
     "additional_fields": [
       "1"
@@ -4682,7 +4747,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1052"
+      "1": "1079"
     },
     "additional_fields": [
       "1"
@@ -4741,7 +4806,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1062"
+      "1": "1089"
     },
     "additional_fields": [
       "1"
@@ -4799,7 +4864,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1070"
+      "1": "1097"
     },
     "additional_fields": [
       "1"
@@ -4855,11 +4920,15 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1134"
+      "1": "1161"
     },
     "additional_fields": [],
     "bookings_limit": "15",
     "products": [
+      {
+        "product_id": "2",
+        "qty": "15"
+      },
       {
         "product_id": "1",
         "qty": "1"
@@ -4867,10 +4936,6 @@
       {
         "product_id": "3",
         "qty": "1"
-      },
-      {
-        "product_id": "2",
-        "qty": "15"
       }
     ],
     "resource_groups": [],
@@ -4929,7 +4994,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1158"
+      "1": "1185"
     },
     "additional_fields": [
       "1"
@@ -4999,7 +5064,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1175"
+      "1": "1202"
     },
     "additional_fields": [
       "1"
@@ -5066,7 +5131,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1185"
+      "1": "1212"
     },
     "additional_fields": [
       "1"
@@ -5074,12 +5139,12 @@
     "bookings_limit": "15",
     "products": [
       {
-        "product_id": "1",
-        "qty": "1"
-      },
-      {
         "product_id": "2",
         "qty": "15"
+      },
+      {
+        "product_id": "1",
+        "qty": "1"
       }
     ],
     "resource_groups": [],
@@ -5096,7 +5161,9 @@
           "2024-10-30": [
             "15:30:00"
           ],
-          "2024-10-31": [],
+          "2024-10-31": [
+            "15:30:00"
+          ],
           "2024-11-01": []
         }
       }
@@ -5134,7 +5201,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1229"
+      "1": "1257"
     },
     "additional_fields": [
       "1"
@@ -5142,12 +5209,12 @@
     "bookings_limit": "15",
     "products": [
       {
-        "product_id": "1",
-        "qty": "1"
-      },
-      {
         "product_id": "2",
         "qty": "15"
+      },
+      {
+        "product_id": "1",
+        "qty": "1"
       }
     ],
     "resource_groups": [],
@@ -5200,7 +5267,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1236"
+      "1": "1264"
     },
     "additional_fields": [
       "1"
@@ -5231,10 +5298,7 @@
             "14:30:00",
             "16:30:00"
           ],
-          "2024-10-31": [
-            "11:30:00",
-            "14:30:00"
-          ],
+          "2024-10-31": [],
           "2024-11-01": []
         }
       }
@@ -5271,7 +5335,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1258"
+      "1": "1288"
     },
     "additional_fields": [
       "1"
@@ -5334,7 +5398,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1264"
+      "1": "1294"
     },
     "additional_fields": [
       "1"
@@ -5401,7 +5465,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1287"
+      "1": "1317"
     },
     "additional_fields": [],
     "bookings_limit": "10",
@@ -5456,7 +5520,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1298"
+      "1": "1328"
     },
     "additional_fields": [],
     "bookings_limit": "10",
@@ -5512,7 +5576,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1305"
+      "1": "1335"
     },
     "additional_fields": [],
     "bookings_limit": "10",
@@ -5566,7 +5630,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1312"
+      "1": "1342"
     },
     "additional_fields": [],
     "bookings_limit": "10",
@@ -5621,7 +5685,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1320"
+      "1": "1350"
     },
     "additional_fields": [],
     "bookings_limit": "10",
@@ -5675,7 +5739,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1325"
+      "1": "1355"
     },
     "additional_fields": [],
     "bookings_limit": "10",
@@ -5730,7 +5794,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1332"
+      "1": "1362"
     },
     "additional_fields": [],
     "bookings_limit": "10",
@@ -5784,7 +5848,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1338"
+      "1": "1368"
     },
     "additional_fields": [],
     "bookings_limit": "10",
@@ -5839,7 +5903,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1344"
+      "1": "1374"
     },
     "additional_fields": [],
     "bookings_limit": "10",
@@ -5895,7 +5959,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1355"
+      "1": "1385"
     },
     "additional_fields": [],
     "bookings_limit": "10",
@@ -5949,7 +6013,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1361"
+      "1": "1391"
     },
     "additional_fields": [],
     "bookings_limit": "10",
@@ -6006,7 +6070,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1366"
+      "1": "1396"
     },
     "additional_fields": [],
     "bookings_limit": "10",
@@ -6061,7 +6125,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1378"
+      "1": "1408"
     },
     "additional_fields": [],
     "bookings_limit": "10",
@@ -6115,7 +6179,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1397"
+      "1": "1427"
     },
     "additional_fields": [
       "1"
@@ -6171,7 +6235,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1405"
+      "1": "1435"
     },
     "additional_fields": [
       "1"
@@ -6227,7 +6291,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1412"
+      "1": "1442"
     },
     "additional_fields": [
       "1"
@@ -6283,7 +6347,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1422"
+      "1": "1452"
     },
     "additional_fields": [
       "1"
@@ -6339,7 +6403,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1436"
+      "1": "1466"
     },
     "additional_fields": [
       "1"
@@ -6395,7 +6459,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1447"
+      "1": "1477"
     },
     "additional_fields": [
       "1"
@@ -6451,7 +6515,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1456"
+      "1": "1486"
     },
     "additional_fields": [
       "1"
@@ -6507,7 +6571,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1470"
+      "1": "1500"
     },
     "additional_fields": [
       "1"
@@ -6566,7 +6630,7 @@
       "1"
     ],
     "position_in_category": {
-      "1": "1523"
+      "1": "1553"
     },
     "additional_fields": [],
     "bookings_limit": "10",
@@ -8549,7 +8613,6 @@
             "14:00:00",
             "14:30:00",
             "15:00:00",
-            "16:00:00",
             "16:30:00",
             "17:00:00"
           ],
@@ -8589,7 +8652,7 @@
     "buffertime_before": "0",
     "buffertime_after": "0",
     "hide_duration": "0",
-    "description": "<p><span style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\">The Fresh Life presents, this year’s Finale Party Theme...&nbsp;</span><span style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\">HALLOWEEN</span><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><span style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\">Our final night is on Halloween so bring your best costumes and leave the rest to us.</span><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><span style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\">Join us to celebrate an unforgettable week filled with spooky food stations, ‘creepy’ cocktails, and live music that will send shivers down your spine</span><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><span style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\">But beware, there are tons of surprises lurking in the shadows, guaranteed to leave you spellbound!</span><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><span style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\">Our not-to-be-missed finale event is on the last night of The Fresh Life this year - making it the perfect way to come together after an empowering week!</span><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><span style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\">So grab your broomsticks and spirit squad, and let’s dance the night away in true Fresh Life style!</span><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><span style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\">If you haven’t purchase your finale party ticket yet, jump on this now! Buy your tickets here:&nbsp;</span><a href=\"https://events.humanitix.com/the-fresh-life-2024/tickets#group1\">https://events.humanitix.com/the-fresh-life-2024/tickets#group1</a></p>",
+    "description": "<p><span style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\">The Fresh Life presents, this year’s Finale Party Theme...&nbsp;</span><span style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\">HALLOWEEN ????</span><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><span style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\">Our final night is on Halloween so bring your best costumes and leave the rest to us.</span><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><span style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\">Join us to celebrate an unforgettable week filled with spooky food stations, ‘creepy’ cocktails, and live music that will send shivers down your spine ????</span><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><span style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\">But beware, there are tons of surprises lurking in the shadows, guaranteed to leave you spellbound!</span><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><span style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\">Our not-to-be-missed finale event is on the last night of The Fresh Life this year - making it the perfect way to come together after an empowering week!</span><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><span style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\">So grab your broomsticks and spirit squad, and let’s dance the night away in true Fresh Life style! ????</span><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><br style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\"><span style=\"font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;\">If you haven’t purchase your finale party ticket yet, jump on this now! Buy your tickets here:&nbsp;</span><a href=\"https://events.humanitix.com/the-fresh-life-2024/tickets#group1\">https://events.humanitix.com/the-fresh-life-2024/tickets#group1</a></p>",
     "is_public": "1",
     "is_active": "1",
     "position": "45",
@@ -8603,7 +8666,7 @@
     "class_id": null,
     "is_visible": "1",
     "picture_path": null,
-    "short_description": "The Fresh Life presents, this year’s Finale Party Theme...&nbsp;HALLOWEEN<br>Our final night is on Halloween so bring your best costumes and leave the rest to us.Join us to celebrate an unforgettable week filled with spooky food stations, ‘creepy’ cocktails, and live music that will send shivers down your spine<br>But beware, there are tons of surprises lurking in the shadows, guaranteed to leave you spellbound!<br>Our not-to-be-missed finale event is on the last night of The Fresh Life this year",
+    "short_description": "The Fresh Life presents, this year’s Finale Party Theme...&nbsp;HALLOWEEN ????Our final night is on Halloween so bring your best costumes and leave the rest to us.Join us to celebrate an unforgettable week filled with spooky food stations, ‘creepy’ cocktails, and live music that will send shivers down your spine ????But beware, there are tons of surprises lurking in the shadows, guaranteed to leave you spellbound!Our not-to-be-missed finale event is on the last night of The Fresh Life this year ",
     "unit_map": {
       "29": null
     },
@@ -9504,7 +9567,8 @@
         }
       }
     ]
-  },{
+  },
+  {
     "id": "360",
     "name": "Q&A with David Eccleston | Facilitated by 'The Johns'",
     "duration": "25",
@@ -9589,7 +9653,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "0"
+      "11": "1"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -9643,7 +9707,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "3"
+      "11": "4"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -9697,7 +9761,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "4"
+      "11": "5"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -9749,7 +9813,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "5"
+      "11": "6"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -9803,7 +9867,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "6"
+      "11": "7"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -9857,7 +9921,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "7"
+      "11": "8"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -9912,7 +9976,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "8"
+      "11": "9"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -9966,7 +10030,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "9"
+      "11": "10"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10020,7 +10084,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "10"
+      "11": "11"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10072,7 +10136,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "11"
+      "11": "12"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10126,7 +10190,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "13"
+      "11": "14"
     },
     "additional_fields": [],
     "bookings_limit": "10",
@@ -10181,7 +10245,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "14"
+      "11": "15"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10235,7 +10299,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "15"
+      "11": "16"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10289,7 +10353,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "16"
+      "11": "17"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10343,7 +10407,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "17"
+      "11": "18"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10397,7 +10461,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "18"
+      "11": "19"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10451,7 +10515,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "20"
+      "11": "22"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10505,7 +10569,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "21"
+      "11": "23"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10559,7 +10623,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "22"
+      "11": "24"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10613,7 +10677,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "25"
+      "11": "27"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10667,7 +10731,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "26"
+      "11": "28"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10721,7 +10785,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "27"
+      "11": "29"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10775,7 +10839,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "29"
+      "11": "31"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10829,7 +10893,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "30"
+      "11": "32"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10884,7 +10948,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "32"
+      "11": "34"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10938,7 +11002,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "33"
+      "11": "35"
     },
     "additional_fields": [],
     "bookings_limit": "0",
@@ -10992,7 +11056,7 @@
       "11"
     ],
     "position_in_category": {
-      "11": "35"
+      "11": "37"
     },
     "additional_fields": [],
     "bookings_limit": "0",
