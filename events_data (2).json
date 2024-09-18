@@ -492,7 +492,7 @@
   },
   {
     "id": "41",
-    "name": "Teoxane Masterclass: Midface Multilayering (MLT), ATP Fundamentals",
+    "name": "Midface Multilayering (MLT), ATP Fundamentals",
     "duration": "55",
     "buffertime_before": "0",
     "buffertime_after": "0",
@@ -2117,7 +2117,7 @@
   },
   {
     "id": "42",
-    "name": "Teoxane Masterclass: Skin Rejuvenation - The Glow Up",
+    "name": "Skin Rejuvenation - The Glow Up",
     "duration": "55",
     "buffertime_before": "0",
     "buffertime_after": "0",
@@ -2409,7 +2409,7 @@
   },
   {
     "id": "43",
-    "name": "Teoxane Masterclass: Midface Multilayering (MLT), ATP Fundamentals",
+    "name": "Midface Multilayering (MLT), ATP Fundamentals",
     "duration": "55",
     "buffertime_before": "0",
     "buffertime_after": "0",
@@ -2813,7 +2813,7 @@
   },
   {
     "id": "44",
-    "name": "Teoxane Masterclass: Midface Multilayering (MLT), ATP Fundamentals",
+    "name": "Midface Multilayering (MLT), ATP Fundamentals",
     "duration": "55",
     "buffertime_before": "0",
     "buffertime_after": "0",
@@ -3102,7 +3102,7 @@
   },
   {
     "id": "45",
-    "name": "Teoxane Masterclass: Lower Face Beautification",
+    "name": "Lower Face Beautification",
     "duration": "55",
     "buffertime_before": "0",
     "buffertime_after": "0",
@@ -3502,7 +3502,7 @@
   },
   {
     "id": "46",
-    "name": "Teoxane Masterclass: Sculpting the Perfect Profile: Lip, Perioral, and Chin Focus",
+    "name": "Sculpting the Perfect Profile: Lip, Perioral, and Chin Focus",
     "duration": "55",
     "buffertime_before": "0",
     "buffertime_after": "0",
@@ -3616,7 +3616,7 @@
   {
     "id": "30",
     "name": "Croma HA Inner Contour Treatment",
-    "duration": "25",
+    "duration": "55",
     "buffertime_before": "0",
     "buffertime_after": "0",
     "hide_duration": "0",
@@ -3662,8 +3662,7 @@
           "2024-10-29": [],
           "2024-10-30": [],
           "2024-10-31": [
-            "10:00:00",
-            "10:25:00"
+            "10:00:00"
           ],
           "2024-11-01": []
         }
@@ -3731,7 +3730,7 @@
   },
   {
     "id": "48",
-    "name": "Teoxane Masterclass: Lower Face Beautification",
+    "name": "Lower Face Beautification",
     "duration": "55",
     "buffertime_before": "0",
     "buffertime_after": "0",
@@ -3787,7 +3786,7 @@
   },
   {
     "id": "319",
-    "name": "Teoxane Masterclass: Skin Rejuvenation - The Glow Up",
+    "name": "Skin Rejuvenation - The Glow Up",
     "duration": "55",
     "buffertime_before": "0",
     "buffertime_after": "0",
@@ -3843,7 +3842,7 @@
   },
   {
     "id": "49",
-    "name": "Teoxane Masterclass: Skin Rejuvenation - The Glow Up",
+    "name": "Skin Rejuvenation - The Glow Up",
     "duration": "55",
     "buffertime_before": "0",
     "buffertime_after": "0",
@@ -3957,7 +3956,7 @@
   },
   {
     "id": "50",
-    "name": "Teoxane Masterclass: Sculpting the Perfect Profile: Lip, Perioral, and Chin Focus",
+    "name": "Sculpting the Perfect Profile: Lip, Perioral, and Chin Focus",
     "duration": "55",
     "buffertime_before": "0",
     "buffertime_after": "0",
