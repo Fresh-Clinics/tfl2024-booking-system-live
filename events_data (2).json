@@ -9504,6 +9504,59 @@
         }
       }
     ]
+  },{
+    "id": "360",
+    "name": "Q&A with David Eccleston | Facilitated by 'The Johns'",
+    "duration": "25",
+    "buffertime_before": "0",
+    "buffertime_after": "0",
+    "hide_duration": "0",
+    "description": "<p><b>Q&amp;A with David Eccleston</b></p><p><b>Facilitated by 'The Johns'</b><br></p>",
+    "is_public": "1",
+    "is_active": "1",
+    "position": "48",
+    "file_id": null,
+    "seo_url": null,
+    "min_time_till_event": null,
+    "max_time_till_event": null,
+    "is_recurring": "0",
+    "picture": null,
+    "picture_sub_path": null,
+    "class_id": null,
+    "is_visible": "1",
+    "picture_path": null,
+    "unit_map": {
+      "30": null
+    },
+    "providers": [
+      30
+    ],
+    "categories": [
+      "11"
+    ],
+    "position_in_category": {
+      "11": "0"
+    },
+    "additional_fields": [],
+    "bookings_limit": "0",
+    "products": [],
+    "resource_groups": [],
+    "ticket_id": null,
+    "timeMatrix": [
+      {
+        "provider_id": 30,
+        "service_id": 360,
+        "timeslots": {
+          "2024-10-28": [],
+          "2024-10-29": [],
+          "2024-10-30": [],
+          "2024-10-31": [
+            "12:00:00"
+          ],
+          "2024-11-01": []
+        }
+      }
+    ]
   },
   {
     "id": "292",
