@@ -119,7 +119,7 @@ body {
 }
 
 .fc .fc-bg-event {
-    background: #ebf7f4 !important; /* Set custom background color */
+    background: #ebf7f475 !important; /* Set custom background color */
     color: #0e4333 !important; /* Set custom text color */
     opacity: unset;
 }
