@@ -45,14 +45,14 @@ $(document).ready(function () {
     loginClient.getToken('thefreshlifeconference', '2b09dc7aee0f1f9d4bdd7f8ae39aa51e1ed13e833d67354b61ef643e8d4947d8', function (token) {
         if (token) {
             console.log("Fetched token: ", token);
-            renderCalendar(token);  // This will replace renderCalendarWithEvents
+            renderCalendar();  // Only render the calendar after fetching the token
         } else {
             console.error("Failed to fetch token. Please check your API credentials.");
         }
     });
     
-    // Define the calendar rendering function
-    function renderCalendar(token) {
+    // Function to render the calendar
+    function renderCalendar() {
         // Initialize FullCalendar
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -84,8 +84,8 @@ $(document).ready(function () {
             resourceOrder: 'order_id',
             resources: getHardcodedResources(),
             events: function (info, successCallback, failureCallback) {
-                // Load events from SimplyBook API and hardcoded JSON data
-                loadEvents(token, successCallback);
+                // Load events from JSON and hardcoded
+                loadEvents(successCallback);
             },
             businessHours: [
                 { daysOfWeek: [2], startTime: '09:00', endTime: '18:30' },
@@ -141,8 +141,8 @@ $(document).ready(function () {
         calendar.render();
     }
 
-    // Load events from both SimplyBook API and hardcoded JSON data
-    function loadEvents(token, successCallback) {
+    // Load events from the events_data.json file and hardcoded events
+    function loadEvents(successCallback) {
         $.getJSON('/events_data.json', function(eventData) {
             const events = eventData;
             const calendarEvents = processEvents(events);
@@ -181,6 +181,24 @@ $(document).ready(function () {
         return calendarEvents;
     }
 
+    // Hardcoded events function
+    function getHardcodedEvents() {
+        const resources = getHardcodedResources();
+        return resources.flatMap(resource => [
+            {
+                id: `bg-event-${resource.id}-1`,
+                title: 'Afternoon Tea, Sponsor Activations & Networking',
+                description: '<b>Afternoon Tea, Sponsor Activations & Networking</b><br><br>In the Restaurant, on the Deck and in the Fresh Lounge',
+                start: '2024-10-29T15:30:00',
+                end: '2024-10-29T16:00:00',
+                resourceId: resource.id,
+                categories: '12',
+                display: 'background'
+            },
+            // Add more hardcoded events...
+        ]);
+    }
+
     function getCategoryBorderColor(category) {
         switch (category) {
             case '1': return '#142652';
@@ -198,7 +216,7 @@ $(document).ready(function () {
             { id: '29', title: 'Woodlands Stage', category: 'Program', order_id: 'a' },
             { id: '30', title: 'Fresh Lounge', category: 'Program', order_id: 'b' },
             { id: '8', title: 'Merz | Room 1', category: 'Training Suites', order_id: 'c' },
-            // Add more resources as required...
+            // Add more resources...
         ];
     }
 
