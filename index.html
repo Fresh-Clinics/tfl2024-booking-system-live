@@ -90,19 +90,19 @@ $(document).ready(function () {
                 { daysOfWeek: [4], startTime: '07:00', endTime: '22:30' }
             ],
             eventContent: function (arg) {
-                if (arg.event && arg.event.title) {
-                    const borderColor = getCategoryBorderColor(arg.event.extendedProps.category);
-                    const displaySlots = arg.event.extendedProps.displaySlots && !['9', '10', '11', '12'].includes(arg.event.extendedProps.category);
-                    return {
-                        html: `<div class="fc-event-content" style="border-top: 4px solid ${borderColor} !important;">
-                                  <div class="fc-event-title">${arg.event.title}</div>
-                                  <div class="fc-event-slots">${displaySlots ? `Slots Available: ${arg.event.extendedProps.bookings_limit}` : ''}</div>
-                               </div>`
-                    };
-                } else {
-                    return { html: '<div class="fc-event-content"><div class="fc-event-title">Invalid Event</div></div>' };
-                }
-            },
+            if (arg.event && arg.event.title) {
+                const borderColor = getCategoryBorderColor(arg.event.extendedProps.category);
+                const displaySlots = arg.event.extendedProps.displaySlots && !['9', '10', '11', '12'].includes(arg.event.extendedProps.category);
+                return {
+                    html: `<div class="fc-event-content" style="border-top: 4px solid ${borderColor} !important; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                              <div class="fc-event-title">${arg.event.title}</div>
+                              <div class="fc-event-slots">${displaySlots ? `Slots Available: ${arg.event.extendedProps.bookings_limit}` : ''}</div>
+                           </div>`
+                };
+            } else {
+                return { html: '<div class="fc-event-content"><div class="fc-event-title">Invalid Event</div></div>' };
+            }
+        },
             eventDidMount: function (info) {
                 tippy(info.el, {
                     content: `<div style="font-size: 1rem!important; font-family: Arial;"><strong>${info.event.title}</strong></div><br><div style="font-size: 0.9rem!important; font-family: Arial;">${info.event.extendedProps.description}</div>`,
@@ -112,26 +112,43 @@ $(document).ready(function () {
                 });
             },
             eventClick: function (info) {
-                const event = info.event;
-                const startDateTime = formatTimeToAEST(new Date(event.extendedProps.rawStartTime));
-                const endDateTime = formatTimeToAEST(new Date(event.extendedProps.rawEndTime));
+            const event = info.event;
 
-                const popup = document.createElement('div');
-                popup.className = 'popup-overlay';
-                popup.innerHTML = `
-                    <div class="popup-content">
-                        <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
-                        ${getResourceLogo(event.resourceId) ? `<img src="${getResourceLogo(event.resourceId)}" style="width: 100px; margin: 10px auto;" alt="Resource Logo">` : ''}
-                        <p><strong>${startDateTime} - ${endDateTime}</strong></p>
-                        <h3>${event.title}</h3>
-                        <div style="font-size: 0.9rem; font-family: Arial;">${event.extendedProps.description}</div>                  
-                        <div class="popup-footer">Bookings open Monday 23rd October at 7:00PM AEST</div>
+            // Format and convert time to Australia/Sydney timezone using Luxon
+            const startDateTimeLuxon = luxon.DateTime.fromJSDate(event.start).setZone('Australia/Sydney');
+            const endDateTimeLuxon = luxon.DateTime.fromJSDate(event.end).setZone('Australia/Sydney');
+
+            const startDateTime = startDateTimeLuxon.toFormat('h:mm a');
+            const endDateTime = endDateTimeLuxon.toFormat('h:mm a');
+
+            // Extract the necessary values for the URL
+            const category = event.extendedProps.category || '1'; // Default to category 1 if not available
+            const service = event.id; // Dynamically set the service using event.id
+            const date = startDateTimeLuxon.toFormat('yyyy-MM-dd'); // Correctly formatted date
+            const time = startDateTimeLuxon.toFormat('HH:mm:ss'); // Correctly formatted time
+
+            // Create the dynamic booking URL
+            const bookingUrl = `https://thefreshlifeconference.simplybook.net/v2/#book/category/${category}/service/${service}/count/1/date/${date}/time/${time}/`;
+
+            const popup = document.createElement('div');
+            popup.className = 'popup-overlay';
+            popup.innerHTML = `
+                <div class="popup-content">
+                    <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
+                    ${getResourceLogo(event.resourceId) ? `<img src="${getResourceLogo(event.resourceId)}" style="width: 100px; margin: 10px auto;" alt="Resource Logo">` : ''}
+                    <p><strong>${startDateTime} - ${endDateTime}</strong></p>
+                    <h3>${event.title}</h3>
+                    <div style="font-size: 0.9rem; font-family: Arial;">${event.extendedProps.description}</div>
+                    <div class="popup-footer">
+                        <a href="${bookingUrl}" class="book-now-button" target="_blank">Book Now</a>
                     </div>
-                `;
-                document.body.appendChild(popup);
-            },
-            allDaySlot: false
-        });
+                </div>
+            `;
+            document.body.appendChild(popup);
+        },
+        allDaySlot: false
+    });
+
 
         calendar.render();
     }
