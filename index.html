@@ -33,7 +33,7 @@
 $(document).ready(function () {
     console.log("Initializing FullCalendar with Hardcoded Events...");
 
-    // Initialize JSON-RPC Client for SimplyBook API
+    // Initialize JSON-RPC Client for SimplyBook API to only fetch the token
     var loginClient = new JSONRpcClient({
         'url': 'https://user-api.simplybook.me/login',
         'onerror': function (error) {
@@ -45,15 +45,14 @@ $(document).ready(function () {
     loginClient.getToken('thefreshlifeconference', '2b09dc7aee0f1f9d4bdd7f8ae39aa51e1ed13e833d67354b61ef643e8d4947d8', function (token) {
         if (token) {
             console.log("Fetched token: ", token);
-            renderCalendar();  // Only render the calendar after fetching the token
+            renderCalendar();  // Render the calendar after fetching the token
         } else {
             console.error("Failed to fetch token. Please check your API credentials.");
         }
     });
-    
+
     // Function to render the calendar
     function renderCalendar() {
-        // Initialize FullCalendar
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
             schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
@@ -84,7 +83,7 @@ $(document).ready(function () {
             resourceOrder: 'order_id',
             resources: getHardcodedResources(),
             events: function (info, successCallback, failureCallback) {
-                // Load events from JSON and hardcoded
+                // Load events from JSON and hardcoded events
                 loadEvents(successCallback);
             },
             businessHours: [
@@ -116,8 +115,6 @@ $(document).ready(function () {
             },
             eventClick: function (info) {
                 const event = info.event;
-
-                // Format and convert time to Australia/Sydney timezone
                 const startDateTime = formatTimeToAEST(new Date(event.extendedProps.rawStartTime));
                 const endDateTime = formatTimeToAEST(new Date(event.extendedProps.rawEndTime));
 
@@ -141,6 +138,7 @@ $(document).ready(function () {
         calendar.render();
     }
 
+    // Load events from events_data.json and combine with hardcoded events
     function loadEvents(successCallback) {
         $.getJSON('/events_data.json', function(eventData) {
             const events = eventData;
@@ -180,17 +178,25 @@ $(document).ready(function () {
         return calendarEvents;
     }
 
-
-    // Hardcoded events function
     function getHardcodedEvents() {
         const resources = getHardcodedResources();
         return resources.flatMap(resource => [
             {
                 id: `bg-event-${resource.id}-1`,
-                title: 'Afternoon Tea, Sponsor Activations & Networking',
+                title: ' ',
                 description: '<b>Afternoon Tea, Sponsor Activations & Networking</b><br><br>In the Restaurant, on the Deck and in the Fresh Lounge',
                 start: '2024-10-29T15:30:00',
                 end: '2024-10-29T16:00:00',
+                resourceId: resource.id,
+                categories: '12',
+                display: 'background'
+            },
+            {
+                id: `bg-event-${resource.id}-2`,
+                title: ' ',
+                description: '<b>Lunch, Sponsor Activations & Networking</b><br><br>In the Restaurant, on the Deck and in the Fresh Lounge',
+                start: '2024-10-29T13:00:00',
+                end: '2024-10-29T14:00:00',
                 resourceId: resource.id,
                 categories: '12',
                 display: 'background'
