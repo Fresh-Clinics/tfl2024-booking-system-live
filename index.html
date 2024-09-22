@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendar with Live Events from SimplyBook.me</title>
 
@@ -11,6 +10,9 @@
 
     <!-- Include Tippy.js for tooltips -->
     <link href="https://unpkg.com/tippy.js@6/dist/tippy.css" rel="stylesheet" />
+
+    <!-- Include your custom style.css -->
+    <link href="./style.css" rel="stylesheet" />
 
     <!-- Include FullCalendar Scheduler JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.15/index.global.min.js"></script>
@@ -24,99 +26,6 @@
 
     <!-- Include JSON-RPC Client Library for SimplyBook.me -->
     <script src="json-rpc-client.js"></script>
-
-    <!-- Custom Styles -->
-    <style>
-        /* Your existing CSS */
-        body {
-            margin: 40px 10px;
-            padding: 0;
-            font-family: 'Manrope', sans-serif;
-            font-size: 14px;
-            text-align: center;
-        }
-
-        #calendar {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .fc-event {
-            background-color: #eae6e3 !important;
-            color: white;
-            border: none;
-            position: relative;
-        }
-
-        .fc-v-event .fc-event-main {
-            color: #142652 !important;
-        }
-
-        .fc-event-content {
-            padding: 5px;
-        }
-
-        .fc .fc-toolbar-title, .fc .fc-col-header-cell-cushion {
-            color: #0e4333 !important;
-        }
-
-        .fc .fc-button-primary {
-            background-color: #0e4333 !important;
-            border-color: #0e4333 !important;
-        }
-
-        .fc-event-slots {
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
-            font-size: 10px;
-            font-weight: normal;
-            color: #142652;
-        }
-
-        .tippy-box {
-            background: #eff0ed;
-            color: #142652;
-            max-width: 200px;
-            font-size: .8rem;
-            padding: .5em 1em;
-        }
-
-        .popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .popup-content {
-            background: white;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-            padding: 20px;
-            border-radius: 4px;
-        }
-
-        .close-popup {
-            cursor: pointer;
-            font-size: 1.2rem;
-            position: absolute;
-            top: 10px;
-            right: 20px;
-        }
-
-        .popup-footer {
-            margin-top: 10px;
-            font-size: 0.9rem;
-        }
-    </style>
 </head>
 <body>
 
@@ -155,17 +64,27 @@ $(document).ready(function () {
             schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
             initialView: 'resourceTimeGridDay',
             initialDate: '2024-10-29',
-            timeZone: 'Australia/Sydney', // Set timezone to AEST
+            timeZone: 'Australia/Sydney',
             headerToolbar: {
-                left: 'prev',
+                left: 'prev,next',
                 center: 'title',
-                right: 'next'
+                right: 'resourceTimeGridDay,resourceTimeGridThreeDay'
             },
             dayMinWidth: 150, // Set column width
             resources: getHardcodedResources(), // Use hardcoded resources
             events: function (info, successCallback, failureCallback) {
-                // Fetch events for the current date range
-                fetchEventsForRange(token, info.startStr, info.endStr, successCallback);
+                // Fetch events from events_data.json
+                fetch('/events_data.json')
+                    .then(response => response.json())
+                    .then(eventData => {
+                        // Combine hardcoded events and events from the JSON file
+                        const combinedEvents = [...processEvents(eventData), ...getHardcodedEvents()];
+                        successCallback(combinedEvents);
+                    })
+                    .catch(error => {
+                        console.error("Error loading events from JSON:", error);
+                        failureCallback(error);
+                    });
             },
             height: 'auto',
             slotMinTime: '07:00',
@@ -190,12 +109,11 @@ $(document).ready(function () {
             ],
             eventContent: function (arg) {
                 if (arg.event && arg.event.title) {
-                    // Determine border color based on category
                     const borderColor = getCategoryBorderColor(arg.event.extendedProps.category);
                     return {
                         html: `<div class="fc-event-content" style="border-top: 4px solid ${borderColor} !important;">
                                   <div class="fc-event-title">${arg.event.title}</div>
-                                  <div class="fc-event-slots">Slots Available: ${arg.event.extendedProps.bookings_limit}</div> <!-- Display slots available -->
+                                  <div class="fc-event-slots">Slots Available: ${arg.event.extendedProps.bookings_limit}</div>
                                </div>`
                     };
                 } else {
@@ -231,41 +149,64 @@ $(document).ready(function () {
         calendar.render();
     }
 
-    function fetchEventsForRange(token, start, end, callback) {
-        var client = new JSONRpcClient({
-            'url': 'https://user-api.simplybook.me',
-            'headers': {
-                'X-Company-Login': 'thefreshlifeconference',
-                'X-Token': token
+    function processEvents(events) {
+        const calendarEvents = events.map(event => ({
+            id: event.id,
+            title: event.name,
+            start: event.start_time,
+            end: event.end_time,
+            resourceId: event.resource_id,
+            description: event.description || '',
+            bookings_limit: event.bookings_limit,
+            category: event.category
+        }));
+        return calendarEvents;
+    }
+
+    function getHardcodedEvents() {
+        const hardcodedResources = getHardcodedResources();
+        return hardcodedResources.flatMap(resource => [
+            {
+                id: `bg-event-${resource.id}-1`,
+                title: 'Afternoon Tea, Sponsor Activations & Networking',
+                description: 'In the Restaurant, on the Deck and in the Fresh Lounge',
+                start: '2024-10-29T15:30:00',
+                end: '2024-10-29T16:00:00',
+                resourceId: resource.id,
+                category: '12',
+                display: 'background'
             },
-            'onerror': function (error) {
-                console.error("Error in JSON-RPC client setup:", error);
+            {
+                id: `bg-event-${resource.id}-2`,
+                title: 'Lunch, Sponsor Activations & Networking',
+                description: 'In the Restaurant, on the Deck and in the Fresh Lounge',
+                start: '2024-10-29T13:00:00',
+                end: '2024-10-29T14:00:00',
+                resourceId: resource.id,
+                category: '12',
+                display: 'background'
+            },
+            {
+                id: `bg-event-${resource.id}-3`,
+                title: 'Morning Tea, Sponsor Activations & Networking',
+                description: 'In the Restaurant, on the Deck and in the Fresh Lounge',
+                start: '2024-10-30T11:30:00',
+                end: '2024-10-30T12:00:00',
+                resourceId: resource.id,
+                category: '12',
+                display: 'background'
+            },
+            {
+                id: `bg-event-${resource.id}-4`,
+                title: 'Fright Night Finale',
+                description: 'Brought to you by Fresh Clinics',
+                start: '2024-10-31T18:00:00',
+                end: '2024-10-31T22:30:00',
+                resourceId: resource.id,
+                category: '12',
+                display: 'background'
             }
-        });
-
-        client.request('getEventList', [], function (events) {
-            if (events) {
-                console.log("Fetched events (raw):", events);
-
-                // Ensure the events object is correctly handled
-                if (typeof events === 'object' && !Array.isArray(events)) {
-                    events = Object.values(events); // Convert to array if it's an object
-                }
-
-                if (Array.isArray(events) && events.length > 0) {
-                    callback(events); // Callback with the event data
-                } else {
-                    console.error("No valid events returned. Please check the API response.");
-                    callback([]); // Return empty array if no events
-                }
-            } else {
-                console.error("No events returned. Please check the API response.");
-                callback([]); // Return empty array if no events
-            }
-        }, function (error) {
-            console.error("Error fetching events:", error);
-            callback([]); // Return empty array on error
-        });
+        ]);
     }
 
     function getCategoryBorderColor(category) {
@@ -277,6 +218,10 @@ $(document).ready(function () {
             case '6': return '#cbe4e0';
             case '7': return '#142652';
             case '8': return '#84cdb8';
+            case '9': return '#142652';
+            case '10': return '#142652';
+            case '11': return '#cbe4e0';
+            case '12': return '#ebf7f4';
             default: return '#142652'; // Default color
         }
     }
@@ -292,7 +237,24 @@ $(document).ready(function () {
             { id: '3', title: 'Allergan', category: 'Training Suites', order_id: 'g' },
             { id: '4', title: 'Evolus', category: 'Training Suites', order_id: 'h' },
             { id: '7', title: 'Candela', category: 'Training Suites', order_id: 'i' },
-            { id: '14', title: 'Cryomed', category: 'Training Suites', order_id: 'j' }
+            { id: '14', title: 'Cryomed', category: 'Training Suites', order_id: 'j' },
+            { id: '13', title: 'Dermocosmetica | Room 1', category: 'Training Suites', order_id: 'k' },
+            { id: '25', title: 'Dermocosmetica | Room 2', category: 'Training Suites', order_id: 'l' },
+            { id: '9', title: 'EnVogue', category: 'Training Suites', order_id: 'm' },
+            { id: '10', title: 'Hugel', category: 'Training Suites', order_id: 'n' },
+            { id: '26', title: 'Rejuran', category: 'Training Suites', order_id: 'o' },
+            { id: '11', title: 'Teoxane', category: 'Training Suites', order_id: 'p' },
+            { id: '12', title: 'Xytide', category: 'Training Suites', order_id: 'q' },
+            { id: '15', title: 'Fresh Clinics | Room 1', category: 'Training Suites', order_id: 'r' },
+            { id: '27', title: 'Fresh Clinics | Room 2', category: 'Training Suites', order_id: 's' },
+            { id: '28', title: 'Laser & Skin Training', category: 'Training Suites', order_id: 't' },
+            { id: '20', title: 'Venus Concept', category: 'Activations Hub', order_id: 'u' },
+            { id: '17', title: 'Alma', category: 'Activations Hub', order_id: 'v' },
+            { id: '19', title: 'Advanced Skin Technology', category: 'Activations Hub', order_id: 'w' },
+            { id: '22', title: 'Fresh Tech Hub', category: 'Activations Hub', order_id: 'x' },
+            { id: '18', title: 'The Skincare Company', category: 'Activations Hub', order_id: 'y' },
+            { id: '21', title: 'Wellness Sessions', category: 'Wellness & Spa', order_id: 'z' },
+            { id: '16', title: 'The Fresh Spa', category: 'Wellness & Spa', order_id: 'zz' }
         ];
     }
 });
