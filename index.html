@@ -66,7 +66,7 @@ $(document).ready(function () {
 
     // Function to load events and integrate available units
     function loadSimplyBookEvents(successCallback, failureCallback) {
-        $.getJSON('/mnt/data/events_data%20(2).json', function(eventData) {
+        $.getJSON('/events_data.json', function(eventData) {
             const events = eventData;
             const calendarEvents = processEvents(events);
             successCallback(calendarEvents);
