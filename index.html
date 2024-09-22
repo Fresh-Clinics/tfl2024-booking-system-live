@@ -102,7 +102,7 @@ $(document).ready(function () {
 
             // Extract the necessary values for the URL
             const category = event.extendedProps.category || '1'; // Default to category 1 if not available
-            const service = '363'; // This could be dynamic if needed
+            const service = event.id; // Dynamically set the service using event.id
             const date = startDateTimeLuxon.toFormat('yyyy-MM-dd'); // Correctly formatted date
             const time = startDateTimeLuxon.toFormat('HH:mm:ss'); // Correctly formatted time
 
@@ -131,7 +131,7 @@ $(document).ready(function () {
     calendar.render();
 
     function loadEvents(successCallback) {
-        $.getJSON('/events_data%20(2).json', function(eventData) {
+        $.getJSON('/events_data.json', function(eventData) {
             const events = eventData;
             const calendarEvents = processEvents(events);
             successCallback([...calendarEvents, ...getHardcodedEvents()]);
@@ -149,7 +149,7 @@ $(document).ready(function () {
                         const startDateTime = `${date}T${slot}`;
                         const endDateTime = luxon.DateTime.fromISO(startDateTime).plus({ minutes: parseInt(event.duration) }).toISO();
                         calendarEvents.push({
-                            id: event.id,
+                            id: event.id, // Use event.id as service dynamically
                             title: event.name,
                             start: startDateTime,
                             end: endDateTime,
