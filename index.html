@@ -22,7 +22,7 @@
     <!-- Include JSON-RPC Client -->
     <script src="json-rpc-client.js"></script>
 
-    <!-- Include custom styles -->
+    <!-- Custom Styles -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -33,7 +33,7 @@
 $(document).ready(function () {
     console.log("Initializing FullCalendar with Hardcoded Events...");
 
-    // Fetch SimplyBook token using JSON-RPC client
+    // Initialize JSON-RPC Client for SimplyBook API
     var loginClient = new JSONRpcClient({
         'url': 'https://user-api.simplybook.me/login',
         'onerror': function (error) {
@@ -41,6 +41,7 @@ $(document).ready(function () {
         }
     });
 
+    // Fetch token dynamically using SimplyBook API credentials
     loginClient.getToken('thefreshlifeconference', '2b09dc7aee0f1f9d4bdd7f8ae39aa51e1ed13e833d67354b61ef643e8d4947d8', function (token) {
         if (token) {
             console.log("Fetched token: ", token);
@@ -92,31 +93,28 @@ $(document).ready(function () {
             eventContent: function (arg) {
                 if (arg.event && arg.event.title) {
                     const borderColor = getCategoryBorderColor(arg.event.extendedProps.category);
+                    const displaySlots = arg.event.extendedProps.displaySlots && !['9', '10', '11', '12'].includes(arg.event.extendedProps.category);
                     return {
-                        html: `<div class="fc-event-content" style="border-top: 4px solid ${borderColor} !important;">
+                        html: `<div class="fc-event-content" style="border-top: 4px solid ${borderColor} !important; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                                   <div class="fc-event-title">${arg.event.title}</div>
+                                  <div class="fc-event-slots">${displaySlots ? `Slots Available: ${arg.event.extendedProps.bookings_limit}` : ''}</div>
                                </div>`
                     };
                 } else {
                     return { html: '<div class="fc-event-content"><div class="fc-event-title">Invalid Event</div></div>' };
                 }
             },
+            eventDidMount: function (info) {
+                tippy(info.el, {
+                    content: `<div style="font-size: 1rem!important; font-family: Arial;"><strong>${info.event.title}</strong></div><br><div style="font-size: 0.9rem!important; font-family: Arial;">${info.event.extendedProps.description}</div>`,
+                    allowHTML: true,
+                    theme: 'light-border',
+                    placement: 'top'
+                });
+            },
             eventClick: function (info) {
                 const event = info.event;
-                const startDateTimeLuxon = luxon.DateTime.fromJSDate(event.start).setZone('Australia/Sydney');
-                const endDateTimeLuxon = luxon.DateTime.fromJSDate(event.end).setZone('Australia/Sydney');
-                const startDateTime = startDateTimeLuxon.toFormat('h:mm a');
-                const endDateTime = endDateTimeLuxon.toFormat('h:mm a');
-                const category = event.extendedProps.category || '1';
-                const service = event.id;
-                const date = startDateTimeLuxon.toFormat('yyyy-MM-dd');
-                const time = startDateTimeLuxon.toFormat('HH:mm:ss');
-
-                // Create the dynamic booking URL
-                const bookingUrl = `https://thefreshlifeconference.simplybook.net/v2/#book/category/${category}/service/${service}/count/1/date/${date}/time/${time}/`;
-                
-                // Create or update popup
-                loadBookingUrl(bookingUrl, startDateTime, endDateTime, event.title);
+                replacePopup(event);
             },
             allDaySlot: false
         });
@@ -124,7 +122,48 @@ $(document).ready(function () {
         calendar.render();
     }
 
-    // Load events from events_data.json (NOT SimplyBook events)
+    // Function to replace popup content
+    function replacePopup(event) {
+        const startDateTimeLuxon = luxon.DateTime.fromJSDate(event.start).setZone('Australia/Sydney');
+        const endDateTimeLuxon = luxon.DateTime.fromJSDate(event.end).setZone('Australia/Sydney');
+        const startDateTime = startDateTimeLuxon.toFormat('h:mm a');
+        const endDateTime = endDateTimeLuxon.toFormat('h:mm a');
+
+        const popup = document.querySelector('.popup-overlay');
+        if (popup) {
+            popup.remove(); // Remove the old popup if it exists
+        }
+
+        const newPopup = document.createElement('div');
+        newPopup.className = 'popup-overlay';
+        newPopup.innerHTML = `
+            <div class="popup-content">
+                <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
+                ${getResourceLogo(event.resourceId) ? `<img src="${getResourceLogo(event.resourceId)}" style="width: 100px; margin: 10px auto;" alt="Resource Logo">` : ''}
+                <p><strong>${startDateTime} - ${endDateTime}</strong></p>
+                <h3>${event.title}</h3>
+                <div style="font-size: 0.9rem; font-family: Arial;">${event.extendedProps.description}</div>
+                <div class="popup-footer">
+                    <button class="book-now-button" onclick="loadBookingUrl('${event.id}', '${event.extendedProps.category}', '${startDateTimeLuxon.toFormat('yyyy-MM-dd')}', '${startDateTimeLuxon.toFormat('HH:mm:ss')}')">Book Now</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(newPopup);
+    }
+
+    // Function to load booking URL in the popup
+    function loadBookingUrl(serviceId, categoryId, date, time) {
+        const bookingUrl = `https://thefreshlifeconference.simplybook.me/v2/#book/category/${categoryId}/service/${serviceId}/count/1/date/${date}/time/${time}/`;
+        const popupContent = document.querySelector('.popup-content');
+        if (popupContent) {
+            popupContent.innerHTML = `
+                <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
+                <iframe src="${bookingUrl}" width="100%" height="400px" style="border:none;"></iframe>
+            `;
+        }
+    }
+
+    // Load events from events_data.json
     function loadEvents(successCallback) {
         $.getJSON('/events_data.json', function(eventData) {
             const events = eventData;
@@ -151,10 +190,11 @@ $(document).ready(function () {
                             end: endDateTime,
                             resourceId: timeMatrix.provider_id,
                             description: event.description || '',
-                            bookings_limit: event.bookings_limit,
+                            bookings_limit: event.bookings_limit, 
                             category: event.categories[0],
                             rawStartTime: startDateTime,
-                            rawEndTime: endDateTime
+                            rawEndTime: endDateTime,
+                            displaySlots: ['1', '2', '3', '5', '6', '7', '9'].includes(event.categories[0])
                         });
                     });
                 });
@@ -164,33 +204,7 @@ $(document).ready(function () {
         return calendarEvents;
     }
 
-    // Function to create or update popup
-    function loadBookingUrl(bookingUrl, startTime, endTime, title) {
-        let popupContent = document.querySelector('.popup-content');
-        if (!popupContent) {
-            const popup = document.createElement('div');
-            popup.className = 'popup-overlay';
-            popup.innerHTML = `
-                <div class="popup-content">
-                    <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
-                    <div id="popup-body"></div>
-                </div>
-            `;
-            document.body.appendChild(popup);
-            popupContent = document.querySelector('.popup-content');
-        }
-
-        const popupBody = popupContent.querySelector('#popup-body');
-        popupBody.innerHTML = `
-            <h3>Confirm Booking</h3>
-            <p><strong>${startTime} - ${endTime}</strong></p>
-            <h3>${title}</h3>
-            <p>Click the button below to book the service:</p>
-            <a href="${bookingUrl}" class="book-now-button" target="_blank">Book Now</a>
-        `;
-    }
-
-    // Hardcoded events (you can update these)
+    // Hardcoded events
     function getHardcodedEvents() {
         const resources = getHardcodedResources();
         return resources.flatMap(resource => [
@@ -307,10 +321,28 @@ $(document).ready(function () {
         ]);
     }
 
-    // Hardcoded resources (you can update these)
+    // Get category border color
+    function getCategoryBorderColor(category) {
+        switch (category) {
+            case '1': return '#142652';
+            case '2': return '#142652';
+            case '3': return '#142652';
+            case '5': return '#4b6c59';
+            case '6': return '#e8b2a6';
+            case '7': return '#142652';
+            case '8': return '#84cdb8';
+            case '9': return '#84cdb8';
+            case '10': return '#84cdb8';
+            case '11': return '#cbe4e0';
+            case '12': return '#ebf7f475 !important';
+            default: return '#ebf7f475'; // Default color
+        }
+    }
+
+    // Hardcoded resources
     function getHardcodedResources() {
         return [
-             { id: '29', title: 'Woodlands Stage', category: 'Program', order_id: 'a', logo: ' ' },
+           { id: '29', title: 'Woodlands Stage', category: 'Program', order_id: 'a', logo: ' ' },
             { id: '30', title: 'Fresh Lounge', category: 'Program', order_id: 'b', logo: ' ' },
             { id: '8', title: 'Merz | Room 1', category: 'Training Suites', order_id: 'c', logo: 'Merz.png' },
             { id: '23', title: 'Merz | Room 2', category: 'Training Suites', order_id: 'd', logo: 'Merz.png' },
@@ -339,21 +371,10 @@ $(document).ready(function () {
         ];
     }
 
-    function getCategoryBorderColor(category) {
-        switch (category) {
-            case '1': return '#142652';
-            case '2': return '#142652';
-            case '3': return '#142652';
-            case '5': return '#4b6c59';
-            case '6': return '#e8b2a6';
-            case '7': return '#142652';
-            case '8': return '#84cdb8';
-            case '9': return '#84cdb8';
-            case '10': return '#84cdb8';
-            case '11': return '#cbe4e0';
-            case '12': return '#ebf7f475';
-            default: return '#ebf7f475';
-        }
+    // Get resource logo
+    function getResourceLogo(resourceId) {
+        const resource = getHardcodedResources().find(r => r.id === resourceId);
+        return resource && resource.logo ? `image-files/${resource.logo}` : null;
     }
 });
 </script>
