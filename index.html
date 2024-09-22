@@ -22,6 +22,60 @@
 $(document).ready(function () {
     console.log("Initializing FullCalendar with SimplyBook API...");
 
+    const publicApiKey = '2b09dc7aee0f1f9d4bdd7f8ae39aa51e1ed13e833d67354b61ef643e8d4947d8';
+    const secretApiKey = '8a817baee58f1200a4f6b769ac05b7430b22a72d82e8f96e561f728f967f4a5d';
+
+    // Fetch token using both public and secret API keys
+    function fetchAuthToken(callback) {
+        var loginClient = new JSONRpcClient({
+            'url': 'https://user-api.simplybook.me/login',
+            'onerror': function (error) {
+                console.error("Login Error:", error);
+                alert("Error fetching token. Check console for details.");
+            }
+        });
+
+        // Fetch token dynamically using the public and secret API keys
+        loginClient.getToken('thefreshlifeconference', publicApiKey, secretApiKey, function (token) {
+            if (token) {
+                console.log("Fetched token: ", token);
+                callback(token); // Use the token for API calls
+            } else {
+                console.error("Failed to fetch token. Please check your API credentials.");
+            }
+        });
+    }
+
+    // Fetch available units from SimplyBook API
+    function fetchAvailableUnits(eventId, dateTime, unitId, callback) {
+        fetchAuthToken(function (token) { // First, fetch the token
+            var client = new JSONRpcClient({
+                'url': 'https://user-api.simplybook.me',
+                'headers': {
+                    'X-Company-Login': 'thefreshlifeconference',
+                    'X-Token': token
+                },
+                'onerror': function (error) {
+                    console.error("Error fetching available units:", error);
+                }
+            });
+
+            // Now request available units using the token
+            client.request('getAvailableUnits', [eventId, dateTime, 1, unitId, []], function (availableUnits) {
+                if (availableUnits && availableUnits.length > 0) {
+                    console.log("Available units: ", availableUnits);
+                    callback(availableUnits);
+                } else {
+                    console.log("No units available");
+                    callback([]);
+                }
+            }, function (error) {
+                console.error("Error from API:", error);
+            });
+        });
+    }
+
+    // Initialize FullCalendar with resources and events
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
         schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
@@ -47,8 +101,14 @@ $(document).ready(function () {
         },
         resources: getHardcodedResources(),
         events: function (info, successCallback, failureCallback) {
-            // Load events and integrate available units from SimplyBook API
-            loadSimplyBookEvents(successCallback, failureCallback);
+            // Load events from a hardcoded source (can be from your JSON file)
+            $.getJSON('/events_data.json', function(eventData) {
+                const events = processEvents(eventData);
+                successCallback(events);
+            }).catch(error => {
+                console.error("Error loading events:", error);
+                failureCallback(error);
+            });
         },
         eventContent: function (arg) {
             if (arg.event && arg.event.title) {
@@ -66,91 +126,46 @@ $(document).ready(function () {
 
     calendar.render();
 
-    // Function to load events and integrate available units
-    function loadSimplyBookEvents(successCallback, failureCallback) {
-        $.getJSON('/events_data.json', function(eventData) {
-            const events = eventData;
-            const calendarEvents = processEvents(events);
-            successCallback(calendarEvents);
-        }).catch(error => {
-            console.error("Error loading events:", error);
-            failureCallback(error);
-        });
-    }
-
-    // Process events and fetch available units for each
+    // Process events and fetch available units for each event
     function processEvents(events) {
         const calendarEvents = [];
 
         events.forEach(event => {
-            const date = '2024-10-29';  // You can dynamically set the date as needed
+            const date = '2024-10-29';  // Set the date dynamically as needed
             const eventId = event.id;
             const unitId = event.providers[0];  // Assuming a single provider for simplicity
-            const bookingsLimit = event.bookings_limit;
 
-            fetchAvailableUnits(eventId, date, unitId)
-                .then(availableUnits => {
-                    event.timeMatrix.forEach(timeMatrix => {
-                        Object.entries(timeMatrix.timeslots).forEach(([date, slots]) => {
-                            slots.forEach(slot => {
-                                const startDateTime = `${date}T${slot}`;
-                                const endDateTime = luxon.DateTime.fromISO(startDateTime).plus({ minutes: parseInt(event.duration) }).toISO();
-                                calendarEvents.push({
-                                    id: event.id,
-                                    title: event.name,
-                                    start: startDateTime,
-                                    end: endDateTime,
-                                    resourceId: timeMatrix.provider_id,
-                                    description: event.description || '',
-                                    bookings_limit: bookingsLimit, 
-                                    availableUnits: availableUnits.length, // Replace 'Slots Available' with actual available units
-                                    extendedProps: {
-                                        bookings_limit: bookingsLimit,
-                                        availableUnits: availableUnits.length
-                                    }
-                                });
+            // Fetch available units for each event
+            fetchAvailableUnits(eventId, date, unitId, function (availableUnits) {
+                event.timeMatrix.forEach(timeMatrix => {
+                    Object.entries(timeMatrix.timeslots).forEach(([date, slots]) => {
+                        slots.forEach(slot => {
+                            const startDateTime = `${date}T${slot}`;
+                            const endDateTime = luxon.DateTime.fromISO(startDateTime).plus({ minutes: parseInt(event.duration) }).toISO();
+                            calendarEvents.push({
+                                id: event.id,
+                                title: event.name,
+                                start: startDateTime,
+                                end: endDateTime,
+                                resourceId: timeMatrix.provider_id,
+                                description: event.description || '',
+                                bookings_limit: event.bookings_limit, 
+                                availableUnits: availableUnits.length, // Replace 'Slots Available' with actual available units
+                                extendedProps: {
+                                    bookings_limit: event.bookings_limit,
+                                    availableUnits: availableUnits.length
+                                }
                             });
                         });
                     });
-                })
-                .catch(error => {
-                    console.error("Error fetching available units:", error);
                 });
+            });
         });
 
         return calendarEvents;
     }
 
-    // Fetch available units using SimplyBook API
-    function fetchAvailableUnits(eventId, dateTime, unitId) {
-        return new Promise((resolve, reject) => {
-            const token = '2b09dc7aee0f1f9d4bdd7f8ae39aa51e1ed13e833d67354b61ef643e8d4947d8'; // API token
-
-            var client = new JSONRpcClient({
-                'url': 'https://user-api.simplybook.me',
-                'headers': {
-                    'X-Company-Login': 'thefreshlifeconference',
-                    'X-Token': token
-                },
-                'onerror': function (error) {
-                    console.error("Error fetching available units:", error);
-                    reject(error);
-                }
-            });
-
-            client.request('getAvailableUnits', [eventId, dateTime, 1, unitId, []], function (availableUnits) {
-                if (availableUnits && availableUnits.length > 0) {
-                    resolve(availableUnits);
-                } else {
-                    resolve([]); // No units available
-                }
-            }, function (error) {
-                reject(error);
-            });
-        });
-    }
-
-    // Hardcoded resources function
+    // Hardcoded resources function (for testing purposes)
     function getHardcodedResources() {
         return [
             { id: '29', title: 'Woodlands Stage', category: 'Program', order_id: 'a', logo: ' ' },
@@ -162,23 +177,7 @@ $(document).ready(function () {
             { id: '3', title: 'Allergan', category: 'Training Suites', order_id: 'g', logo: 'Allergan.png' },
             { id: '4', title: 'Evolus', category: 'Training Suites', order_id: 'h', logo: 'Evolus.png' },
             { id: '7', title: 'Candela', category: 'Training Suites', order_id: 'i', logo: 'Candela.png' },
-            { id: '14', title: 'Cryomed', category: 'Training Suites', order_id: 'j', logo: 'Cryomed.png' },
-            { id: '13', title: 'Dermocosmetica | Room 1', category: 'Training Suites', order_id: 'k', logo: 'Dermocosmetica.png' },
-            { id: '25', title: 'Dermocosmetica | Room 2', category: 'Training Suites', order_id: 'l', logo: 'Dermocosmetica.png' },
-            { id: '9', title: 'EnVogue', category: 'Training Suites', order_id: 'm', logo: 'enVogue.png' },
-            { id: '10', title: 'Hugel', category: 'Training Suites', order_id: 'n', logo: 'Hugel.png' },
-            { id: '26', title: 'Rejuran', category: 'Training Suites', order_id: 'o', logo: 'Rejuran.png' },
-            { id: '11', title: 'Teoxane', category: 'Training Suites', order_id: 'p', logo: 'Teoxane.png' },
-            { id: '12', title: 'Xytide', category: 'Training Suites', order_id: 'q', logo: 'Xytide.png' },
-            { id: '15', title: 'Fresh Clinics | Room 1', category: 'Training Suites', order_id: 'r', logo: 'Fresh-Clinics.png' },
-            { id: '27', title: 'Fresh Clinics | Room 2', category: 'Training Suites', order_id: 's', logo: 'Fresh-Clinics.png' },
-            { id: '31', title: 'Laser & Skin Training', category: 'Training Suites', order_id: 't', logo: 'Laser-Skin-Training.png' },
-            { id: '20', title: 'Venus Concept', category: 'Activations Hub', order_id: 'u', logo: 'Venus.png' },
-            { id: '19', title: 'Advanced Skin Technology', category: 'Activations Hub', order_id: 'v', logo: 'AST.png' },
-            { id: '22', title: 'Fresh Tech Hub', category: 'Activations Hub', order_id: 'w', logo: 'fresh-tech-hub.png' },
-            { id: '18', title: 'The Skincare Company', category: 'Activations Hub', order_id: 'x', logo: 'Skincare-Company.png' },
-            { id: '21', title: 'Wellness Sessions', category: 'Wellness & Spa', order_id: 'y', logo: ' ' },
-            { id: '16', title: 'The Fresh Spa', category: 'Wellness & Spa', order_id: 'z', logo: ' ' }
+            { id: '14', title: 'Cryomed', category: 'Training Suites', order_id: 'j', logo: 'Cryomed.png' }
         ];
     }
 });
