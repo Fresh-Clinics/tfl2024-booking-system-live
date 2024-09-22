@@ -140,7 +140,7 @@ $(document).ready(function () {
                     <h3>${event.title}</h3>
                     <div style="font-size: 0.9rem; font-family: Arial;">${event.extendedProps.description}</div>
                     <div class="popup-footer">
-                        <a href="${bookingUrl}" class="book-now-button" target="_blank">Book Now</a>
+                        <a href="#" class="book-now-button" onclick="loadBookingUrl('${bookingUrl}')">Book Now</a>
                     </div>
                 </div>
             `;
@@ -151,6 +151,15 @@ $(document).ready(function () {
 
 
         calendar.render();
+    }
+
+    // Function to load booking URL inside the popup
+    function loadBookingUrl(url) {
+        const popupContent = document.querySelector('.popup-content');
+        popupContent.innerHTML = `
+            <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
+            <iframe src="${url}" style="width: 100%; height: 600px;" frameborder="0"></iframe>
+        `;
     }
 
     // Load events from events_data.json (NOT SimplyBook events)
