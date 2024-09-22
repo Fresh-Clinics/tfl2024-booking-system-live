@@ -114,9 +114,9 @@ $(document).ready(function () {
             eventClick: function (info) {
     const event = info.event;
 
-    // Use Luxon to format and convert time to Australia/Sydney timezone
-    const startDateTimeLuxon = luxon.DateTime.fromISO(event.start.toISOString(), { zone: 'Australia/Sydney' });
-    const endDateTimeLuxon = luxon.DateTime.fromISO(event.end.toISOString(), { zone: 'Australia/Sydney' });
+    // Use Luxon to properly interpret the event time in the calendar's timezone (Australia/Sydney)
+    const startDateTimeLuxon = luxon.DateTime.fromJSDate(event.start).setZone('Australia/Sydney', { keepLocalTime: true });
+    const endDateTimeLuxon = luxon.DateTime.fromJSDate(event.end).setZone('Australia/Sydney', { keepLocalTime: true });
 
     const startDateTime = startDateTimeLuxon.toFormat('h:mm a');
     const endDateTime = endDateTimeLuxon.toFormat('h:mm a');
@@ -146,6 +146,7 @@ $(document).ready(function () {
     `;
     document.body.appendChild(popup);
 },
+
 
         allDaySlot: false
     });
