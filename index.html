@@ -114,9 +114,10 @@ $(document).ready(function () {
             eventClick: function (info) {
     const event = info.event;
 
-    // Use Luxon to properly interpret the event time in the calendar's timezone (Australia/Sydney)
-    const startDateTimeLuxon = luxon.DateTime.fromJSDate(event.start).setZone('Australia/Sydney');
-    const endDateTimeLuxon = luxon.DateTime.fromJSDate(event.end).setZone('Australia/Sydney');
+    // Use Luxon to properly interpret the event time
+    // The times in FullCalendar are most likely in UTC, so we need to convert from UTC to Australia/Sydney
+    const startDateTimeLuxon = luxon.DateTime.fromJSDate(event.start).setZone('UTC').setZone('Australia/Sydney');
+    const endDateTimeLuxon = luxon.DateTime.fromJSDate(event.end).setZone('UTC').setZone('Australia/Sydney');
 
     const startDateTime = startDateTimeLuxon.toFormat('h:mm a');
     const endDateTime = endDateTimeLuxon.toFormat('h:mm a');
@@ -146,7 +147,6 @@ $(document).ready(function () {
     `;
     document.body.appendChild(popup);
 },
-
         allDaySlot: false
     });
 
