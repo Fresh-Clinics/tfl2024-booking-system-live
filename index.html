@@ -2,17 +2,121 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendar with SimplyBook Integration</title>
+    <title>Calendar with Live Events from SimplyBook.me</title>
 
     <!-- Include FullCalendar Scheduler CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.15/index.global.min.css" rel="stylesheet" />
+
+    <!-- Include Tippy.js for tooltips -->
+    <link href="https://unpkg.com/tippy.js@6/dist/tippy.css" rel="stylesheet" />
+
+    <!-- Include FullCalendar Scheduler JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.15/index.global.min.js"></script>
+
     <!-- Include jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
-    <!-- Include your local JSON-RPC Client Library -->
-    <script src="./json-rpc-client.js"></script>
+
+    <!-- Include Tippy.js for tooltips -->
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+
+    <!-- Include JSON-RPC Client Library for SimplyBook.me -->
+    <script src="json-rpc-client.js"></script>
+
+    <!-- Custom Styles -->
+    <style>
+        /* Your existing CSS */
+        body {
+            margin: 40px 10px;
+            padding: 0;
+            font-family: 'Manrope', sans-serif;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        #calendar {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .fc-event {
+            background-color: #eae6e3 !important;
+            color: white;
+            border: none;
+            position: relative;
+        }
+
+        .fc-v-event .fc-event-main {
+            color: #142652 !important;
+        }
+
+        .fc-event-content {
+            padding: 5px;
+        }
+
+        .fc .fc-toolbar-title, .fc .fc-col-header-cell-cushion {
+            color: #0e4333 !important;
+        }
+
+        .fc .fc-button-primary {
+            background-color: #0e4333 !important;
+            border-color: #0e4333 !important;
+        }
+
+        .fc-event-slots {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            font-size: 10px;
+            font-weight: normal;
+            color: #142652;
+        }
+
+        .tippy-box {
+            background: #eff0ed;
+            color: #142652;
+            max-width: 200px;
+            font-size: .8rem;
+            padding: .5em 1em;
+        }
+
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup-content {
+            background: white;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            padding: 20px;
+            border-radius: 4px;
+        }
+
+        .close-popup {
+            cursor: pointer;
+            font-size: 1.2rem;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+
+        .popup-footer {
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
 
@@ -20,177 +124,175 @@
 
 <script>
 $(document).ready(function () {
-    console.log("Initializing FullCalendar with SimplyBook API...");
+    console.log("Initializing SimplyBook Widget with Events...");
 
-    const publicApiKey = '2b09dc7aee0f1f9d4bdd7f8ae39aa51e1ed13e833d67354b61ef643e8d4947d8';
-    const secretApiKey = '8a817baee58f1200a4f6b769ac05b7430b22a72d82e8f96e561f728f967f4a5d';
-    let token = null; // Variable to store the token after the first fetch
-
-    // Fetch token using both public and secret API keys
-    function fetchAuthToken(callback) {
-        if (token) {
-            console.log("Reusing existing token:", token);
-            callback(token);
-            return; // Token already fetched, skip fetching again
-        }
-
+    // Initialize JSON-RPC Client for SimplyBook API to fetch the token
+    try {
         var loginClient = new JSONRpcClient({
             'url': 'https://user-api.simplybook.me/login',
             'onerror': function (error) {
                 console.error("Login Error:", error);
-                alert("Error fetching token. Check console for details.");
             }
         });
 
-        // Fetch token dynamically using the public and secret API keys
-        loginClient.request('getToken', ['thefreshlifeconference', publicApiKey, secretApiKey], function (result) {
-            console.log("Token response:", result); // Log the full response to inspect
-
-            if (result) {
-                console.log("Fetched new token: ", result);
-                token = result; // Store the token for future use
-                callback(token); // Pass the token for the next step
+        // Fetch token dynamically using the SimplyBook API credentials
+        loginClient.getToken('thefreshlifeconference', '2b09dc7aee0f1f9d4bdd7f8ae39aa51e1ed13e833d67354b61ef643e8d4947d8', function (token) {
+            if (token) {
+                console.log("Fetched token: ", token);
+                // Fetch events and render the calendar with the token
+                renderCalendarWithEvents(token);
             } else {
                 console.error("Failed to fetch token. Please check your API credentials.");
             }
-        }, function (error) {
-            console.error("Error fetching token:", error);
         });
+    } catch (e) {
+        console.error("Error initializing JSON-RPC client or fetching token:", e);
     }
 
-    // Fetch available units from SimplyBook API
-    function fetchAvailableUnits(eventId, dateTime, unitId, callback) {
-        fetchAuthToken(function (token) { // First, fetch the token (or reuse if already fetched)
-            console.log("Using token for available units request:", token); // Log the token being used
-            var client = new JSONRpcClient({
-                'url': 'https://user-api.simplybook.me',
-                'headers': {
-                    'X-Company-Login': 'thefreshlifeconference',
-                    'X-Token': token
-                },
-                'onerror': function (error) {
-                    console.error("Error fetching available units:", error);
-                }
-            });
-
-            // Now request available units using the token
-            client.request('getAvailableUnits', [eventId, dateTime, 1, unitId, []], function (availableUnits) {
-                if (availableUnits && availableUnits.length > 0) {
-                    console.log("Available units: ", availableUnits);
-                    callback(availableUnits);
-                } else {
-                    console.log("No units available");
-                    callback([]);
-                }
-            }, function (error) {
-                console.error("Error from API:", error);
-            });
-        });
-    }
-
-    // Initialize FullCalendar with resources and events
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
-        initialView: 'resourceTimeGridDay',
-        initialDate: '2024-10-29',
-        timeZone: 'Australia/Sydney',
-        headerToolbar: {
-            left: 'resourceTimeGridDay,resourceTimeGridThreeDay',
-            center: 'title',
-            right: 'prev,next'
-        },
-        views: {
-            resourceTimeGridThreeDay: {
-                type: 'resourceTimeGrid',
-                duration: { days: 3 },
-                buttonText: '3 Days'
+    function renderCalendarWithEvents(token) {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+            initialView: 'resourceTimeGridDay',
+            initialDate: '2024-10-29',
+            timeZone: 'Australia/Sydney', // Set timezone to AEST
+            headerToolbar: {
+                left: 'prev',
+                center: 'title',
+                right: 'next'
             },
-            resourceTimeGridDay: {
-                type: 'resourceTimeGrid',
-                duration: { days: 1 },
-                buttonText: '1 Day'
-            }
-        },
-        resources: getHardcodedResources(),
-        events: function (info, successCallback, failureCallback) {
-            // Load events from a hardcoded source (can be from your JSON file)
-            $.getJSON('/events_data.json', function(eventData) {
-                const events = processEvents(eventData);
-                successCallback(events);
-            }).catch(error => {
-                console.error("Error loading events:", error);
-                failureCallback(error);
-            });
-        },
-        eventContent: function (arg) {
-            if (arg.event && arg.event.title) {
-                return {
-                    html: `<div class="fc-event-content">
-                                <div class="fc-event-title">${arg.event.title}</div>
-                                <div class="fc-event-slots">Slots Available: ${arg.event.extendedProps.availableUnits || arg.event.extendedProps.bookings_limit}</div>
-                            </div>`
-                };
-            } else {
-                return { html: '<div class="fc-event-content"><div class="fc-event-title">Invalid Event</div></div>' };
-            }
-        }
-    });
-
-    calendar.render();
-
-    // Process events and fetch available units for each event
-    function processEvents(events) {
-        const calendarEvents = [];
-
-        events.forEach(event => {
-            const date = '2024-10-29';  // Set the date dynamically as needed
-            const eventId = event.id;
-            const unitId = event.providers[0];  // Assuming a single provider for simplicity
-
-            // Fetch available units for each event
-            fetchAvailableUnits(eventId, date, unitId, function (availableUnits) {
-                event.timeMatrix.forEach(timeMatrix => {
-                    Object.entries(timeMatrix.timeslots).forEach(([date, slots]) => {
-                        slots.forEach(slot => {
-                            const startDateTime = `${date}T${slot}`;
-                            const endDateTime = luxon.DateTime.fromISO(startDateTime).plus({ minutes: parseInt(event.duration) }).toISO();
-                            calendarEvents.push({
-                                id: event.id,
-                                title: event.name,
-                                start: startDateTime,
-                                end: endDateTime,
-                                resourceId: timeMatrix.provider_id,
-                                description: event.description || '',
-                                bookings_limit: event.bookings_limit, 
-                                availableUnits: availableUnits.length, // Replace 'Slots Available' with actual available units
-                                extendedProps: {
-                                    bookings_limit: event.bookings_limit,
-                                    availableUnits: availableUnits.length
-                                }
-                            });
-                        });
-                    });
+            dayMinWidth: 150, // Set column width
+            resources: getHardcodedResources(), // Use hardcoded resources
+            events: function (info, successCallback, failureCallback) {
+                // Fetch events for the current date range
+                fetchEventsForRange(token, info.startStr, info.endStr, successCallback);
+            },
+            height: 'auto',
+            slotMinTime: '07:00',
+            slotMaxTime: '23:00',
+            resourceOrder: 'order_id', // Order by order_id
+            businessHours: [
+                {
+                    daysOfWeek: [2],
+                    startTime: '09:00',
+                    endTime: '18:30'
+                },
+                {
+                    daysOfWeek: [3],
+                    startTime: '07:30',
+                    endTime: '19:00'
+                },
+                {
+                    daysOfWeek: [4],
+                    startTime: '07:00',
+                    endTime: '22:30'
+                }
+            ],
+            eventContent: function (arg) {
+                if (arg.event && arg.event.title) {
+                    // Determine border color based on category
+                    const borderColor = getCategoryBorderColor(arg.event.extendedProps.category);
+                    return {
+                        html: `<div class="fc-event-content" style="border-top: 4px solid ${borderColor} !important;">
+                                  <div class="fc-event-title">${arg.event.title}</div>
+                                  <div class="fc-event-slots">Slots Available: ${arg.event.extendedProps.bookings_limit}</div> <!-- Display slots available -->
+                               </div>`
+                    };
+                } else {
+                    return { html: '<div class="fc-event-content"><div class="fc-event-title">Invalid Event</div></div>' };
+                }
+            },
+            eventDidMount: function (info) {
+                tippy(info.el, {
+                    content: `<strong>${info.event.title}</strong><br>${info.event.extendedProps.description}`,
+                    allowHTML: true,
+                    theme: 'light-border',
+                    placement: 'top'
                 });
-            });
+            },
+            eventClick: function (info) {
+                const event = info.event;
+                const popup = document.createElement('div');
+                popup.className = 'popup-overlay';
+                popup.innerHTML = `
+                    <div class="popup-content">
+                        <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
+                        <p><strong>${event.startStr} - ${event.endStr}</strong></p>
+                        <h3>${event.title}</h3>
+                        <p>${event.extendedProps.description}</p>
+                        <div class="popup-footer">Bookings open Monday 23rd October at 7:00PM AEST</div>
+                    </div>
+                `;
+                document.body.appendChild(popup);
+            },
+            allDaySlot: false
         });
 
-        return calendarEvents;
+        calendar.render();
     }
 
-    // Hardcoded resources function (for testing purposes)
+    function fetchEventsForRange(token, start, end, callback) {
+        var client = new JSONRpcClient({
+            'url': 'https://user-api.simplybook.me',
+            'headers': {
+                'X-Company-Login': 'thefreshlifeconference',
+                'X-Token': token
+            },
+            'onerror': function (error) {
+                console.error("Error in JSON-RPC client setup:", error);
+            }
+        });
+
+        client.request('getEventList', [], function (events) {
+            if (events) {
+                console.log("Fetched events (raw):", events);
+
+                // Ensure the events object is correctly handled
+                if (typeof events === 'object' && !Array.isArray(events)) {
+                    events = Object.values(events); // Convert to array if it's an object
+                }
+
+                if (Array.isArray(events) && events.length > 0) {
+                    callback(events); // Callback with the event data
+                } else {
+                    console.error("No valid events returned. Please check the API response.");
+                    callback([]); // Return empty array if no events
+                }
+            } else {
+                console.error("No events returned. Please check the API response.");
+                callback([]); // Return empty array if no events
+            }
+        }, function (error) {
+            console.error("Error fetching events:", error);
+            callback([]); // Return empty array on error
+        });
+    }
+
+    function getCategoryBorderColor(category) {
+        switch (category) {
+            case '1': return '#142652';
+            case '2': return '#84cdb8';
+            case '3': return '#84cdb8';
+            case '5': return '#4b6c59';
+            case '6': return '#cbe4e0';
+            case '7': return '#142652';
+            case '8': return '#84cdb8';
+            default: return '#142652'; // Default color
+        }
+    }
+
     function getHardcodedResources() {
         return [
-            { id: '29', title: 'Woodlands Stage', category: 'Program', order_id: 'a', logo: ' ' },
-            { id: '30', title: 'Fresh Lounge', category: 'Program', order_id: 'b', logo: ' ' },
-            { id: '8', title: 'Merz | Room 1', category: 'Training Suites', order_id: 'c', logo: 'Merz.png' },
-            { id: '23', title: 'Merz | Room 2', category: 'Training Suites', order_id: 'd', logo: 'Merz.png' },
-            { id: '2', title: 'Galderma | Room 1', category: 'Training Suites', order_id: 'e', logo: 'Galderma.png' },
-            { id: '24', title: 'Galderma | Room 2', category: 'Training Suites', order_id: 'f', logo: 'Galderma.png' },
-            { id: '3', title: 'Allergan', category: 'Training Suites', order_id: 'g', logo: 'Allergan.png' },
-            { id: '4', title: 'Evolus', category: 'Training Suites', order_id: 'h', logo: 'Evolus.png' },
-            { id: '7', title: 'Candela', category: 'Training Suites', order_id: 'i', logo: 'Candela.png' },
-            { id: '14', title: 'Cryomed', category: 'Training Suites', order_id: 'j', logo: 'Cryomed.png' }
+            { id: '29', title: 'Woodlands Stage', category: 'Program', order_id: 'a' },
+            { id: '30', title: 'Fresh Lounge', category: 'Program', order_id: 'b' },
+            { id: '8', title: 'Merz | Room 1', category: 'Training Suites', order_id: 'c' },
+            { id: '23', title: 'Merz | Room 2', category: 'Training Suites', order_id: 'd' },
+            { id: '2', title: 'Galderma | Room 1', category: 'Training Suites', order_id: 'e' },
+            { id: '24', title: 'Galderma | Room 2', category: 'Training Suites', order_id: 'f' },
+            { id: '3', title: 'Allergan', category: 'Training Suites', order_id: 'g' },
+            { id: '4', title: 'Evolus', category: 'Training Suites', order_id: 'h' },
+            { id: '7', title: 'Candela', category: 'Training Suites', order_id: 'i' },
+            { id: '14', title: 'Cryomed', category: 'Training Suites', order_id: 'j' }
         ];
     }
 });
