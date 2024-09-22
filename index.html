@@ -46,10 +46,10 @@ $(document).ready(function () {
         loginClient.request('getToken', ['thefreshlifeconference', publicApiKey, secretApiKey], function (result) {
             console.log("Token response:", result); // Log the full response to inspect
 
-            if (result && result.token) {
-                console.log("Fetched new token: ", result.token);
-                token = result.token; // Store the token for future use
-                callback(result.token);
+            if (result) {
+                console.log("Fetched new token: ", result);
+                token = result; // Store the token for future use
+                callback(token); // Pass the token for the next step
             } else {
                 console.error("Failed to fetch token. Please check your API credentials.");
             }
@@ -61,6 +61,7 @@ $(document).ready(function () {
     // Fetch available units from SimplyBook API
     function fetchAvailableUnits(eventId, dateTime, unitId, callback) {
         fetchAuthToken(function (token) { // First, fetch the token (or reuse if already fetched)
+            console.log("Using token for available units request:", token); // Log the token being used
             var client = new JSONRpcClient({
                 'url': 'https://user-api.simplybook.me',
                 'headers': {
