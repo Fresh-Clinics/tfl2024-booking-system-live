@@ -76,24 +76,24 @@ $(document).ready(function () {
                 // Fetch events from the SimplyBook API
                 fetchSimplyBookEvents(token)
                     .then(apiEvents => {
-                        // Combine hardcoded events and events from JSON file
-                        fetch('./events_data.json') // Fetch events_data.json
+                        // Fetch events from events_data.json and merge everything
+                        fetch('./events_data.json')
                             .then(response => response.json())
                             .then(jsonEvents => {
                                 console.log("Fetched events_data.json:", jsonEvents);
 
-                                // Combine all three event sources
+                                // Merge API events, JSON events, and hardcoded events
                                 const combinedEvents = [
-                                    ...apiEvents,
-                                    ...processEvents(jsonEvents), 
-                                    ...getHardcodedEvents()
+                                    ...apiEvents,                 // Events from the API
+                                    ...processEvents(jsonEvents),  // Events from JSON
+                                    ...getHardcodedEvents()        // Hardcoded events
                                 ];
 
-                                successCallback(combinedEvents);
+                                successCallback(combinedEvents); // Send all combined events
                             })
                             .catch(error => {
                                 console.error("Error loading events from JSON:", error);
-                                successCallback(apiEvents); // At least show API events
+                                successCallback(apiEvents); // At least show API events if JSON fails
                             });
                     })
                     .catch(error => {
