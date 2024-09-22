@@ -44,6 +44,8 @@ $(document).ready(function () {
 
         // Fetch token dynamically using the public and secret API keys
         loginClient.request('getToken', ['thefreshlifeconference', publicApiKey, secretApiKey], function (result) {
+            console.log("Token response:", result); // Log the full response to inspect
+
             if (result && result.token) {
                 console.log("Fetched new token: ", result.token);
                 token = result.token; // Store the token for future use
