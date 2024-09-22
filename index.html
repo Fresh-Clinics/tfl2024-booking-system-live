@@ -33,7 +33,7 @@
 $(document).ready(function () {
     console.log("Initializing FullCalendar with Hardcoded Events...");
 
-    // Initialize JSON-RPC Client for SimplyBook API to only fetch the token
+    // Fetch SimplyBook token ONLY (No SimplyBook events will be processed)
     var loginClient = new JSONRpcClient({
         'url': 'https://user-api.simplybook.me/login',
         'onerror': function (error) {
@@ -41,7 +41,6 @@ $(document).ready(function () {
         }
     });
 
-    // Fetch token dynamically using SimplyBook API credentials
     loginClient.getToken('thefreshlifeconference', '2b09dc7aee0f1f9d4bdd7f8ae39aa51e1ed13e833d67354b61ef643e8d4947d8', function (token) {
         if (token) {
             console.log("Fetched token: ", token);
@@ -50,7 +49,7 @@ $(document).ready(function () {
             console.error("Failed to fetch token. Please check your API credentials.");
         }
     });
-
+    
     // Function to render the calendar
     function renderCalendar() {
         var calendarEl = document.getElementById('calendar');
@@ -58,7 +57,7 @@ $(document).ready(function () {
             schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
             initialView: 'resourceTimeGridDay',
             initialDate: '2024-10-29',
-            timeZone: 'Australia/Sydney', // Set timezone to AEST
+            timeZone: 'Australia/Sydney',
             headerToolbar: {
                 left: 'resourceTimeGridDay,resourceTimeGridThreeDay',
                 center: 'title',
@@ -76,15 +75,14 @@ $(document).ready(function () {
                 buttonText: '1 Day'
               }
             },
-            dayMinWidth: 150, // Set column width
+            dayMinWidth: 150,
             height: 'auto',
             slotMinTime: '07:00',
             slotMaxTime: '23:00',
             resourceOrder: 'order_id',
-            resources: getHardcodedResources(),
+            resources: getHardcodedResources(), // Use hardcoded resources
             events: function (info, successCallback, failureCallback) {
-                // Load events from JSON and hardcoded events
-                loadEvents(successCallback);
+                loadEvents(successCallback); // Load events from events_data.json
             },
             businessHours: [
                 { daysOfWeek: [2], startTime: '09:00', endTime: '18:30' },
@@ -96,7 +94,7 @@ $(document).ready(function () {
                     const borderColor = getCategoryBorderColor(arg.event.extendedProps.category);
                     const displaySlots = arg.event.extendedProps.displaySlots && !['9', '10', '11', '12'].includes(arg.event.extendedProps.category);
                     return {
-                        html: `<div class="fc-event-content" style="border-top: 4px solid ${borderColor} !important; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                        html: `<div class="fc-event-content" style="border-top: 4px solid ${borderColor} !important;">
                                   <div class="fc-event-title">${arg.event.title}</div>
                                   <div class="fc-event-slots">${displaySlots ? `Slots Available: ${arg.event.extendedProps.bookings_limit}` : ''}</div>
                                </div>`
@@ -138,17 +136,18 @@ $(document).ready(function () {
         calendar.render();
     }
 
-    // Load events from events_data.json and combine with hardcoded events
+    // Load events from events_data.json (NOT SimplyBook events)
     function loadEvents(successCallback) {
         $.getJSON('/events_data.json', function(eventData) {
             const events = eventData;
             const calendarEvents = processEvents(events);
-            successCallback([...calendarEvents, ...getHardcodedEvents()]);
+            successCallback([...calendarEvents, ...getHardcodedEvents()]); // Combine JSON and hardcoded events
         }).catch(function (error) {
             console.error("Error loading JSON data:", error);
         });
     }
 
+    // Process events from events_data.json
     function processEvents(events) {
         const calendarEvents = [];
         events.forEach(event => {
@@ -187,16 +186,6 @@ $(document).ready(function () {
                 description: '<b>Afternoon Tea, Sponsor Activations & Networking</b><br><br>In the Restaurant, on the Deck and in the Fresh Lounge',
                 start: '2024-10-29T15:30:00',
                 end: '2024-10-29T16:00:00',
-                resourceId: resource.id,
-                categories: '12',
-                display: 'background'
-            },
-            {
-                id: `bg-event-${resource.id}-2`,
-                title: ' ',
-                description: '<b>Lunch, Sponsor Activations & Networking</b><br><br>In the Restaurant, on the Deck and in the Fresh Lounge',
-                start: '2024-10-29T13:00:00',
-                end: '2024-10-29T14:00:00',
                 resourceId: resource.id,
                 categories: '12',
                 display: 'background'
