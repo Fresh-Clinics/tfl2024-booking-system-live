@@ -49,7 +49,7 @@ $(document).ready(function () {
             console.error("Failed to fetch token. Please check your API credentials.");
         }
     });
-
+    
     // Function to render the calendar
     function renderCalendar() {
         var calendarEl = document.getElementById('calendar');
@@ -64,16 +64,16 @@ $(document).ready(function () {
                 right: 'prev,next'
             },
             views: {
-                resourceTimeGridThreeDay: {
-                    type: 'resourceTimeGrid',
-                    duration: { days: 3 },
-                    buttonText: '3 Days'
-                },
-                resourceTimeGridDay: {
-                    type: 'resourceTimeGrid',
-                    duration: { days: 1 },
-                    buttonText: '1 Day'
-                }
+              resourceTimeGridThreeDay: {
+                type: 'resourceTimeGrid',
+                duration: { days: 3 },
+                buttonText: '3 Days'
+              },
+              resourceTimeGridDay: {
+                type: 'resourceTimeGrid',
+                duration: { days: 1 },
+                buttonText: '1 Day'
+              }
             },
             dayMinWidth: 150,
             height: 'auto',
@@ -90,19 +90,19 @@ $(document).ready(function () {
                 { daysOfWeek: [4], startTime: '07:00', endTime: '22:30' }
             ],
             eventContent: function (arg) {
-                if (arg.event && arg.event.title) {
-                    const borderColor = getCategoryBorderColor(arg.event.extendedProps.category);
-                    const displaySlots = arg.event.extendedProps.displaySlots && !['9', '10', '11', '12'].includes(arg.event.extendedProps.category);
-                    return {
-                        html: `<div class="fc-event-content" style="border-top: 4px solid ${borderColor} !important; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                                  <div class="fc-event-title">${arg.event.title}</div>
-                                  <div class="fc-event-slots">${displaySlots ? `Slots Available: ${arg.event.extendedProps.bookings_limit}` : ''}</div>
-                               </div>`
-                    };
-                } else {
-                    return { html: '<div class="fc-event-content"><div class="fc-event-title">Invalid Event</div></div>' };
-                }
-            },
+            if (arg.event && arg.event.title) {
+                const borderColor = getCategoryBorderColor(arg.event.extendedProps.category);
+                const displaySlots = arg.event.extendedProps.displaySlots && !['9', '10', '11', '12'].includes(arg.event.extendedProps.category);
+                return {
+                    html: `<div class="fc-event-content" style="border-top: 4px solid ${borderColor} !important; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                              <div class="fc-event-title">${arg.event.title}</div>
+                              <div class="fc-event-slots">${displaySlots ? `Slots Available: ${arg.event.extendedProps.bookings_limit}` : ''}</div>
+                           </div>`
+                };
+            } else {
+                return { html: '<div class="fc-event-content"><div class="fc-event-title">Invalid Event</div></div>' };
+            }
+        },
             eventDidMount: function (info) {
                 tippy(info.el, {
                     content: `<div style="font-size: 1rem!important; font-family: Arial;"><strong>${info.event.title}</strong></div><br><div style="font-size: 0.9rem!important; font-family: Arial;">${info.event.extendedProps.description}</div>`,
@@ -112,38 +112,53 @@ $(document).ready(function () {
                 });
             },
             eventClick: function (info) {
-                const event = info.event;
+            const event = info.event;
 
-                // Format and convert time to Australia/Sydney timezone using Luxon
-                const startDateTimeLuxon = luxon.DateTime.fromJSDate(event.start).setZone('Australia/Sydney');
-                const endDateTimeLuxon = luxon.DateTime.fromJSDate(event.end).setZone('Australia/Sydney');
+            // Format and convert time to Australia/Sydney timezone using Luxon
+            const startDateTimeLuxon = luxon.DateTime.fromJSDate(event.start).setZone('Australia/Sydney');
+            const endDateTimeLuxon = luxon.DateTime.fromJSDate(event.end).setZone('Australia/Sydney');
 
-                const startDateTime = startDateTimeLuxon.toFormat('h:mm a');
-                const endDateTime = endDateTimeLuxon.toFormat('h:mm a');
+            const startDateTime = startDateTimeLuxon.toFormat('h:mm a');
+            const endDateTime = endDateTimeLuxon.toFormat('h:mm a');
 
-                // Extract the necessary values for the URL
-                const category = event.extendedProps.category || '1'; // Default to category 1 if not available
-                const service = event.id; // Dynamically set the service using event.id
-                const date = startDateTimeLuxon.toFormat('yyyy-MM-dd'); // Correctly formatted date
-                const time = startDateTimeLuxon.toFormat('HH:mm:ss'); // Correctly formatted time
+            // Extract the necessary values for the URL
+            const category = event.extendedProps.category || '1'; // Default to category 1 if not available
+            const service = event.id; // Dynamically set the service using event.id
+            const date = startDateTimeLuxon.toFormat('yyyy-MM-dd'); // Correctly formatted date
+            const time = startDateTimeLuxon.toFormat('HH:mm:ss'); // Correctly formatted time
 
-                // Create the dynamic booking URL
-                const bookingUrl = `https://thefreshlifeconference.simplybook.net/v2/#book/category/${category}/service/${service}/count/1/date/${date}/time/${time}/`;
+            // Create the dynamic booking URL
+            const bookingUrl = `https://thefreshlifeconference.simplybook.net/v2/#book/category/${category}/service/${service}/count/1/date/${date}/time/${time}/`;
 
-                loadBookingUrl(bookingUrl, event.title);  // Load the booking URL in the popup
-            },
-            allDaySlot: false
-        });
+            const popup = document.createElement('div');
+            popup.className = 'popup-overlay';
+            popup.innerHTML = `
+                <div class="popup-content">
+                    <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
+                    ${getResourceLogo(event.resourceId) ? `<img src="${getResourceLogo(event.resourceId)}" style="width: 100px; margin: 10px auto;" alt="Resource Logo">` : ''}
+                    <p><strong>${startDateTime} - ${endDateTime}</strong></p>
+                    <h3>${event.title}</h3>
+                    <div style="font-size: 0.9rem; font-family: Arial;">${event.extendedProps.description}</div>
+                    <div class="popup-footer">
+                        <a href="#" class="book-now-button" onclick="loadBookingUrl('${bookingUrl}')">Book Now</a>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(popup);
+        },
+        allDaySlot: false
+    });
+
 
         calendar.render();
     }
 
     // Function to load booking URL inside the popup
-    function loadBookingUrl(url, eventTitle) {
+    function loadBookingUrl(url) {
         const popupContent = document.querySelector('.popup-content');
         popupContent.innerHTML = `
             <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
-            <iframe src="${url}" width="100%" height="400px" title="Booking for ${eventTitle}"></iframe>
+            <iframe src="${url}" style="width: 100%; height: 600px;" frameborder="0"></iframe>
         `;
     }
 
@@ -359,6 +374,11 @@ $(document).ready(function () {
     function getResourceLogo(resourceId) {
         const resource = getHardcodedResources().find(r => r.id === resourceId);
         return resource && resource.logo ? `image-files/${resource.logo}` : null;
+    }
+
+    // Format time to AEST
+    function formatTimeToAEST(date) {
+        return luxon.DateTime.fromJSDate(date).setZone('Australia/Sydney').toFormat('h:mm a');
     }
 });
 </script>
