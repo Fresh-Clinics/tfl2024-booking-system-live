@@ -114,7 +114,7 @@ $(document).ready(function () {
             },
             eventClick: function (info) {
                 const event = info.event;
-                replacePopup(event);
+                replacePopup(event);  // Replace popup content
             },
             allDaySlot: false
         });
@@ -152,7 +152,7 @@ $(document).ready(function () {
     }
 
     // Function to load booking URL in the popup
-    function loadBookingUrl(serviceId, categoryId, date, time) {
+    window.loadBookingUrl = function(serviceId, categoryId, date, time) {
         const bookingUrl = `https://thefreshlifeconference.simplybook.me/v2/#book/category/${categoryId}/service/${serviceId}/count/1/date/${date}/time/${time}/`;
         const popupContent = document.querySelector('.popup-content');
         if (popupContent) {
@@ -161,9 +161,9 @@ $(document).ready(function () {
                 <iframe src="${bookingUrl}" width="100%" height="400px" style="border:none;"></iframe>
             `;
         }
-    }
+    };
 
-    // Load events from events_data.json
+    // Load events from events_data.json (NOT SimplyBook events)
     function loadEvents(successCallback) {
         $.getJSON('/events_data.json', function(eventData) {
             const events = eventData;
@@ -342,7 +342,7 @@ $(document).ready(function () {
     // Hardcoded resources
     function getHardcodedResources() {
         return [
-           { id: '29', title: 'Woodlands Stage', category: 'Program', order_id: 'a', logo: ' ' },
+            { id: '29', title: 'Woodlands Stage', category: 'Program', order_id: 'a', logo: ' ' },
             { id: '30', title: 'Fresh Lounge', category: 'Program', order_id: 'b', logo: ' ' },
             { id: '8', title: 'Merz | Room 1', category: 'Training Suites', order_id: 'c', logo: 'Merz.png' },
             { id: '23', title: 'Merz | Room 2', category: 'Training Suites', order_id: 'd', logo: 'Merz.png' },
