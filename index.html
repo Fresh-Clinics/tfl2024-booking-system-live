@@ -45,101 +45,104 @@ $(document).ready(function () {
     loginClient.getToken('thefreshlifeconference', '2b09dc7aee0f1f9d4bdd7f8ae39aa51e1ed13e833d67354b61ef643e8d4947d8', function (token) {
         if (token) {
             console.log("Fetched token: ", token);
-            renderCalendarWithEvents(token);
+            renderCalendar(token);  // This will replace renderCalendarWithEvents
         } else {
             console.error("Failed to fetch token. Please check your API credentials.");
         }
     });
     
-    // Initialize FullCalendar
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
-        initialView: 'resourceTimeGridDay',
-        initialDate: '2024-10-29',
-        timeZone: 'Australia/Sydney', // Set timezone to AEST
-        headerToolbar: {
-            left: 'resourceTimeGridDay,resourceTimeGridThreeDay',
-            center: 'title',
-            right: 'prev,next'
-    },
-    views: {
-      resourceTimeGridThreeDay: {
-        type: 'resourceTimeGrid',
-        duration: { days: 3 },
-        buttonText: '3 Days'
-      },
-        
-      resourceTimeGridDay: {
-        type: 'resourceTimeGrid',
-        duration: { days: 1 },
-        buttonText: '1 Day'
-      }
-    },
-        dayMinWidth: 150, // Set column width
-        height: 'auto',
-        slotMinTime: '07:00',
-        slotMaxTime: '23:00',
-        resourceOrder: 'order_id',
-        resources: getHardcodedResources(),
-        events: function (info, successCallback, failureCallback) {
-            // Load events from JSON and hardcoded
-            loadEvents(successCallback);
-        },
-        businessHours: [
-            { daysOfWeek: [2], startTime: '09:00', endTime: '18:30' },
-            { daysOfWeek: [3], startTime: '07:30', endTime: '19:00' },
-            { daysOfWeek: [4], startTime: '07:00', endTime: '22:30' }
-        ],
-        eventContent: function (arg) {
-            if (arg.event && arg.event.title) {
-                const borderColor = getCategoryBorderColor(arg.event.extendedProps.category);
-                const displaySlots = arg.event.extendedProps.displaySlots && !['9', '10', '11', '12'].includes(arg.event.extendedProps.category);
-                return {
-                    html: `<div class="fc-event-content" style="border-top: 4px solid ${borderColor} !important; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                              <div class="fc-event-title">${arg.event.title}</div>
-                              <div class="fc-event-slots">${displaySlots ? `Slots Available: ${arg.event.extendedProps.bookings_limit}` : ''}</div>
-                           </div>`
-                };
-            } else {
-                return { html: '<div class="fc-event-content"><div class="fc-event-title">Invalid Event</div></div>' };
-            }
-        },
-        eventDidMount: function (info) {
-            tippy(info.el, {
-                content: `<div style="font-size: 1rem!important; font-family: Arial;"><strong>${info.event.title}</strong></div><br><div style="font-size: 0.9rem!important; font-family: Arial;">${info.event.extendedProps.description}</div>`,
-                allowHTML: true,
-                theme: 'light-border',
-                placement: 'top'
-            });
-        },
-        eventClick: function (info) {
-            const event = info.event;
+    // Define the calendar rendering function
+    function renderCalendar(token) {
+        // Initialize FullCalendar
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+            initialView: 'resourceTimeGridDay',
+            initialDate: '2024-10-29',
+            timeZone: 'Australia/Sydney', // Set timezone to AEST
+            headerToolbar: {
+                left: 'resourceTimeGridDay,resourceTimeGridThreeDay',
+                center: 'title',
+                right: 'prev,next'
+            },
+            views: {
+              resourceTimeGridThreeDay: {
+                type: 'resourceTimeGrid',
+                duration: { days: 3 },
+                buttonText: '3 Days'
+              },
+              resourceTimeGridDay: {
+                type: 'resourceTimeGrid',
+                duration: { days: 1 },
+                buttonText: '1 Day'
+              }
+            },
+            dayMinWidth: 150, // Set column width
+            height: 'auto',
+            slotMinTime: '07:00',
+            slotMaxTime: '23:00',
+            resourceOrder: 'order_id',
+            resources: getHardcodedResources(),
+            events: function (info, successCallback, failureCallback) {
+                // Load events from SimplyBook API and hardcoded JSON data
+                loadEvents(token, successCallback);
+            },
+            businessHours: [
+                { daysOfWeek: [2], startTime: '09:00', endTime: '18:30' },
+                { daysOfWeek: [3], startTime: '07:30', endTime: '19:00' },
+                { daysOfWeek: [4], startTime: '07:00', endTime: '22:30' }
+            ],
+            eventContent: function (arg) {
+                if (arg.event && arg.event.title) {
+                    const borderColor = getCategoryBorderColor(arg.event.extendedProps.category);
+                    const displaySlots = arg.event.extendedProps.displaySlots && !['9', '10', '11', '12'].includes(arg.event.extendedProps.category);
+                    return {
+                        html: `<div class="fc-event-content" style="border-top: 4px solid ${borderColor} !important; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                                  <div class="fc-event-title">${arg.event.title}</div>
+                                  <div class="fc-event-slots">${displaySlots ? `Slots Available: ${arg.event.extendedProps.bookings_limit}` : ''}</div>
+                               </div>`
+                    };
+                } else {
+                    return { html: '<div class="fc-event-content"><div class="fc-event-title">Invalid Event</div></div>' };
+                }
+            },
+            eventDidMount: function (info) {
+                tippy(info.el, {
+                    content: `<div style="font-size: 1rem!important; font-family: Arial;"><strong>${info.event.title}</strong></div><br><div style="font-size: 0.9rem!important; font-family: Arial;">${info.event.extendedProps.description}</div>`,
+                    allowHTML: true,
+                    theme: 'light-border',
+                    placement: 'top'
+                });
+            },
+            eventClick: function (info) {
+                const event = info.event;
 
-            // Format and convert time to Australia/Sydney timezone
-            const startDateTime = formatTimeToAEST(new Date(event.extendedProps.rawStartTime));
-            const endDateTime = formatTimeToAEST(new Date(event.extendedProps.rawEndTime));
+                // Format and convert time to Australia/Sydney timezone
+                const startDateTime = formatTimeToAEST(new Date(event.extendedProps.rawStartTime));
+                const endDateTime = formatTimeToAEST(new Date(event.extendedProps.rawEndTime));
 
-            const popup = document.createElement('div');
-            popup.className = 'popup-overlay';
-            popup.innerHTML = `
-                <div class="popup-content">
-                    <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
-                    ${getResourceLogo(event.resourceId) ? `<img src="${getResourceLogo(event.resourceId)}" style="width: 100px; margin: 10px auto;" alt="Resource Logo">` : ''}
-                    <p><strong>${startDateTime} - ${endDateTime}</strong></p>
-                    <h3>${event.title}</h3>
-                    <div style="font-size: 0.9rem; font-family: Arial;">${event.extendedProps.description}</div>                  
-                    <div class="popup-footer">Bookings open Monday 23rd October at 7:00PM AEST</div>
-                </div>
-            `;
-            document.body.appendChild(popup);
-        },
-        allDaySlot: false
-    });
+                const popup = document.createElement('div');
+                popup.className = 'popup-overlay';
+                popup.innerHTML = `
+                    <div class="popup-content">
+                        <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
+                        ${getResourceLogo(event.resourceId) ? `<img src="${getResourceLogo(event.resourceId)}" style="width: 100px; margin: 10px auto;" alt="Resource Logo">` : ''}
+                        <p><strong>${startDateTime} - ${endDateTime}</strong></p>
+                        <h3>${event.title}</h3>
+                        <div style="font-size: 0.9rem; font-family: Arial;">${event.extendedProps.description}</div>                  
+                        <div class="popup-footer">Bookings open Monday 23rd October at 7:00PM AEST</div>
+                    </div>
+                `;
+                document.body.appendChild(popup);
+            },
+            allDaySlot: false
+        });
 
-    calendar.render();
+        calendar.render();
+    }
 
-    function loadEvents(successCallback) {
+    // Load events from both SimplyBook API and hardcoded JSON data
+    function loadEvents(token, successCallback) {
         $.getJSON('/events_data.json', function(eventData) {
             const events = eventData;
             const calendarEvents = processEvents(events);
@@ -176,23 +179,6 @@ $(document).ready(function () {
         });
         console.log("Processed events for calendar:", calendarEvents);
         return calendarEvents;
-    }
-
-    function getHardcodedEvents() {
-        const resources = getHardcodedResources();
-        return resources.flatMap(resource => [
-            {
-                id: `bg-event-${resource.id}-1`,
-                title: 'Afternoon Tea, Sponsor Activations & Networking',
-                description: 'In the Restaurant, on the Deck and in the Fresh Lounge',
-                start: '2024-10-29T15:30:00',
-                end: '2024-10-29T16:00:00',
-                resourceId: resource.id,
-                category: '12',
-                display: 'background'
-            },
-            // Add the rest of your hardcoded events here...
-        ]);
     }
 
     function getCategoryBorderColor(category) {
