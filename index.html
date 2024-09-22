@@ -40,19 +40,20 @@ $(document).ready(function () {
             left: 'resourceTimeGridDay,resourceTimeGridThreeDay',
             center: 'title',
             right: 'prev,next'
-        },
-        views: {
-            resourceTimeGridThreeDay: {
-                type: 'resourceTimeGrid',
-                duration: { days: 3 },
-                buttonText: '3 Days'
-            },
-            resourceTimeGridDay: {
-                type: 'resourceTimeGrid',
-                duration: { days: 1 },
-                buttonText: '1 Day'
-            }
-        },
+    },
+    views: {
+      resourceTimeGridThreeDay: {
+        type: 'resourceTimeGrid',
+        duration: { days: 3 },
+        buttonText: '3 Days'
+      },
+        
+      resourceTimeGridDay: {
+        type: 'resourceTimeGrid',
+        duration: { days: 1 },
+        buttonText: '1 Day'
+      }
+    },
         dayMinWidth: 150, // Set column width
         height: 'auto',
         slotMinTime: '07:00',
@@ -93,21 +94,18 @@ $(document).ready(function () {
         eventClick: function (info) {
             const event = info.event;
 
-            // Format and convert time to Australia/Sydney timezone using Luxon
-            const startDateTimeLuxon = luxon.DateTime.fromISO(event.start.toISOString()).setZone('Australia/Sydney');
-            const endDateTimeLuxon = luxon.DateTime.fromISO(event.end.toISOString()).setZone('Australia/Sydney');
+            // Format and convert time to Australia/Sydney timezone
+            const startDateTime = formatTimeToAEST(new Date(event.extendedProps.rawStartTime));
+            const endDateTime = formatTimeToAEST(new Date(event.extendedProps.rawEndTime));
 
-            const startDateTime = startDateTimeLuxon.toFormat('h:mm a');
-            const endDateTime = endDateTimeLuxon.toFormat('h:mm a');
+             // Extract the necessary values for the URL
+    const category = event.extendedProps.category || '1'; // Default to category 1 if not available
+    const service = event.id; // Dynamically set the service using event.id
+    const date = startDateTime.toFormat('yyyy-MM-dd'); // Correctly formatted date
+    const time = endDateTime.toFormat('HH:mm:ss'); // Correctly formatted time
 
-            // Extract the necessary values for the URL
-            const category = event.extendedProps.category || '1'; // Default to category 1 if not available
-            const service = event.id; // Dynamically set the service using event.id
-            const date = startDateTimeLuxon.toFormat('yyyy-MM-dd'); // Correctly formatted date
-            const time = startDateTimeLuxon.toFormat('HH:mm:ss'); // Correctly formatted time
-
-            // Create the dynamic booking URL
-            const bookingUrl = `https://thefreshlifeconference.simplybook.net/v2/#book/category/${category}/service/${service}/count/1/date/${date}/time/${time}/`;
+             // Create the dynamic booking URL
+    const bookingUrl = `https://thefreshlifeconference.simplybook.net/v2/#book/category/${category}/service/${service}/count/1/date/${date}/time/${time}/`;
 
             const popup = document.createElement('div');
             popup.className = 'popup-overlay';
@@ -117,14 +115,14 @@ $(document).ready(function () {
                     ${getResourceLogo(event.resourceId) ? `<img src="${getResourceLogo(event.resourceId)}" style="width: 100px; margin: 10px auto;" alt="Resource Logo">` : ''}
                     <p><strong>${startDateTime} - ${endDateTime}</strong></p>
                     <h3>${event.title}</h3>
-                    <div style="font-size: 0.9rem; font-family: Arial;">${event.extendedProps.description}</div>
-                    <div class="popup-footer">
-                        <a href="${bookingUrl}" class="book-now-button" target="_blank">Book Now</a>
-                    </div>
-                </div>
+                    <div style="font-size: 0.9rem; font-family: Arial;">${event.extendedProps.description}</div>                  
+ <div class="popup-footer">
+                <a href="${bookingUrl}" class="book-now-button" target="_blank">Book Now</a>
+            </div>                </div>
             `;
             document.body.appendChild(popup);
         },
+        
         allDaySlot: false
     });
 
@@ -182,7 +180,106 @@ $(document).ready(function () {
                 categories: '12',
                 display: 'background'
             },
-            // Add more hardcoded events here
+            {
+                id: `bg-event-${resource.id}-2`,
+                title: ' ',
+                description: '<b>Lunch, Sponsor Activations & Networking</b><br><br>In the Restaurant, on the Deck and in the Fresh Lounge',
+                start: '2024-10-29T13:00:00',
+                end: '2024-10-29T14:00:00',
+                resourceId: resource.id,
+                categories: '12',
+                display: 'background'
+            },
+            {
+                id: `bg-event-${resource.id}-3`,
+                title: ' ',
+                description: '<b>Fresh Life Welcome Event</b><br>Brought to you by Galderma<br><br>On the Deck',
+                start: '2024-10-29T17:30:00',
+                end: '2024-10-29T18:30:00',
+                resourceId: resource.id,
+                categories: '12',
+                display: 'background'
+            },
+            {
+                id: `bg-event-${resource.id}-4`,
+                title: ' ',
+                description: '<b>Morning Tea, Sponsor Activations & Networking</b><br><br>In the Restaurant, on the Deck and in the Fresh Lounge',
+                start: '2024-10-30T11:30:00',
+                end: '2024-10-30T12:00:00',
+                resourceId: resource.id,
+                categories: '12',
+                display: 'background'
+            },
+            {
+                id: `bg-event-${resource.id}-5`,
+                title: ' ',
+                description: '<b>Lunch, Sponsor Activations & Networking</b><br><br>In the Restaurant, on the Deck and in the Fresh Lounge',
+                start: '2024-10-30T13:30:00',
+                end: '2024-10-30T14:30:00',
+                resourceId: resource.id,
+                categories: '12',
+                display: 'background'
+            },
+            {
+                id: `bg-event-${resource.id}-6`,
+                title: ' ',
+                description: '<b>Afternoon Tea, Sponsor Activations & Networking</b><br><br>In the Restaurant, on the Deck and in the Fresh Lounge',
+                start: '2024-10-30T16:00:00',
+                end: '2024-10-30T16:30:00',
+                resourceId: resource.id,
+                categories: '12',
+                display: 'background'
+            },
+            {
+                id: `bg-event-${resource.id}-7`,
+                title: ' ',
+                description: '<b>Aperitivo Hour</b><br>Brought to you by Fresh Clinics Training Team<br><br>On the Deck',
+                start: '2024-10-30T17:30:00',
+                end: '2024-10-30T18:30:00',
+                resourceId: resource.id,
+                categories: '12',
+                display: 'background'
+            },
+            {
+                id: `bg-event-${resource.id}-8`,
+                title: ' ',
+                description: '<b>Morning Tea, Sponsor Activations & Networking</b><br><br>In the Restaurant, on the Deck and in the Fresh Lounge',
+                start: '2024-10-31T11:00:00',
+                end: '2024-10-31T11:30:00',
+                resourceId: resource.id,
+                categories: '12',
+                display: 'background'
+            },
+            {
+                id: `bg-event-${resource.id}-9`,
+                title: ' ',
+                description: '<b>Lunch, Sponsor Activations & Networking</b><br><br>In the Restaurant, on the Deck and in the Fresh Lounge',
+                start: '2024-10-31T13:30:00',
+                end: '2024-10-31T14:30:00',
+                resourceId: resource.id,
+                categories: '12',
+                display: 'background'
+            },
+            {
+                id: `bg-event-${resource.id}-10`,
+                title: ' ',
+                description: '<b>Afternoon Tea, Sponsor Activations & Networking</b><br><br>In the Restaurant, on the Deck and in the Fresh Lounge',
+                start: '2024-10-31T16:00:00',
+                end: '2024-10-31T16:30:00',
+                resourceId: resource.id,
+                categories: '12',
+                display: 'background'
+            },
+            {
+                id: `bg-event-${resource.id}-11`,
+                title: ' ',
+                description: '<b>Fright Night Finale</b><br>(Ticketed Event)<br>Brought to you by Fresh Clinics<br><br>Woodlands Stage<br><br><b><a style="color:#84cdb8" href="https://events.humanitix.com/the-fresh-life-2024#group1">Buy ticket</a>',
+                start: '2024-10-31T18:00:00',
+                end: '2024-10-31T22:30:00',
+                resourceId: resource.id,
+                categories: '12',
+                display: 'background'
+            }
         ]);
     }
 
@@ -206,7 +303,31 @@ $(document).ready(function () {
     function getHardcodedResources() {
         return [
             { id: '29', title: 'Woodlands Stage', category: 'Program', order_id: 'a', logo: ' ' },
-            // Add more hardcoded resources here
+            { id: '30', title: 'Fresh Lounge', category: 'Program', order_id: 'b', logo: ' ' },
+            { id: '8', title: 'Merz | Room 1', category: 'Training Suites', order_id: 'c', logo: 'Merz.png' },
+            { id: '23', title: 'Merz | Room 2', category: 'Training Suites', order_id: 'd', logo: 'Merz.png' },
+            { id: '2', title: 'Galderma | Room 1', category: 'Training Suites', order_id: 'e', logo: 'Galderma.png' },
+            { id: '24', title: 'Galderma | Room 2', category: 'Training Suites', order_id: 'f', logo: 'Galderma.png' },
+            { id: '3', title: 'Allergan', category: 'Training Suites', order_id: 'g', logo: 'Allergan.png' },
+            { id: '4', title: 'Evolus', category: 'Training Suites', order_id: 'h', logo: 'Evolus.png' },
+            { id: '7', title: 'Candela', category: 'Training Suites', order_id: 'i', logo: 'Candela.png' },
+            { id: '14', title: 'Cryomed', category: 'Training Suites', order_id: 'j', logo: 'Cryomed.png' },
+            { id: '13', title: 'Dermocosmetica | Room 1', category: 'Training Suites', order_id: 'k', logo: 'Dermocosmetica.png' },
+            { id: '25', title: 'Dermocosmetica | Room 2', category: 'Training Suites', order_id: 'l', logo: 'Dermocosmetica.png' },
+            { id: '9', title: 'EnVogue', category: 'Training Suites', order_id: 'm', logo: 'enVogue.png' },
+            { id: '10', title: 'Hugel', category: 'Training Suites', order_id: 'n', logo: 'Hugel.png' },
+            { id: '26', title: 'Rejuran', category: 'Training Suites', order_id: 'o', logo: 'Rejuran.png' },
+            { id: '11', title: 'Teoxane', category: 'Training Suites', order_id: 'p', logo: 'Teoxane.png' },
+            { id: '12', title: 'Xytide', category: 'Training Suites', order_id: 'q', logo: 'Xytide.png' },
+            { id: '15', title: 'Fresh Clinics | Room 1', category: 'Training Suites', order_id: 'r', logo: 'Fresh-Clinics.png' },
+            { id: '27', title: 'Fresh Clinics | Room 2', category: 'Training Suites', order_id: 's', logo: 'Fresh-Clinics.png' },
+            { id: '31', title: 'Laser & Skin Training', category: 'Training Suites', order_id: 't', logo: 'Laser-Skin-Training.png' },
+            { id: '20', title: 'Venus Concept', category: 'Activations Hub', order_id: 'u', logo: 'Venus.png' },
+            { id: '19', title: 'Advanced Skin Technology', category: 'Activations Hub', order_id: 'v', logo: 'AST.png' },
+            { id: '22', title: 'Fresh Tech Hub', category: 'Activations Hub', order_id: 'w', logo: 'fresh-tech-hub.png' },
+            { id: '18', title: 'The Skincare Company', category: 'Activations Hub', order_id: 'x', logo: 'Skincare-Company.png' },
+            { id: '21', title: 'Wellness Sessions', category: 'Wellness & Spa', order_id: 'y', logo: ' ' },
+            { id: '16', title: 'The Fresh Spa', category: 'Wellness & Spa', order_id: 'z', logo: ' ' }
         ];
     }
 
@@ -216,7 +337,7 @@ $(document).ready(function () {
     }
 
     function formatTimeToAEST(date) {
-        return luxon.DateTime.fromISO(date).setZone('Australia/Sydney').toFormat('h:mm a');
+        return luxon.DateTime.fromJSDate(date).setZone('Australia/Sydney').toFormat('h:mm a');
     }
 });
 </script>
