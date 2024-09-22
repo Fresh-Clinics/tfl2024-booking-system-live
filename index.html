@@ -73,21 +73,31 @@ $(document).ready(function () {
             dayMinWidth: 150, // Set column width
             resources: getHardcodedResources(), // Use hardcoded resources
             events: function (info, successCallback, failureCallback) {
-                // Fetch events from events_data.json
-                fetch('./events_data.json') // Ensuring the correct file path
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error("Network response was not ok");
-                        }
-                        return response.json();
-                    })
-                    .then(eventData => {
-                        console.log("Fetched events_data.json:", eventData);
-                        const combinedEvents = [...processEvents(eventData), ...getHardcodedEvents()];
-                        successCallback(combinedEvents);
+                // Fetch events from the SimplyBook API
+                fetchSimplyBookEvents(token)
+                    .then(apiEvents => {
+                        // Combine hardcoded events and events from JSON file
+                        fetch('./events_data.json') // Fetch events_data.json
+                            .then(response => response.json())
+                            .then(jsonEvents => {
+                                console.log("Fetched events_data.json:", jsonEvents);
+
+                                // Combine all three event sources
+                                const combinedEvents = [
+                                    ...apiEvents,
+                                    ...processEvents(jsonEvents), 
+                                    ...getHardcodedEvents()
+                                ];
+
+                                successCallback(combinedEvents);
+                            })
+                            .catch(error => {
+                                console.error("Error loading events from JSON:", error);
+                                successCallback(apiEvents); // At least show API events
+                            });
                     })
                     .catch(error => {
-                        console.error("Error loading events from JSON:", error);
+                        console.error("Error fetching events from SimplyBook API:", error);
                         failureCallback(error);
                     });
             },
@@ -152,6 +162,39 @@ $(document).ready(function () {
         });
 
         calendar.render();
+    }
+
+    function fetchSimplyBookEvents(token) {
+        return new Promise((resolve, reject) => {
+            var client = new JSONRpcClient({
+                'url': 'https://user-api.simplybook.me',
+                'headers': {
+                    'X-Company-Login': 'thefreshlifeconference',
+                    'X-Token': token
+                },
+                'onerror': function (error) {
+                    console.error("Error in JSON-RPC client setup:", error);
+                    reject(error);
+                }
+            });
+
+            client.request('getEventList', [], function (events) {
+                console.log("Fetched events from SimplyBook API:", events);
+                resolve(events.map(event => ({
+                    id: event.id,
+                    title: event.name,
+                    start: event.start_time,
+                    end: event.end_time,
+                    resourceId: event.unit_map && Object.keys(event.unit_map)[0], // Assume the first provider
+                    description: event.description || '',
+                    bookings_limit: event.bookings_limit || 0,
+                    category: event.categories[0] // Assume first category
+                })));
+            }, function (error) {
+                console.error("Error fetching events from SimplyBook API:", error);
+                reject(error);
+            });
+        });
     }
 
     function processEvents(events) {
