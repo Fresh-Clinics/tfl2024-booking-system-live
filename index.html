@@ -114,11 +114,11 @@ $(document).ready(function () {
             eventClick: function (info) {
     const event = info.event;
 
-    // Use Luxon to properly interpret the event time
-    // The times in FullCalendar are most likely in UTC, so we need to convert from UTC to Australia/Sydney
-    const startDateTimeLuxon = luxon.DateTime.fromJSDate(event.start).setZone('UTC').setZone('Australia/Sydney');
-    const endDateTimeLuxon = luxon.DateTime.fromJSDate(event.end).setZone('UTC').setZone('Australia/Sydney');
+    // Assuming the event start and end are in UTC, convert them to Australia/Sydney timezone using Luxon
+    const startDateTimeLuxon = luxon.DateTime.fromISO(event.start.toISOString(), { zone: 'UTC' }).setZone('Australia/Sydney');
+    const endDateTimeLuxon = luxon.DateTime.fromISO(event.end.toISOString(), { zone: 'UTC' }).setZone('Australia/Sydney');
 
+    // Format the start and end times for display
     const startDateTime = startDateTimeLuxon.toFormat('h:mm a');
     const endDateTime = endDateTimeLuxon.toFormat('h:mm a');
 
