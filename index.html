@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendar with Events from API and Hardcoded</title>
+    <title>Calendar with Events from API, JSON, and Hardcoded</title>
 
     <!-- Include FullCalendar Scheduler CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.15/index.global.min.css" rel="stylesheet" />
@@ -78,11 +78,10 @@ $(document).ready(function () {
             eventContent: function (arg) {
                 if (arg.event && arg.event.title) {
                     const borderColor = getCategoryBorderColor(arg.event.extendedProps.category);
-                    const displaySlots = arg.event.extendedProps.displaySlots && !['9', '10', '11', '12'].includes(arg.event.extendedProps.category);
                     return {
                         html: `<div class="fc-event-content" style="border-top: 4px solid ${borderColor} !important; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                                   <div class="fc-event-title">${arg.event.title}</div>
-                                  <div class="fc-event-slots">${displaySlots ? `Slots Available: ${arg.event.extendedProps.bookings_limit}` : ''}</div>
+                                  <div class="fc-event-slots">${arg.event.extendedProps.bookings_limit ? `Slots Available: ${arg.event.extendedProps.bookings_limit}` : ''}</div>
                                </div>`
                     };
                 } else {
@@ -96,21 +95,6 @@ $(document).ready(function () {
                     theme: 'light-border',
                     placement: 'top'
                 });
-            },
-            eventClick: function (info) {
-                const event = info.event;
-                const popup = document.createElement('div');
-                popup.className = 'popup-overlay';
-                popup.innerHTML = `
-                    <div class="popup-content">
-                        <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
-                        <p><strong>${event.startStr} - ${event.endStr}</strong></p>
-                        <h3>${event.title}</h3>
-                        <div style="font-size: 0.9rem; font-family: Arial;">${event.extendedProps.description}</div>
-                        <div class="popup-footer">Bookings open Monday 23rd October at 7:00PM AEST</div>
-                    </div>
-                `;
-                document.body.appendChild(popup);
             },
             allDaySlot: false
         });
@@ -127,7 +111,7 @@ $(document).ready(function () {
                     console.log("Fetched events_data.json:", jsonEvents);
 
                     // Process events from JSON and hardcoded
-                    const calendarEvents = processEvents(jsonEvents);
+                    const calendarEvents = processJsonEvents(jsonEvents);
                     const combinedEvents = [
                         ...apiEvents,
                         ...calendarEvents,
@@ -186,17 +170,27 @@ $(document).ready(function () {
         });
     }
 
-    function processEvents(events) {
-        const calendarEvents = events.map(event => ({
-            id: event.id,
-            title: event.name,
-            start: event.start_time,
-            end: event.end_time,
-            resourceId: event.resource_id,
-            description: event.description || '',
-            bookings_limit: event.bookings_limit,
-            category: event.category
-        }));
+    function processJsonEvents(events) {
+        const calendarEvents = events.flatMap(event => {
+            return event.timeMatrix.flatMap(timeMatrix => {
+                return Object.entries(timeMatrix.timeslots).flatMap(([date, slots]) => {
+                    return slots.map(slot => {
+                        const startDateTime = `${date}T${slot}`;
+                        const endDateTime = luxon.DateTime.fromISO(startDateTime).plus({ minutes: parseInt(event.duration) }).toISO();
+                        return {
+                            id: event.id,
+                            title: event.name,
+                            start: startDateTime,
+                            end: endDateTime,
+                            resourceId: timeMatrix.provider_id,
+                            description: event.description || '',
+                            bookings_limit: event.bookings_limit,
+                            category: event.categories[0]
+                        };
+                    });
+                });
+            });
+        });
         return calendarEvents;
     }
 
