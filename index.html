@@ -40,20 +40,19 @@ $(document).ready(function () {
             left: 'resourceTimeGridDay,resourceTimeGridThreeDay',
             center: 'title',
             right: 'prev,next'
-    },
-    views: {
-      resourceTimeGridThreeDay: {
-        type: 'resourceTimeGrid',
-        duration: { days: 3 },
-        buttonText: '3 Days'
-      },
-        
-      resourceTimeGridDay: {
-        type: 'resourceTimeGrid',
-        duration: { days: 1 },
-        buttonText: '1 Day'
-      }
-    },
+        },
+        views: {
+            resourceTimeGridThreeDay: {
+                type: 'resourceTimeGrid',
+                duration: { days: 3 },
+                buttonText: '3 Days'
+            },
+            resourceTimeGridDay: {
+                type: 'resourceTimeGrid',
+                duration: { days: 1 },
+                buttonText: '1 Day'
+            }
+        },
         dayMinWidth: 150, // Set column width
         height: 'auto',
         slotMinTime: '07:00',
@@ -94,18 +93,21 @@ $(document).ready(function () {
         eventClick: function (info) {
             const event = info.event;
 
-            // Format and convert time to Australia/Sydney timezone
-            const startDateTime = formatTimeToAEST(new Date(event.extendedProps.rawStartTime));
-            const endDateTime = formatTimeToAEST(new Date(event.extendedProps.rawEndTime));
+            // Format and convert time to Australia/Sydney timezone using Luxon
+            const startDateTimeLuxon = luxon.DateTime.fromISO(event.start.toISOString()).setZone('Australia/Sydney');
+            const endDateTimeLuxon = luxon.DateTime.fromISO(event.end.toISOString()).setZone('Australia/Sydney');
 
-             // Extract the necessary values for the URL
-    const category = event.extendedProps.category || '1'; // Default to category 1 if not available
-    const service = event.id; // Dynamically set the service using event.id
-    const date = startDateTime.toFormat('yyyy-MM-dd'); // Correctly formatted date
-    const time = endDateTime.toFormat('HH:mm:ss'); // Correctly formatted time
+            const startDateTime = startDateTimeLuxon.toFormat('h:mm a');
+            const endDateTime = endDateTimeLuxon.toFormat('h:mm a');
 
-             // Create the dynamic booking URL
-    const bookingUrl = `https://thefreshlifeconference.simplybook.net/v2/#book/category/${category}/service/${service}/count/1/date/${date}/time/${time}/`;
+            // Extract the necessary values for the URL
+            const category = event.extendedProps.category || '1'; // Default to category 1 if not available
+            const service = event.id; // Dynamically set the service using event.id
+            const date = startDateTimeLuxon.toFormat('yyyy-MM-dd'); // Correctly formatted date
+            const time = startDateTimeLuxon.toFormat('HH:mm:ss'); // Correctly formatted time
+
+            // Create the dynamic booking URL
+            const bookingUrl = `https://thefreshlifeconference.simplybook.net/v2/#book/category/${category}/service/${service}/count/1/date/${date}/time/${time}/`;
 
             const popup = document.createElement('div');
             popup.className = 'popup-overlay';
@@ -115,10 +117,11 @@ $(document).ready(function () {
                     ${getResourceLogo(event.resourceId) ? `<img src="${getResourceLogo(event.resourceId)}" style="width: 100px; margin: 10px auto;" alt="Resource Logo">` : ''}
                     <p><strong>${startDateTime} - ${endDateTime}</strong></p>
                     <h3>${event.title}</h3>
-                    <div style="font-size: 0.9rem; font-family: Arial;">${event.extendedProps.description}</div>                  
- <div class="popup-footer">
-                <a href="${bookingUrl}" class="book-now-button" target="_blank">Book Now</a>
-            </div>                </div>
+                    <div style="font-size: 0.9rem; font-family: Arial;">${event.extendedProps.description}</div>
+                    <div class="popup-footer">
+                        <a href="${bookingUrl}" class="book-now-button" target="_blank">Book Now</a>
+                    </div>
+                </div>
             `;
             document.body.appendChild(popup);
         },
@@ -337,7 +340,7 @@ $(document).ready(function () {
     }
 
     function formatTimeToAEST(date) {
-        return luxon.DateTime.fromJSDate(date).setZone('Australia/Sydney').toFormat('h:mm a');
+        return luxon.DateTime.fromISO(date.toISOString()).setZone('Australia/Sydney').toFormat('h:mm a');
     }
 });
 </script>
