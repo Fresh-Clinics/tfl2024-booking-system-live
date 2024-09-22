@@ -79,28 +79,30 @@ body {
 }
 
 .popup-content {
-    position: relative;
-    width: 80%;
-    height: 90%;
     background: white;
-    border-radius: 8px;
-    padding: 20px;
+    max-width: 400px;
+    width: 90%;
+    max-height: 90%; /* Limit height */
+    overflow-y: auto; /* Make content scrollable */
+    text-align: center;
+    position: relative;
+    display: flex;
+    flex-direction: column; /* Use flex to separate scrollable content and fixed footer */
+    padding: 0px 20px; /* New padding */
+    border-radius: 4px; /* New border-radius */
 }
-
-.close-popup {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    cursor: pointer;
-    font-size: 24px;
-    font-weight: bold;
-}
-
 
 .popup-content h3 {
     margin-top: 0;
 }
 
+.close-popup {
+    position: sticky;
+    top: 10px;
+    right: 10px;
+    margin-left: auto;
+    cursor: pointer;
+}
 
 .popup-footer {
     margin-top: auto; /* Push to the bottom */
@@ -123,4 +125,18 @@ body {
 }
 .fc-direction-ltr .fc-button-group > .fc-button:not(:last-child) {margin-right:10px}
 
+.book-now-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #142652;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 10px;
+}
 
+.book-now-button:hover {
+    background-color: #84cdb8;
+}
