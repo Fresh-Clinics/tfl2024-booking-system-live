@@ -118,6 +118,7 @@ $(document).ready(function () {
                         ...getHardcodedEvents()
                     ];
 
+                    console.log("Combined Events:", combinedEvents); // Log combined events
                     successCallback(combinedEvents); // Pass all events to FullCalendar
                 }).catch(function (error) {
                     console.error("Error loading events_data.json:", error);
@@ -191,6 +192,7 @@ $(document).ready(function () {
                 });
             });
         });
+        console.log("Processed events from JSON:", calendarEvents);
         return calendarEvents;
     }
 
