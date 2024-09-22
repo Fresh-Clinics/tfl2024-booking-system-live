@@ -141,7 +141,6 @@ $(document).ready(function () {
         calendar.render();
     }
 
-    // Load events from the events_data.json file and hardcoded events
     function loadEvents(successCallback) {
         $.getJSON('/events_data.json', function(eventData) {
             const events = eventData;
@@ -180,6 +179,7 @@ $(document).ready(function () {
         console.log("Processed events for calendar:", calendarEvents);
         return calendarEvents;
     }
+
 
     // Hardcoded events function
     function getHardcodedEvents() {
