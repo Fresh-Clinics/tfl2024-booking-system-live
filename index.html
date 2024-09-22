@@ -24,9 +24,16 @@ $(document).ready(function () {
 
     const publicApiKey = '2b09dc7aee0f1f9d4bdd7f8ae39aa51e1ed13e833d67354b61ef643e8d4947d8';
     const secretApiKey = '8a817baee58f1200a4f6b769ac05b7430b22a72d82e8f96e561f728f967f4a5d';
+    let token = null; // Variable to store the token after the first fetch
 
     // Fetch token using both public and secret API keys
     function fetchAuthToken(callback) {
+        if (token) {
+            console.log("Reusing existing token:", token);
+            callback(token);
+            return; // Token already fetched, skip fetching again
+        }
+
         var loginClient = new JSONRpcClient({
             'url': 'https://user-api.simplybook.me/login',
             'onerror': function (error) {
@@ -36,10 +43,11 @@ $(document).ready(function () {
         });
 
         // Fetch token dynamically using the public and secret API keys
-        loginClient.request('getToken', ['thefreshlifeconference', publicApiKey, secretApiKey], function (token) {
-            if (token) {
-                console.log("Fetched token: ", token);
-                callback(token); // Use the token for API calls
+        loginClient.request('getToken', ['thefreshlifeconference', publicApiKey, secretApiKey], function (result) {
+            if (result && result.token) {
+                console.log("Fetched new token: ", result.token);
+                token = result.token; // Store the token for future use
+                callback(result.token);
             } else {
                 console.error("Failed to fetch token. Please check your API credentials.");
             }
@@ -50,7 +58,7 @@ $(document).ready(function () {
 
     // Fetch available units from SimplyBook API
     function fetchAvailableUnits(eventId, dateTime, unitId, callback) {
-        fetchAuthToken(function (token) { // First, fetch the token
+        fetchAuthToken(function (token) { // First, fetch the token (or reuse if already fetched)
             var client = new JSONRpcClient({
                 'url': 'https://user-api.simplybook.me',
                 'headers': {
