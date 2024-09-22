@@ -74,10 +74,15 @@ $(document).ready(function () {
             resources: getHardcodedResources(), // Use hardcoded resources
             events: function (info, successCallback, failureCallback) {
                 // Fetch events from events_data.json
-                fetch('/events_data.json')
-                    .then(response => response.json())
+                fetch('./events_data.json') // Ensuring the correct file path
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Network response was not ok");
+                        }
+                        return response.json();
+                    })
                     .then(eventData => {
-                        // Combine hardcoded events and events from the JSON file
+                        console.log("Fetched events_data.json:", eventData);
                         const combinedEvents = [...processEvents(eventData), ...getHardcodedEvents()];
                         successCallback(combinedEvents);
                     })
