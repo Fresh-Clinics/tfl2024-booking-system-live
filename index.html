@@ -118,7 +118,7 @@ $(document).ready(function () {
     calendar.render();
 
     function loadEvents(successCallback) {
-        $.getJSON('/events_data%20(2).json', function(eventData) {
+        $.getJSON('/events_data.json', function(eventData) {
             const events = eventData;
             const calendarEvents = processEvents(events);
             successCallback([...calendarEvents, ...getHardcodedEvents()]);
