@@ -1,7 +1,8 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendar with Hardcoded Events</title>
 
@@ -18,11 +19,6 @@
     <script src="https://unpkg.com/tippy.js@6"></script>
     <!-- Include Luxon for date and time handling -->
     <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
-
-    <!-- Include JSON-RPC Client -->
-    <script src="json-rpc-client.js"></script>
-
-    <!-- Custom Styles -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -33,63 +29,47 @@
 $(document).ready(function () {
     console.log("Initializing FullCalendar with Hardcoded Events...");
 
-    // Fetch SimplyBook token ONLY (No SimplyBook events will be processed)
-    var loginClient = new JSONRpcClient({
-        'url': 'https://user-api.simplybook.me/login',
-        'onerror': function (error) {
-            console.error("Login Error:", error);
-        }
-    });
-
-    loginClient.getToken('thefreshlifeconference', '2b09dc7aee0f1f9d4bdd7f8ae39aa51e1ed13e833d67354b61ef643e8d4947d8', function (token) {
-        if (token) {
-            console.log("Fetched token: ", token);
-            renderCalendar();  // Render the calendar after fetching the token
-        } else {
-            console.error("Failed to fetch token. Please check your API credentials.");
-        }
-    });
-    
-    // Function to render the calendar
-    function renderCalendar() {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
-            initialView: 'resourceTimeGridDay',
-            initialDate: '2024-10-29',
-            timeZone: 'Australia/Sydney',
-            headerToolbar: {
-                left: 'resourceTimeGridDay,resourceTimeGridThreeDay',
-                center: 'title',
-                right: 'prev,next'
-            },
-            views: {
-              resourceTimeGridThreeDay: {
-                type: 'resourceTimeGrid',
-                duration: { days: 3 },
-                buttonText: '3 Days'
-              },
-              resourceTimeGridDay: {
-                type: 'resourceTimeGrid',
-                duration: { days: 1 },
-                buttonText: '1 Day'
-              }
-            },
-            dayMinWidth: 150,
-            height: 'auto',
-            slotMinTime: '07:00',
-            slotMaxTime: '23:00',
-            resourceOrder: 'order_id',
-            resources: getHardcodedResources(), // Use hardcoded resources
-            events: function (info, successCallback, failureCallback) {
-                loadEvents(successCallback); // Load events from events_data.json
-            },
-            businessHours: [
-                { daysOfWeek: [2], startTime: '09:00', endTime: '18:30' },
-                { daysOfWeek: [3], startTime: '07:30', endTime: '19:00' },
-                { daysOfWeek: [4], startTime: '07:00', endTime: '22:30' }
-            ],
-            eventContent: function (arg) {
+    // Initialize FullCalendar
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+        initialView: 'resourceTimeGridDay',
+        initialDate: '2024-10-29',
+        timeZone: 'Australia/Sydney', // Set timezone to AEST
+        headerToolbar: {
+            left: 'resourceTimeGridDay,resourceTimeGridThreeDay',
+            center: 'title',
+            right: 'prev,next'
+    },
+    views: {
+      resourceTimeGridThreeDay: {
+        type: 'resourceTimeGrid',
+        duration: { days: 3 },
+        buttonText: '3 Days'
+      },
+        
+      resourceTimeGridDay: {
+        type: 'resourceTimeGrid',
+        duration: { days: 1 },
+        buttonText: '1 Day'
+      }
+    },
+        dayMinWidth: 150, // Set column width
+        height: 'auto',
+        slotMinTime: '07:00',
+        slotMaxTime: '23:00',
+        resourceOrder: 'order_id',
+        resources: getHardcodedResources(),
+        events: function (info, successCallback, failureCallback) {
+            // Load events from JSON and hardcoded
+            loadEvents(successCallback);
+        },
+        businessHours: [
+            { daysOfWeek: [2], startTime: '09:00', endTime: '18:30' },
+            { daysOfWeek: [3], startTime: '07:30', endTime: '19:00' },
+            { daysOfWeek: [4], startTime: '07:00', endTime: '22:30' }
+        ],
+        eventContent: function (arg) {
             if (arg.event && arg.event.title) {
                 const borderColor = getCategoryBorderColor(arg.event.extendedProps.category);
                 const displaySlots = arg.event.extendedProps.displaySlots && !['9', '10', '11', '12'].includes(arg.event.extendedProps.category);
@@ -103,69 +83,50 @@ $(document).ready(function () {
                 return { html: '<div class="fc-event-content"><div class="fc-event-title">Invalid Event</div></div>' };
             }
         },
-            eventDidMount: function (info) {
-                tippy(info.el, {
-                    content: `<div style="font-size: 1rem!important; font-family: Arial;"><strong>${info.event.title}</strong></div><br><div style="font-size: 0.9rem!important; font-family: Arial;">${info.event.extendedProps.description}</div>`,
-                    allowHTML: true,
-                    theme: 'light-border',
-                    placement: 'top'
-                });
-            },
-            eventClick: function (info) {
-    const event = info.event;
+        eventDidMount: function (info) {
+            tippy(info.el, {
+                content: `<div style="font-size: 1rem!important; font-family: Arial;"><strong>${info.event.title}</strong></div><br><div style="font-size: 0.9rem!important; font-family: Arial;">${info.event.extendedProps.description}</div>`,
+                allowHTML: true,
+                theme: 'light-border',
+                placement: 'top'
+            });
+        },
+        eventClick: function (info) {
+            const event = info.event;
 
-    // Assuming the event start and end are in UTC, convert them to Australia/Sydney timezone using Luxon
-    const startDateTimeLuxon = luxon.DateTime.fromISO(event.start.toISOString(), { zone: 'UTC' }).setZone('Australia/Sydney');
-    const endDateTimeLuxon = luxon.DateTime.fromISO(event.end.toISOString(), { zone: 'UTC' }).setZone('Australia/Sydney');
+            // Format and convert time to Australia/Sydney timezone
+            const startDateTime = formatTimeToAEST(new Date(event.extendedProps.rawStartTime));
+            const endDateTime = formatTimeToAEST(new Date(event.extendedProps.rawEndTime));
 
-    // Format the start and end times for display
-    const startDateTime = startDateTimeLuxon.toFormat('h:mm a');
-    const endDateTime = endDateTimeLuxon.toFormat('h:mm a');
-
-    // Extract the necessary values for the URL
-    const category = event.extendedProps.category || '1'; // Default to category 1 if not available
-    const service = event.id; // Dynamically set the service using event.id
-    const date = startDateTimeLuxon.toFormat('yyyy-MM-dd'); // Correctly formatted date
-    const time = startDateTimeLuxon.toFormat('HH:mm:ss'); // Correctly formatted time
-
-    // Create the dynamic booking URL
-    const bookingUrl = `https://thefreshlifeconference.simplybook.net/v2/#book/category/${category}/service/${service}/count/1/date/${date}/time/${time}/`;
-
-    const popup = document.createElement('div');
-    popup.className = 'popup-overlay';
-    popup.innerHTML = `
-        <div class="popup-content">
-            <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
-            ${getResourceLogo(event.resourceId) ? `<img src="${getResourceLogo(event.resourceId)}" style="width: 100px; margin: 10px auto;" alt="Resource Logo">` : ''}
-            <p><strong>${startDateTime} - ${endDateTime}</strong></p>
-            <h3>${event.title}</h3>
-            <div style="font-size: 0.9rem; font-family: Arial;">${event.extendedProps.description}</div>
-            <div class="popup-footer">
-                <a href="${bookingUrl}" class="book-now-button" target="_blank">Book Now</a>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(popup);
-},
+            const popup = document.createElement('div');
+            popup.className = 'popup-overlay';
+            popup.innerHTML = `
+                <div class="popup-content">
+                    <span class="close-popup" onclick="this.parentElement.parentElement.remove()">×</span>
+                    ${getResourceLogo(event.resourceId) ? `<img src="${getResourceLogo(event.resourceId)}" style="width: 100px; margin: 10px auto;" alt="Resource Logo">` : ''}
+                    <p><strong>${startDateTime} - ${endDateTime}</strong></p>
+                    <h3>${event.title}</h3>
+                    <div style="font-size: 0.9rem; font-family: Arial;">${event.extendedProps.description}</div>                  
+                    <div class="popup-footer">Bookings open Monday 23rd October at 7:00PM AEST</div>
+                </div>
+            `;
+            document.body.appendChild(popup);
+        },
         allDaySlot: false
     });
 
+    calendar.render();
 
-        calendar.render();
-    }
-
-    // Load events from events_data.json (NOT SimplyBook events)
     function loadEvents(successCallback) {
-        $.getJSON('/events_data.json', function(eventData) {
+        $.getJSON('/events_data%20(2).json', function(eventData) {
             const events = eventData;
             const calendarEvents = processEvents(events);
-            successCallback([...calendarEvents, ...getHardcodedEvents()]); // Combine JSON and hardcoded events
+            successCallback([...calendarEvents, ...getHardcodedEvents()]);
         }).catch(function (error) {
             console.error("Error loading JSON data:", error);
         });
     }
 
-    // Process events from events_data.json
     function processEvents(events) {
         const calendarEvents = [];
         events.forEach(event => {
@@ -195,7 +156,6 @@ $(document).ready(function () {
         return calendarEvents;
     }
 
-    // Hardcoded events
     function getHardcodedEvents() {
         const resources = getHardcodedResources();
         return resources.flatMap(resource => [
@@ -312,7 +272,6 @@ $(document).ready(function () {
         ]);
     }
 
-    // Get category border color
     function getCategoryBorderColor(category) {
         switch (category) {
             case '1': return '#142652';
@@ -330,7 +289,6 @@ $(document).ready(function () {
         }
     }
 
-    // Hardcoded resources
     function getHardcodedResources() {
         return [
             { id: '29', title: 'Woodlands Stage', category: 'Program', order_id: 'a', logo: ' ' },
@@ -362,13 +320,11 @@ $(document).ready(function () {
         ];
     }
 
-    // Get resource logo
     function getResourceLogo(resourceId) {
         const resource = getHardcodedResources().find(r => r.id === resourceId);
         return resource && resource.logo ? `image-files/${resource.logo}` : null;
     }
 
-    // Format time to AEST
     function formatTimeToAEST(date) {
         return luxon.DateTime.fromJSDate(date).setZone('Australia/Sydney').toFormat('h:mm a');
     }
