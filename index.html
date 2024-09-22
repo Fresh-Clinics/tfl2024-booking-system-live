@@ -36,13 +36,15 @@ $(document).ready(function () {
         });
 
         // Fetch token dynamically using the public and secret API keys
-        loginClient.getToken('thefreshlifeconference', publicApiKey, secretApiKey, function (token) {
+        loginClient.request('getToken', ['thefreshlifeconference', publicApiKey, secretApiKey], function (token) {
             if (token) {
                 console.log("Fetched token: ", token);
                 callback(token); // Use the token for API calls
             } else {
                 console.error("Failed to fetch token. Please check your API credentials.");
             }
+        }, function (error) {
+            console.error("Error fetching token:", error);
         });
     }
 
