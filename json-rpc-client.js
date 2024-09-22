@@ -37,13 +37,13 @@ JSONRpcClient.prototype.request = function (method, params, callback) {
             } else {
                 callback(response.result);
             }
-        },
+        }.bind(this), // Bind the correct context for "this"
         error: function (xhr, status, error) {
             console.error("AJAX Error:", error);
             if (typeof this.onerror === 'function') {
                 this.onerror(error);
             }
-        }
+        }.bind(this) // Bind the correct context for "this"
     });
 };
 
@@ -72,9 +72,9 @@ JSONRpcClient.prototype.getToken = function (companyLogin, apiKey, callback) {
             } else {
                 callback(response.result);
             }
-        },
+        }.bind(this), // Bind the correct context for "this"
         error: function (xhr, status, error) {
             console.error("AJAX Error fetching token:", error);
-        }
+        }.bind(this) // Bind the correct context for "this"
     });
 };
