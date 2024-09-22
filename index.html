@@ -82,14 +82,14 @@ $(document).ready(function () {
                             .then(jsonEvents => {
                                 console.log("Fetched events_data.json:", jsonEvents);
 
-                                // Merge API events, JSON events, and hardcoded events
+                                // Ensure the API events, JSON events, and hardcoded events are properly merged
                                 const combinedEvents = [
                                     ...apiEvents,                 // Events from the API
                                     ...processEvents(jsonEvents),  // Events from JSON
                                     ...getHardcodedEvents()        // Hardcoded events
                                 ];
 
-                                successCallback(combinedEvents);
+                                successCallback(combinedEvents); // Pass all combined events to FullCalendar
                             })
                             .catch(error => {
                                 console.error("Error loading events from JSON:", error);
@@ -186,7 +186,6 @@ $(document).ready(function () {
                     events = Object.values(events); // Convert object to array
                 }
 
-                // If it's already an array, use map; otherwise handle as an array
                 if (Array.isArray(events)) {
                     resolve(events.map(event => ({
                         id: event.id,
