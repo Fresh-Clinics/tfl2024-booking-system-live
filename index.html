@@ -94,18 +94,21 @@ $(document).ready(function () {
         eventClick: function (info) {
     const event = info.event;
 
-    // Format and convert time to Australia/Sydney timezone using Luxon
-    const startDateTimeLuxon = luxon.DateTime.fromISO(event.start.toISOString(), { zone: 'UTC' }).setZone('Australia/Sydney');
-    const endDateTimeLuxon = luxon.DateTime.fromISO(event.end.toISOString(), { zone: 'UTC' }).setZone('Australia/Sydney');
+    // Convert event start and end times to Australia/Sydney timezone using Luxon
+    const startDateTimeLuxon = luxon.DateTime.fromISO(event.start.toISOString()).setZone('Australia/Sydney');
+    const endDateTimeLuxon = luxon.DateTime.fromISO(event.end.toISOString()).setZone('Australia/Sydney');
 
+    // Format times for the popup display
     const startDateTime = startDateTimeLuxon.toFormat('h:mm a');
     const endDateTime = endDateTimeLuxon.toFormat('h:mm a');
 
-    // Extract the necessary values for the URL
-    const category = event.extendedProps.category || '1'; // Default to category 1 if not available
-    const service = event.id; // Dynamically set the service using event.id
+    // Format the date and time for the booking URL
     const date = startDateTimeLuxon.toFormat('yyyy-MM-dd'); // Correctly formatted date
     const time = startDateTimeLuxon.toFormat('HH:mm:ss'); // Correctly formatted time
+
+    // Extract the category and service ID
+    const category = event.extendedProps.category || '1'; // Default to category 1 if not available
+    const service = event.id; // Dynamically set the service using event.id
 
     // Create the dynamic booking URL
     const bookingUrl = `https://thefreshlifeconference.simplybook.net/v2/#book/category/${category}/service/${service}/count/1/date/${date}/time/${time}/`;
