@@ -115,8 +115,8 @@ $(document).ready(function () {
     const event = info.event;
 
     // Use Luxon to properly interpret the event time in the calendar's timezone (Australia/Sydney)
-    const startDateTimeLuxon = luxon.DateTime.fromJSDate(event.start).setZone('Australia/Sydney', { keepLocalTime: true });
-    const endDateTimeLuxon = luxon.DateTime.fromJSDate(event.end).setZone('Australia/Sydney', { keepLocalTime: true });
+    const startDateTimeLuxon = luxon.DateTime.fromISO(event.start.toISOString(), { zone: 'Australia/Sydney' });
+    const endDateTimeLuxon = luxon.DateTime.fromISO(event.end.toISOString(), { zone: 'Australia/Sydney' });
 
     const startDateTime = startDateTimeLuxon.toFormat('h:mm a');
     const endDateTime = endDateTimeLuxon.toFormat('h:mm a');
