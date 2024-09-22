@@ -98,6 +98,15 @@ $(document).ready(function () {
             const startDateTime = formatTimeToAEST(new Date(event.extendedProps.rawStartTime));
             const endDateTime = formatTimeToAEST(new Date(event.extendedProps.rawEndTime));
 
+            // Extract the necessary values for the URL
+            const category = event.extendedProps.category || '1'; // Default to category 1 if not available
+            const service = event.id; // Dynamically set the service using event.id
+            const date = startDateTimeLuxon.toFormat('yyyy-MM-dd'); // Correctly formatted date
+            const time = startDateTimeLuxon.toFormat('HH:mm:ss'); // Correctly formatted time
+
+            // Create the dynamic booking URL
+            const bookingUrl = `https://thefreshlifeconference.simplybook.net/v2/#book/category/${category}/service/${service}/count/1/date/${date}/time/${time}/`;
+
             const popup = document.createElement('div');
             popup.className = 'popup-overlay';
             popup.innerHTML = `
